@@ -1,0 +1,15 @@
+{
+  "name": "asllc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./public/main.js",
+  "scripts": {
+    "start": "serve ./public"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pixi.js": "^7.4.0",
+    "serve": "^14.2.1"
+  }
+}
