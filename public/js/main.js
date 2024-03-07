@@ -30,12 +30,7 @@ async function main() {
 
   document.body.appendChild(app.view);
 
-  const container = new PIXI.Container();
-
-  app.stage.addChild(container);
-
   state.app = app;
-  state.container = container;
 
   render();
   animate();

@@ -37,10 +37,12 @@ export default class Floor {
   }
 
   onClick() {
+    if (state.activeFloorNumber === this.index) {
+      return;
+    }
+
     state.activeFloorNumber = this.index;
     Elevator.animateDoor();
-
-    state.container.pivot.y += 1;
   }
 
   render() {
