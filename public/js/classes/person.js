@@ -1,5 +1,6 @@
 import { SPRITES } from "../constants/sprites.js";
 import { randomNumberBetween } from "../utils.js";
+import Interface from "./interface.js";
 import Building from "./building.js";
 import Elevator from "./elevator.js";
 import state from "../state.js";
@@ -7,7 +8,7 @@ import state from "../state.js";
 export default class Person {
   constructor(name) {
     this.name = name;
-    this.floorNumber = 1;
+    this.floorNumber = 0;
     this.character = new PIXI.AnimatedSprite(
       SPRITES[name].src.map((img) => PIXI.Texture.from(img))
     );
@@ -46,7 +47,7 @@ export default class Person {
   }
 
   get currentFloor() {
-    return Building.floors[this.floorNumber - 1];
+    return Building.floors[this.floorNumber];
   }
 
   get boundaries() {
@@ -99,6 +100,8 @@ export default class Person {
       if (walkRandomly) {
         this.goToRandomDestination();
       }
+
+      Interface.render(); // Maybe not?
     });
   }
 
@@ -141,5 +144,10 @@ export default class Person {
     this.character.loop = true;
 
     state.app.stage.addChild(this.character);
+
+    const highlight =
+      state.activeFloorNumber && this.floorNumber === state.activeFloorNumber;
+
+    this.character.filters = highlight ? [state.filters.highlight] : [];
   }
 }

@@ -1,12 +1,18 @@
-import { MOBILE_BREAKPOINT } from "./constants/mobile.js";
+import { COLORS } from "./constants/colors.js";
+import { isMobileSizedScreen } from "./utils.js";
 
 const state = {
   app: null,
   activeFloorNumber: null,
   people: [],
-  scale: () => (window.innerWidth < MOBILE_BREAKPOINT ? 0.2 : 0.25),
+  scale: () => {
+    return isMobileSizedScreen() ? 0.2 : 0.25;
+  },
   shift: 0,
   busy: false,
+  filters: {
+    highlight: new PIXI.filters.OutlineFilter(2, COLORS.sky),
+  },
 };
 
 export default state;

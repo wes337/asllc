@@ -1,5 +1,6 @@
 import Background from "./classes/background.js";
 import Building from "./classes/building.js";
+import Interface from "./classes/interface.js";
 import state from "./state.js";
 
 export default function animate() {
@@ -19,13 +20,23 @@ function animateIntro() {
 
   Background.pivot();
 
+  let delay = 100;
+  let current = 0;
+
   const animation = (delta) => {
-    const speed = 4 * delta;
+    current++;
+
+    if (current < delay) {
+      return;
+    }
+
+    const speed = 8 * delta;
     const scrollAmount = state.app.stage.pivot.y + speed;
 
     state.app.stage.pivot.y = Math.min(scrollAmount, 0);
 
     Background.pivot();
+    Interface.render();
 
     if (state.app.stage.pivot.y === 0) {
       state.app.ticker.remove(animation);
@@ -54,6 +65,7 @@ export function animateCamera(end) {
     state.app.stage.pivot.y = up ? Math.max(pivot, end) : Math.min(pivot, end);
 
     Background.pivot();
+    Interface.render();
 
     if (state.app.stage.pivot.y === end) {
       state.app.ticker.remove(animation);

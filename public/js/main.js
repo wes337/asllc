@@ -35,7 +35,9 @@ async function main() {
   render();
   animate();
 
-  window.addEventListener("resize", render);
+  window.addEventListener("resize", () => {
+    render();
+  });
 }
 
 main();

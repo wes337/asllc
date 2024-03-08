@@ -10,7 +10,6 @@ export default function render() {
   state.app.renderer.resize(window.innerWidth, window.innerHeight);
 
   Background.render();
-
   Building.renderFloor(0, "lobby");
 
   for (let i = 1; i <= ALL_ARTIST_IDS.length; i++) {
@@ -27,12 +26,11 @@ export default function render() {
       artist.boundaries.max()
     );
 
-    artist.floorNumber = i + 1;
+    artist.floorNumber = i;
 
     state.people.push(artist);
   }
 
   Building.renderRoof();
-
   Elevator.render();
 }
