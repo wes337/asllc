@@ -160,14 +160,14 @@ export const SPRITES = {
     height: 220,
     floor: "./img/sprites/floors/changeline-floor.png",
   },
-  "cherry-ills": {
+  cherry: {
     src: [
-      "./img/sprites/characters/cherry-ills-1.png",
-      "./img/sprites/characters/cherry-ills-2.png",
+      "./img/sprites/characters/cherry-1.png",
+      "./img/sprites/characters/cherry-2.png",
     ],
     width: 160,
     height: 200,
-    floor: "./img/sprites/floors/cherry-ills-floor.png",
+    floor: "./img/sprites/floors/cherry-floor.png",
   },
   cubensis: {
     src: [
