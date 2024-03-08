@@ -19,7 +19,7 @@ export const ARTISTS = {
   changeline: {
     name: "Changeline",
   },
-  "cherry-ills": {
+  cherry: {
     name: "Cherry Ills",
   },
   cubensis: {
