@@ -1,7 +1,6 @@
 import { COLORS } from "../constants/colors.js";
-import { MOBILE_BREAKPOINT } from "../constants/mobile.js";
 import { SPRITES } from "../constants/sprites.js";
-import { randomNumberBetween } from "../utils.js";
+import { randomNumberBetween, isMobileSizedScreen } from "../utils.js";
 import state from "../state.js";
 
 export default class Background {
@@ -80,10 +79,9 @@ export default class Background {
   static renderClouds() {
     const scale = state.scale();
 
-    const ROWS =
-      state.app.screen.width > MOBILE_BREAKPOINT
-        ? [4, 4, 3, 4, 3, 3]
-        : [2, 2, 3, 2, 1, 1];
+    const ROWS = isMobileSizedScreen(state.app)
+      ? [2, 2, 3, 2, 1, 1]
+      : [4, 4, 3, 4, 3, 3];
     const ROW_OFFSET_X = [0, 128, 56, 8, 120, 288];
     const ROW_OFFSET_Y = [0, 28, 48, 72, 88, 72];
     const ROW_SIZES = ["xs", "xs", "sm", "md", "lg", "xl"];

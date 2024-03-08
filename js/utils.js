@@ -1,3 +1,5 @@
+import { MOBILE_BREAKPOINT } from "./constants/mobile.js";
+
 export function randomNumberBetween(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
@@ -20,4 +22,12 @@ export function shuffleArray(array) {
   }
 
   return shuffledArray;
+}
+
+export function isMobileSizedScreen(app) {
+  if (!app) {
+    return window.innerWidth < MOBILE_BREAKPOINT;
+  }
+
+  return app.screen.width < MOBILE_BREAKPOINT;
 }
