@@ -1,6 +1,8 @@
 import { SPRITES } from "../constants/sprites.js";
 import Elevator from "./elevator.js";
 import state from "../state.js";
+import Building from "./building.js";
+import { animateCamera } from "../animate.js";
 
 export default class Floor {
   constructor(index, name) {
@@ -37,9 +39,32 @@ export default class Floor {
   }
 
   onClick() {
-    if (state.activeFloorNumber === this.index) {
+    if (state.activeFloorNumber === this.index || state.busy) {
       return;
     }
+
+    const maxRoomsOnScreen = Math.floor(
+      state.app.screen.height / this.room.height
+    );
+
+    let section = this.index / maxRoomsOnScreen;
+
+    if (section < 0.8) {
+      section = 0;
+    }
+
+    let cameraPosition = Math.min(
+      section * maxRoomsOnScreen * (this.room.height / 2) * -1,
+      0
+    );
+
+    const numberFromTop = Building.floors.length - 1 - this.index;
+    if (numberFromTop < maxRoomsOnScreen) {
+      cameraPosition = cameraPosition - (this.room.height / 2) * this.index;
+      cameraPosition = cameraPosition + state.app.screen.height / 2;
+    }
+
+    animateCamera(Math.min(cameraPosition, 0));
 
     state.activeFloorNumber = this.index;
     Elevator.animateDoor();

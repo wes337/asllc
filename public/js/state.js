@@ -6,6 +6,7 @@ const state = {
   people: [],
   scale: () => (window.innerWidth < MOBILE_BREAKPOINT ? 0.2 : 0.25),
   shift: 0,
+  busy: false,
 };
 
 export default state;

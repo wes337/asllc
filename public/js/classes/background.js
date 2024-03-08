@@ -10,6 +10,15 @@ export default class Background {
   static clouds = [];
   static buildings = [];
 
+  static pivot() {
+    this.sky.position.y = this.sky.initialPosition.y + state.app.stage.pivot.y;
+    this.sun.position.y = this.sun.initialPosition.y + state.app.stage.pivot.y;
+
+    [...this.clouds, ...this.buildings].flat().forEach((sprite) => {
+      sprite.position.y = sprite.initialPosition.y + state.app.stage.pivot.y;
+    });
+  }
+
   static renderSky() {
     this.sky.clear();
 
@@ -44,6 +53,8 @@ export default class Background {
     this.sky.drawRect(0, skySize + skyMidSize - stroke * 5, width, stroke);
     this.sky.endFill();
 
+    this.sky.initialPosition = { x: 0, y: 0 };
+
     state.app.stage.addChild(this.sky);
   }
 
@@ -55,6 +66,8 @@ export default class Background {
     const positionX =
       state.app.screen.width - (SPRITES.sun.width * scale) / 2 - marginX;
     const positionY = (SPRITES.sun.height * scale) / 2 + marginY;
+
+    this.sun.initialPosition = { x: positionX, y: positionY };
 
     this.sun.position.set(positionX, positionY);
     this.sun.scale.y = scale;
@@ -100,6 +113,8 @@ export default class Background {
           1 -
           marginX;
         const positionY = state.app.screen.height / 4 - marginY;
+
+        cloud.initialPosition = { x: positionX, y: positionY };
 
         cloud.position.set(positionX, positionY);
         cloud.scale.y = scale;
@@ -147,6 +162,8 @@ export default class Background {
         positionY = state.app.screen.height + margin;
       }
 
+      building.initialPosition = { x: positionX, y: positionY };
+
       building.position.set(positionX, positionY);
       building.scale.y = scale;
       building.scale.x = scale;
@@ -185,5 +202,6 @@ export default class Background {
     this.renderSun();
     this.renderClouds();
     this.renderBuildings();
+    this.pivot();
   }
 }

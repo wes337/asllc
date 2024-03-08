@@ -1,15 +1,20 @@
 {
   "name": "asllc",
+  "homepage": "http://wes337.github.io/asllc",
   "version": "1.0.0",
   "description": "",
   "main": "./public/main.js",
   "scripts": {
-    "start": "serve ./public"
+    "start": "serve ./public",
+    "deploy": "gh-pages -d public"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "pixi.js": "^7.4.0",
+    "pixi.js": "^7.4.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.1.1",
     "serve": "^14.2.1"
   }
 }

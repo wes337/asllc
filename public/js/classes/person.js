@@ -18,9 +18,12 @@ export default class Person {
   }
 
   set startingPosition(position) {
-    if (position < this.boundaries.min()) {
+    const min = this.boundaries.min();
+    const max = this.boundaries.max();
+
+    if (position < min) {
       this.character.position.x = min;
-    } else if (position > this.boundaries.max()) {
+    } else if (position > max) {
       this.character.position.x = max;
     } else {
       this.character.position.x = position;
