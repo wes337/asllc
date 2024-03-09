@@ -23,7 +23,7 @@ export default class Floor {
     this.container.eventMode = "static";
     this.container.cursor = "pointer";
 
-    this.container.addListener("pointerdown", this.onClick.bind(this));
+    this.container.addListener("pointertap", this.onClick.bind(this));
   }
 
   get width() {
@@ -53,7 +53,11 @@ export default class Floor {
   }
 
   onClick() {
-    if (state.activeFloorNumber === this.index || state.busy) {
+    if (
+      state.activeFloorNumber === this.index ||
+      state.busy ||
+      !state.introFinished
+    ) {
       return;
     }
 

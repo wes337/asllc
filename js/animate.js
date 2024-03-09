@@ -12,8 +12,6 @@ export default function animate() {
 }
 
 function animateIntro() {
-  state.busy = true;
-
   const start = Building.roof.position.y - state.app.screen.height / 2;
 
   state.app.stage.pivot.y += start;
@@ -40,8 +38,7 @@ function animateIntro() {
 
     if (state.app.stage.pivot.y === 0) {
       state.app.ticker.remove(animation);
-      state.busy = false;
-
+      state.introFinished = true;
       Interface.showBottomBar();
     }
   };
@@ -49,14 +46,20 @@ function animateIntro() {
   state.app.ticker.add(animation);
 }
 
-export function animateCamera(end) {
+export function animateCamera(end, withDelta) {
   state.busy = true;
 
   const start = state.app.stage.pivot.y;
   const up = start > end;
 
+  Interface.render();
+
   const animation = (delta) => {
     let amount = 25;
+
+    if (withDelta) {
+      amount = amount * delta;
+    }
 
     if (up) {
       amount = amount * -1;
