@@ -15,8 +15,8 @@ export default class Background {
     this.sky.position.y = this.sky.initialPosition.y + state.app.stage.pivot.y;
     this.sun.position.y = this.sun.initialPosition.y + state.app.stage.pivot.y;
 
-    [...this.clouds].flat().forEach((sprite) => {
-      sprite.position.y = sprite.initialPosition.y + state.app.stage.pivot.y;
+    [...this.clouds].flat().forEach((cloud) => {
+      cloud.position.y = cloud.initialPosition.y + state.app.stage.pivot.y;
     });
   }
 
@@ -32,26 +32,16 @@ export default class Background {
 
     this.sky.beginFill(COLORS.skyDark);
     this.sky.drawRect(0, 0, width, skySize);
-    this.sky.endFill();
 
     this.sky.beginFill(COLORS.sky);
     this.sky.drawRect(0, skySize - stroke * 2, width, stroke);
-    this.sky.endFill();
-
-    this.sky.beginFill(COLORS.sky);
     this.sky.drawRect(0, skySize - stroke * 5, width, stroke);
-    this.sky.endFill();
-
-    this.sky.beginFill(COLORS.sky);
     this.sky.drawRect(0, skySize, width, skyMidSize);
-    this.sky.endFill();
 
     this.sky.beginFill(COLORS.skyLight);
     this.sky.drawRect(0, skySize + skyMidSize - stroke * 2, width, stroke);
-    this.sky.endFill();
-
-    this.sky.beginFill(COLORS.skyLight);
     this.sky.drawRect(0, skySize + skyMidSize - stroke * 5, width, stroke);
+
     this.sky.endFill();
 
     this.sky.initialPosition = { x: 0, y: 0 };

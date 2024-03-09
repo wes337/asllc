@@ -81,12 +81,13 @@ export default class Interface {
     this.bottomBar.container.pivot.y = this.bottomBar.container.height * -1;
 
     const animation = (delta) => {
-      const speed = 8 * delta;
+      const speed = 4 * delta;
       this.bottomBar.container.pivot.y += speed;
 
-      if (this.bottomBar.container.pivot.y >= 0) {
+      if (this.bottomBar.container.pivot.y >= -2) {
         state.app.ticker.remove(animation);
         state.busy = false;
+        this.bottomBar.container.pivot.y = -2;
       }
     };
 
@@ -152,12 +153,42 @@ export default class Interface {
     );
     this.bottomBar.background.endFill();
 
+    // Top border
+    const borderSize = 4;
+    this.bottomBar.background.beginFill(COLORS.sky);
+    this.bottomBar.background.drawRect(
+      0,
+      positionY - this.bottomBar.downButton.height / 2 - borderSize,
+      width + borderSize,
+      borderSize
+    );
+
+    if (!isMobileSizedScreen()) {
+      // Left border
+      this.bottomBar.background.drawRect(
+        positionX - state.app.screen.width / 4,
+        positionY - this.bottomBar.downButton.height / 2,
+        borderSize,
+        this.bottomBar.downButton.height
+      );
+
+      // Right border
+      this.bottomBar.background.drawRect(
+        positionX + state.app.screen.width / 4,
+        positionY - this.bottomBar.downButton.height / 2,
+        borderSize,
+        this.bottomBar.downButton.height
+      );
+    }
+
+    this.bottomBar.background.endFill();
+
     this.bottomBar.container.addChild(this.bottomBar.background);
     this.bottomBar.container.addChild(this.bottomBar.upButton);
     this.bottomBar.container.addChild(this.bottomBar.downButton);
 
     this.bottomBar.container.position.x = positionX;
-    this.bottomBar.background.filters = [state.filters.highlight];
+    //  this.bottomBar.background.filters = [state.filters.highlight];
 
     // Text
     const textMargin = isMobileSizedScreen() ? 8 : 16;
