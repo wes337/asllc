@@ -1,6 +1,7 @@
 import { COLORS } from "../constants/colors.js";
 import { SPRITES } from "../constants/sprites.js";
 import { randomNumberBetween, isMobileSizedScreen } from "../utils.js";
+import Interface from "./interface.js";
 import state from "../state.js";
 
 export default class Background {
@@ -8,12 +9,13 @@ export default class Background {
   static sun = PIXI.Sprite.from(SPRITES.sun.src);
   static clouds = [];
   static buildings = [];
+  static ground = new PIXI.Graphics();
 
   static pivot() {
     this.sky.position.y = this.sky.initialPosition.y + state.app.stage.pivot.y;
     this.sun.position.y = this.sun.initialPosition.y + state.app.stage.pivot.y;
 
-    [...this.clouds, ...this.buildings].flat().forEach((sprite) => {
+    [...this.clouds].flat().forEach((sprite) => {
       sprite.position.y = sprite.initialPosition.y + state.app.stage.pivot.y;
     });
   }
@@ -154,7 +156,10 @@ export default class Background {
           : state.app.screen.width - scaledWidth / 2 + margin;
       }
 
-      let positionY = state.app.screen.height - (image.height / 2) * scale;
+      let positionY =
+        state.app.screen.height -
+        (image.height / 2) * scale -
+        Interface.bottomBar.height * scale;
 
       if (breakpointY) {
         positionY = state.app.screen.height + margin;
@@ -171,6 +176,25 @@ export default class Background {
 
       this.buildings[i] = building;
     }
+  }
+
+  static renderGround() {
+    const scale = state.scale();
+
+    this.ground.clear();
+
+    const width = state.app.screen.width;
+    const height = Interface.bottomBar.height * scale;
+
+    const positionY = state.app.screen.height - height;
+
+    this.ground.beginFill(COLORS.dirt);
+    this.ground.drawRect(0, positionY, width, height);
+    this.ground.endFill();
+
+    this.ground.initialPosition = { x: 0, y: 0 };
+
+    state.app.stage.addChild(this.ground);
   }
 
   static animateClouds() {
@@ -200,6 +224,7 @@ export default class Background {
     this.renderSun();
     this.renderClouds();
     this.renderBuildings();
+    this.renderGround();
     this.pivot();
   }
 }
