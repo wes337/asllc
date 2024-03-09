@@ -188,7 +188,6 @@ export default class Interface {
     this.bottomBar.container.addChild(this.bottomBar.downButton);
 
     this.bottomBar.container.position.x = positionX;
-    //  this.bottomBar.background.filters = [state.filters.highlight];
 
     // Text
     const textMargin = isMobileSizedScreen() ? 8 : 16;

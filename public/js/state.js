@@ -10,12 +10,9 @@ const state = {
   },
   shift: 0,
   busy: false,
+  introFinished: false,
   filters: {
     highlight: new PIXI.filters.OutlineFilter(2, COLORS.sky),
-  },
-  touch: {
-    start: { x: 0, y: 0 },
-    end: { x: 0, y: 0 },
   },
 };
 

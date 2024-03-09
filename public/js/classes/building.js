@@ -47,7 +47,7 @@ export default class Building {
   }
 
   static selectNextOrPreviousFloor(previous) {
-    if (state.busy) {
+    if (state.busy || !state.introFinished) {
       return;
     }
 
