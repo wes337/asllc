@@ -20,7 +20,7 @@ function animateIntro() {
 
   Background.pivot();
 
-  let delay = 80;
+  let delay = 60;
   let current = 0;
 
   const animation = (delta) => {
