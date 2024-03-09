@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Nokia";
+  src: url("./fonts/nokiafc22.ttf") format("truetype");
+}
+
 *,
 *::before,
 *::after {
@@ -11,6 +16,7 @@
 html,
 body {
   background-color: #4f8fba;
+  font-family: "Nokia", monospace;
 }
 
 body {
@@ -32,8 +38,16 @@ canvas {
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-family: monospace;
   text-transform: uppercase;
   color: #fff;
   gap: 16px;
+}
+
+#logo {
+  max-width: 95vw;
+  object-fit: contain;
+}
+
+#loading h1 {
+  all: unset;
 }

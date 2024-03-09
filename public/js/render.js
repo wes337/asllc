@@ -1,5 +1,6 @@
 import { ALL_ARTIST_IDS } from "./constants/artists.js";
 import { randomNumberBetween } from "./utils.js";
+import Interface from "./classes/interface.js";
 import Background from "./classes/background.js";
 import Building from "./classes/building.js";
 import Elevator from "./classes/elevator.js";
@@ -33,4 +34,5 @@ export default function render() {
 
   Building.renderRoof();
   Elevator.render();
+  Interface.render();
 }

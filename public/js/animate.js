@@ -20,7 +20,7 @@ function animateIntro() {
 
   Background.pivot();
 
-  let delay = 100;
+  let delay = 80;
   let current = 0;
 
   const animation = (delta) => {
@@ -30,7 +30,7 @@ function animateIntro() {
       return;
     }
 
-    const speed = 8 * delta;
+    const speed = 16 * delta;
     const scrollAmount = state.app.stage.pivot.y + speed;
 
     state.app.stage.pivot.y = Math.min(scrollAmount, 0);
@@ -41,6 +41,8 @@ function animateIntro() {
     if (state.app.stage.pivot.y === 0) {
       state.app.ticker.remove(animation);
       state.busy = false;
+
+      Interface.showBottomBar();
     }
   };
 

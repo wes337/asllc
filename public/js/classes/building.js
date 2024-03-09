@@ -45,4 +45,20 @@ export default class Building {
 
     state.app.stage.addChild(this.roof);
   }
+
+  static selectNextOrPreviousFloor(previous) {
+    if (state.busy) {
+      return;
+    }
+
+    const index = previous ? -1 : +1;
+
+    const floor = this.floors[(state.activeFloorNumber || 0) + index];
+
+    if (!floor) {
+      return;
+    }
+
+    floor.onClick();
+  }
 }

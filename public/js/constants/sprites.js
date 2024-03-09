@@ -234,12 +234,32 @@ export const SPRITES = {
   },
 };
 
+export const INTERFACE_SPRITES = {
+  logo: {
+    src: "./img/logo.gif",
+    width: 512,
+    height: 61,
+  },
+  downButton: {
+    src: "./img/sprites/down-button.png",
+    width: 300,
+    height: 343,
+  },
+  upButton: {
+    src: "./img/sprites/up-button.png",
+    width: 300,
+    height: 343,
+  },
+};
+
 export const ALL_SPRITE_IMAGES = (() => {
   const src = [];
 
-  Object.values(SPRITES).forEach((sprite) => {
-    src.push(sprite.src);
-  });
+  [...Object.values(SPRITES), ...Object.values(INTERFACE_SPRITES)].forEach(
+    (sprite) => {
+      src.push(sprite.src);
+    }
+  );
 
   return src.flat();
 })();

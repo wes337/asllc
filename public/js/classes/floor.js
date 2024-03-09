@@ -1,15 +1,21 @@
 import { SPRITES } from "../constants/sprites.js";
+import { ARTISTS } from "../constants/artists.js";
+import { FONT_SIZES } from "../constants/text.js";
+import { CONTENT } from "../constants/content.js";
+import { isMobileSizedScreen } from "../utils.js";
 import { animateCamera } from "../animate.js";
 import Elevator from "./elevator.js";
 import Building from "./building.js";
+import Interface from "./interface.js";
 import state from "../state.js";
 
 export default class Floor {
-  constructor(index, name) {
+  constructor(index, id) {
+    this.name = ARTISTS[id]?.name || id;
     this.index = index;
     this.container = new PIXI.Container();
     this.room = PIXI.Sprite.from(
-      SPRITES[name]?.floor || SPRITES[name]?.src || SPRITES.floor.src
+      SPRITES[id]?.floor || SPRITES[id]?.src || SPRITES.floor.src
     );
     this.wall = PIXI.Sprite.from(SPRITES.wall.src);
     this.separator = PIXI.Sprite.from(SPRITES.separator.src);
@@ -35,7 +41,8 @@ export default class Floor {
         state.app.screen.height -
         (SPRITES.wall.height / 2) * state.scale() -
         (SPRITES.separator.height / 2) * state.scale() -
-        SPRITES.wall.height * state.scale() * this.index,
+        SPRITES.wall.height * state.scale() * this.index -
+        Interface.bottomBar.height * state.scale(),
     };
   }
 
@@ -75,6 +82,16 @@ export default class Floor {
 
     state.activeFloorNumber = this.index;
     Elevator.animateDoor();
+
+    const defaultFontSize = isMobileSizedScreen()
+      ? FONT_SIZES.sm
+      : FONT_SIZES.md;
+
+    Interface.updateBottomBarText({
+      text:
+        this.name === "lobby" ? CONTENT.interface.bottomBar.default : this.name,
+      size: this.name === "lobby" ? defaultFontSize : FONT_SIZES.lg,
+    });
   }
 
   render() {
