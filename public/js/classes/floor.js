@@ -72,15 +72,21 @@ export default class Floor {
     }
 
     let cameraPosition = Math.min(
-      section * maxRoomsOnScreen * (this.room.height / 2) * -1,
+      maxRoomsOnScreen *
+        section *
+        (this.room.height / (maxRoomsOnScreen / 4)) *
+        -1,
       0
     );
 
     const numberFromTop = Building.floors.length - 1 - this.index;
     if (numberFromTop < maxRoomsOnScreen) {
       cameraPosition = cameraPosition - (this.room.height / 2) * this.index;
-      cameraPosition = cameraPosition + state.app.screen.height / 2;
+      cameraPosition =
+        cameraPosition + state.app.screen.height * state.scale() * 4;
     }
+
+    console.log(cameraPosition);
 
     animateCamera(Math.min(cameraPosition, 0));
 
