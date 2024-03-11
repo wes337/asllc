@@ -22,6 +22,11 @@ export default class Interface {
     show: false,
   };
 
+  static modal = {
+    container: new PIXI.Container(),
+    background: new PIXI.Graphics(),
+  };
+
   static {
     this.bottomBar.upButton.id = "up-button";
     this.bottomBar.upButton.eventMode = "static";
@@ -108,6 +113,22 @@ export default class Interface {
     }
   }
 
+  static showModal() {
+    this.modal.background.clear();
+    this.modal.background.beginFill(COLORS.interfaceBackground);
+    this.modal.background.drawRect(
+      state.app.screen.width / 4,
+      state.app.stage.pivot.y + state.app.screen.height / 4,
+      state.app.screen.width / 2,
+      state.app.screen.height / 2
+    );
+    this.modal.background.endFill();
+    this.modal.background.filters = [state.filters.highlight(4)];
+    this.modal.container.addChild(this.modal.background);
+
+    state.app.stage.addChild(this.modal.container);
+  }
+
   static renderBottomBar() {
     const scale = state.scale();
 
@@ -144,14 +165,13 @@ export default class Interface {
 
     // Background
     this.bottomBar.background.clear();
-    this.bottomBar.background.beginFill(COLORS.bottomBar);
+    this.bottomBar.background.beginFill(COLORS.interfaceBackground);
     this.bottomBar.background.drawRect(
       0,
       positionY - this.bottomBar.downButton.height / 2,
       width,
       this.bottomBar.height()
     );
-    this.bottomBar.background.endFill();
 
     // Top border
     const borderSize = 4;

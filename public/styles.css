@@ -40,7 +40,10 @@ canvas {
   text-align: center;
   text-transform: uppercase;
   color: #fff;
+  text-shadow: 2px 2px 0px #3b2c4a;
   gap: 16px;
+  background-color: #4f8fba;
+  z-index: 1;
 }
 
 #logo {
