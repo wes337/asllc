@@ -1,3 +1,4 @@
+import { isMobileSizedScreen } from "../utils.js";
 import { COLORS } from "./colors.js";
 
 export const FONT_FAMILY = { name: "Nokia", src: "./fonts/nokiafc22.ttf" };
@@ -20,3 +21,6 @@ export const TEXT_STYLES = {
     dropShadowDistance: 2,
   },
 };
+
+export const DEFAULT_FONT_SIZE = () =>
+  isMobileSizedScreen() ? FONT_SIZES.sm : FONT_SIZES.md;

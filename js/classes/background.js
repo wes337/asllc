@@ -169,14 +169,11 @@ export default class Background {
   }
 
   static renderGround() {
-    const scale = state.scale();
-
     this.ground.clear();
 
     const width = state.app.screen.width;
-    const height = Interface.bottomBar.height();
-
-    const positionY = state.app.screen.height - height;
+    const height = state.app.screen.height * 2;
+    const positionY = state.app.screen.height - Interface.bottomBar.height();
 
     this.ground.beginFill(COLORS.dirt);
     this.ground.drawRect(0, positionY, width, height);

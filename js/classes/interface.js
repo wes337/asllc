@@ -1,6 +1,6 @@
 import { INTERFACE_SPRITES } from "../constants/sprites.js";
 import { COLORS } from "../constants/colors.js";
-import { TEXT_STYLES, FONT_SIZES } from "../constants/text.js";
+import { TEXT_STYLES, DEFAULT_FONT_SIZE } from "../constants/text.js";
 import { CONTENT } from "../constants/content.js";
 import { isMobileSizedScreen } from "../utils.js";
 import Building from "./building.js";
@@ -15,7 +15,7 @@ export default class Interface {
     height: () => (INTERFACE_SPRITES.downButton.height + 4) * state.scale(),
     text: new PIXI.Text(CONTENT.interface.bottomBar.default, {
       ...TEXT_STYLES.default,
-      fontSize: isMobileSizedScreen() ? FONT_SIZES.sm : FONT_SIZES.md,
+      fontSize: DEFAULT_FONT_SIZE(),
       wordWrap: true,
     }),
     background: new PIXI.Graphics(),

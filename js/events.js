@@ -1,7 +1,7 @@
+import { isMobileSizedScreen } from "./utils.js";
 import { animateCamera } from "./animate.js";
-import Building from "./classes/building.js";
-import state from "./state.js";
 import render from "./render.js";
+import state from "./state.js";
 
 function handleResize() {
   window.addEventListener("resize", () => {
@@ -9,70 +9,84 @@ function handleResize() {
   });
 }
 
-function handleScroll() {
-  window.addEventListener("wheel", (event) => {
-    if (event.deltaY < 0) {
-      Building.selectNextOrPreviousFloor(false);
-    } else if (event.deltaY > 0) {
-      Building.selectNextOrPreviousFloor(true);
-    }
-  });
-}
-
 const hammer = new Hammer(document.body);
 
-function handlePan() {
-  const panAmount = 16;
+function handleScroll() {
+  const scrollAmount = 16;
 
-  hammer.get("pan").set({ direction: Hammer.DIRECTION_ALL });
-
-  hammer.on("panend", (event) => {
+  const scrollUp = (event) => {
     if (!state.introFinished) {
       return;
     }
 
-    let amount =
-      state.app.stage.pivot.y - panAmount - event.distance * event.velocityY;
+    const velocity =
+      event.velocityY !== undefined ? event.velocityY : scrollAmount * -1;
 
-    const top = Building.topFloor.position.y() - state.app.screen.height / 2;
-    const limit = amount <= top;
+    const amount = state.app.stage.pivot.y - scrollAmount * velocity;
+    animateCamera(Math.min(amount, state.camera.min()), true);
+  };
+
+  const scrollDown = (event) => {
+    if (!state.introFinished) {
+      return;
+    }
+
+    const velocity =
+      event.velocityY !== undefined ? event.velocityY : scrollAmount;
+
+    let amount = state.app.stage.pivot.y - scrollAmount * velocity;
+
+    const max = state.camera.max();
+    const limit = amount <= max;
 
     if (limit) {
-      amount = top;
-    }
-
-    animateCamera(Math.min(amount, 0), true);
-  });
-
-  hammer.on("panup", (event) => {
-    if (!state.introFinished) {
-      return;
-    }
-
-    const amount = state.app.stage.pivot.y - panAmount * event.velocityY;
-    animateCamera(Math.min(amount, 0), true);
-  });
-
-  hammer.on("pandown", (event) => {
-    if (!state.introFinished) {
-      return;
-    }
-
-    let amount = state.app.stage.pivot.y - panAmount * event.velocityY;
-
-    const limit =
-      amount <= Building.topFloor.position.y() - state.app.screen.height / 2;
-
-    if (limit) {
-      return;
+      amount = max;
     }
 
     animateCamera(amount, true);
-  });
+  };
+
+  const scrollEnd = (event) => {
+    if (!state.introFinished) {
+      return;
+    }
+    const velocity =
+      event.velocityY !== undefined ? event.velocityY : scrollAmount;
+
+    let amount =
+      state.app.stage.pivot.y - scrollAmount - event.distance * velocity;
+
+    const max = state.camera.max();
+    const limit = amount <= max;
+
+    if (limit) {
+      amount = max;
+    }
+
+    const min = state.camera.min();
+    amount = Math.min(amount, min);
+
+    animateCamera(amount, true);
+  };
+
+  if (isMobileSizedScreen()) {
+    // TODO: Make scrolling feel more natural on mobile devices...
+    hammer.get("pan").set({ direction: Hammer.DIRECTION_ALL });
+    hammer.on("panup", scrollUp);
+    hammer.on("pandown", scrollDown);
+    hammer.on("panend", scrollEnd);
+  } else {
+    window.addEventListener("wheel", (event) => {
+      if (event.deltaY < 0) {
+        scrollDown(event);
+      } else if (event.deltaY > 0) {
+        scrollUp(event);
+      }
+    });
+  }
 }
 
 export default function events() {
   handleResize();
   handleScroll();
-  handlePan();
 }

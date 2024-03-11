@@ -14,6 +14,10 @@ export default class Elevator {
   static generator = PIXI.Sprite.from(SPRITES["elevator-generator"].src);
   static rope = [];
 
+  static get inBasement() {
+    return Building.activeFloor.number < 0;
+  }
+
   static get width() {
     return 145 * state.scale();
   }
@@ -58,10 +62,10 @@ export default class Elevator {
     const offsetY = 4;
 
     // How to animate this? Draw all and stack, or use scale
-    Building.floors.forEach((floor, i) => {
+    [...Building.floors, ...Building.basement].forEach((floor, i) => {
       let rope = this.rope[i];
 
-      if (Building.activeFloor.index <= floor.index) {
+      if (Building.activeFloor.number <= floor.number) {
         rope = this.rope[i] || PIXI.Sprite.from(SPRITES["elevator-rope"].src);
 
         const positionX =
@@ -69,9 +73,13 @@ export default class Elevator {
 
         let positionY = floor.position.y() + offsetY;
 
-        if (Building.activeFloor.index === floor.index) {
+        if (Building.activeFloor.number === floor.number) {
           const overlap = 8;
           positionY = positionY - overlap;
+        }
+
+        if (this.inBasement) {
+          positionY = positionY + SPRITES.foundation.height * scale;
         }
 
         rope.position.set(positionX, positionY);
@@ -81,8 +89,8 @@ export default class Elevator {
 
         // Hides the rope if the active floor is the top floor
         if (
-          Building.activeFloor.index === floor.index &&
-          Building.topFloor.index === floor.index
+          Building.activeFloor.number === floor.number &&
+          Building.topFloor.number === floor.number
         ) {
           rope.scale.y = 0;
         }
@@ -94,6 +102,8 @@ export default class Elevator {
 
       this.rope[i] = rope;
     });
+
+    Building.renderFoundation();
   }
 
   static renderGenerator() {
@@ -147,8 +157,12 @@ export default class Elevator {
       offsetY;
 
     // Animate this
-    const floorFromTop = Building.topFloor.index - Building.activeFloor.index;
+    const floorFromTop = Building.topFloor.number - Building.activeFloor.number;
     positionY = positionY + floorFromTop * Building.activeFloor.height();
+
+    if (this.inBasement) {
+      positionY = positionY + SPRITES.foundation.height * scale + 4;
+    }
 
     this.shaft.position.set(positionX, positionY);
     this.shaft.scale.y = scale;
