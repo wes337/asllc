@@ -35,15 +35,15 @@ function animateIntro() {
       return;
     }
 
-    const speed = 16 * delta;
+    const speed = 24 * delta;
     const scrollAmount = state.app.stage.pivot.y + speed;
 
-    state.app.stage.pivot.y = Math.min(scrollAmount, 0);
+    state.app.stage.pivot.y = Math.min(scrollAmount, state.camera.start());
 
     Background.pivot();
     Interface.render();
 
-    if (state.app.stage.pivot.y === 0) {
+    if (state.app.stage.pivot.y === state.camera.start()) {
       state.app.ticker.remove(animation);
       state.camera.currentAnimation = null;
       state.introFinished = true;
