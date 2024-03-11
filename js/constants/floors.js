@@ -1,6 +1,6 @@
 import { shuffleArray } from "../utils.js";
 
-export const ARTISTS = {
+export const FLOORS = {
   afourteen: {
     name: "Afourteen",
   },
@@ -10,9 +10,9 @@ export const ARTISTS = {
   blckk: {
     name: "Blckk",
   },
-  // bruhmanegod: {
-  //   name: "BRUHMANEGOD",
-  // },
+  bruhmanegod: {
+    name: "BRUHMANEGOD",
+  },
   bvdlvd: {
     name: "BVDLVD",
   },
@@ -34,15 +34,37 @@ export const ARTISTS = {
   dirtybutt: {
     name: "DIRTYBUTT",
   },
-  "gregory-diamond": {
-    name: "Gregory Diamond",
-  },
-  "jake-zimmerman": {
-    name: "Jake Zimmerman",
-  },
   kamaara: {
     name: "KAMAARA",
   },
+  mkultra: {
+    name: "MKULTRA",
+  },
+  "plague-blvd": {
+    name: "Plague Blvd",
+  },
+  skotskr: {
+    name: "Skotskr",
+  },
+  wendigo: {
+    name: "Wendigo",
+  },
+  "gregory-diamond": {
+    name: "Gregory Diamond",
+    basement: true,
+  },
+  "jake-zimmerman": {
+    name: "Jake Zimmerman",
+    basement: true,
+  },
+  sorbet: {
+    name: "Sorbet",
+    basement: true,
+  },
+  steel: {
+    name: "Steel",
+    basement: true,
+  },
 };
 
-export const ALL_ARTIST_IDS = (() => shuffleArray(Object.keys(ARTISTS)))();
+export const ALL_ARTIST_IDS = (() => shuffleArray(Object.keys(FLOORS)))();

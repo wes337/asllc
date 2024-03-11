@@ -12,7 +12,7 @@ export default class Interface {
     container: new PIXI.Container(),
     upButton: PIXI.Sprite.from(INTERFACE_SPRITES.upButton.src),
     downButton: PIXI.Sprite.from(INTERFACE_SPRITES.downButton.src),
-    height: INTERFACE_SPRITES.downButton.height,
+    height: () => (INTERFACE_SPRITES.downButton.height + 4) * state.scale(),
     text: new PIXI.Text(CONTENT.interface.bottomBar.default, {
       ...TEXT_STYLES.default,
       fontSize: isMobileSizedScreen() ? FONT_SIZES.sm : FONT_SIZES.md,
@@ -78,7 +78,7 @@ export default class Interface {
     state.busy = true;
 
     this.bottomBar.show = true;
-    this.bottomBar.container.pivot.y = this.bottomBar.container.height * -1;
+    this.bottomBar.container.pivot.y = this.bottomBar.height() * -1;
 
     const animation = (delta) => {
       const speed = 4 * delta;
@@ -119,7 +119,7 @@ export default class Interface {
 
     const positionY =
       state.app.screen.height -
-      this.bottomBar.container.height / 2 +
+      this.bottomBar.height() / 2 +
       state.app.stage.pivot.y;
 
     // Up button
@@ -149,7 +149,7 @@ export default class Interface {
       0,
       positionY - this.bottomBar.downButton.height / 2,
       width,
-      this.bottomBar.container.height
+      this.bottomBar.height()
     );
     this.bottomBar.background.endFill();
 
@@ -207,7 +207,7 @@ export default class Interface {
     state.app.stage.addChild(this.bottomBar.container);
 
     if (!this.bottomBar.show) {
-      this.bottomBar.container.pivot.y = this.bottomBar.container.height * -1;
+      this.bottomBar.container.pivot.y = this.bottomBar.height() * -1;
     }
   }
 

@@ -8,7 +8,12 @@ export default function animate() {
 
   state.people.forEach((person) => person.animate());
 
-  animateIntro();
+  if (state.skipIntro) {
+    state.introFinished = true;
+    Interface.showBottomBar();
+  } else {
+    animateIntro();
+  }
 }
 
 function animateIntro() {

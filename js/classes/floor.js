@@ -1,5 +1,5 @@
 import { SPRITES } from "../constants/sprites.js";
-import { ARTISTS } from "../constants/artists.js";
+import { FLOORS } from "../constants/floors.js";
 import { FONT_SIZES } from "../constants/text.js";
 import { CONTENT } from "../constants/content.js";
 import { isMobileSizedScreen } from "../utils.js";
@@ -11,7 +11,7 @@ import state from "../state.js";
 
 export default class Floor {
   constructor(index, id) {
-    this.name = ARTISTS[id]?.name || id;
+    this.name = FLOORS[id]?.name || id;
     this.index = index;
     this.container = new PIXI.Container();
     this.room = PIXI.Sprite.from(
@@ -42,7 +42,7 @@ export default class Floor {
         (SPRITES.wall.height / 2) * state.scale() -
         (SPRITES.separator.height / 2) * state.scale() -
         SPRITES.wall.height * state.scale() * this.index -
-        Interface.bottomBar.height * state.scale(),
+        Interface.bottomBar.height(),
     };
   }
 

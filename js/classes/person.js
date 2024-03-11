@@ -16,6 +16,7 @@ export default class Person {
     this.direction = Math.random() < 0.5 ? "left" : "right";
     this.destination = null;
     this.walkRandomly = true;
+    this.metadata = SPRITES[name].metadata;
   }
 
   set startingPosition(position) {
@@ -130,10 +131,15 @@ export default class Person {
 
     positionX = Math.min(positionX, max);
 
-    const positionY =
+    let positionY =
       this.currentFloor.separator.position.y -
       this.currentFloor.separator.height / 2 -
       this.height() / 2;
+
+    if (this.metadata && this.metadata.upsideDown) {
+      positionY =
+        positionY - this.height() - this.currentFloor.separator.height + 2;
+    }
 
     this.character.position.set(positionX, positionY);
 
