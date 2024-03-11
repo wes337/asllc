@@ -54,6 +54,11 @@ export const SPRITES = {
     width: 1770,
     height: 50,
   },
+  foundation: {
+    src: "./img/sprites/foundation.png",
+    width: 1770,
+    height: 160,
+  },
   "elevator-generator": {
     src: "./img/sprites/elevator-generator.png",
     width: 290,

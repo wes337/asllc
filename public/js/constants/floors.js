@@ -67,4 +67,12 @@ export const FLOORS = {
   },
 };
 
-export const ALL_ARTIST_IDS = (() => shuffleArray(Object.keys(FLOORS)))();
+export const ALL_FLOOR_IDS = (() => shuffleArray(Object.keys(FLOORS)))();
+
+export const ABOVE_GROUND_FLOOR_IDS = ALL_FLOOR_IDS.filter(
+  (id) => !FLOORS[id].basement
+);
+
+export const BASEMENT_FLOOR_IDS = ALL_FLOOR_IDS.filter(
+  (id) => FLOORS[id].basement
+);

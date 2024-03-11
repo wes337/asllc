@@ -48,6 +48,10 @@ export default class Person {
   }
 
   get currentFloor() {
+    if (this.floorNumber < 0) {
+      return Building.basement[this.floorNumber * -1];
+    }
+
     return Building.floors[this.floorNumber];
   }
 
@@ -138,7 +142,10 @@ export default class Person {
 
     if (this.metadata && this.metadata.upsideDown) {
       positionY =
-        positionY - this.height() - this.currentFloor.separator.height + 2;
+        positionY -
+        this.height() -
+        this.currentFloor.separator.height +
+        16 * scale;
     }
 
     this.character.position.set(positionX, positionY);

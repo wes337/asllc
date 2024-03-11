@@ -11,6 +11,8 @@ export default function animate() {
   if (state.skipIntro) {
     state.introFinished = true;
     Interface.showBottomBar();
+    state.app.stage.pivot.y = state.camera.start();
+    Background.pivot();
   } else {
     animateIntro();
   }
@@ -43,16 +45,23 @@ function animateIntro() {
 
     if (state.app.stage.pivot.y === 0) {
       state.app.ticker.remove(animation);
+      state.camera.currentAnimation = null;
       state.introFinished = true;
       Interface.showBottomBar();
     }
   };
 
+  state.camera.currentAnimation = animation;
   state.app.ticker.add(animation);
 }
 
 export function animateCamera(end, withDelta) {
   state.busy = true;
+
+  if (state.camera.currentAnimation) {
+    state.app.ticker.remove(state.camera.currentAnimation);
+    state.camera.currentAnimation = null;
+  }
 
   const start = state.app.stage.pivot.y;
   const up = start > end;
@@ -79,9 +88,11 @@ export function animateCamera(end, withDelta) {
 
     if (state.app.stage.pivot.y === end) {
       state.app.ticker.remove(animation);
+      state.camera.currentAnimation = null;
       state.busy = false;
     }
   };
 
+  state.camera.currentAnimation = animation;
   state.app.ticker.add(animation);
 }

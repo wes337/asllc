@@ -1,8 +1,7 @@
 import { isMobileSizedScreen } from "./utils.js";
 import { animateCamera } from "./animate.js";
-import Building from "./classes/building.js";
-import state from "./state.js";
 import render from "./render.js";
+import state from "./state.js";
 
 function handleResize() {
   window.addEventListener("resize", () => {
@@ -24,7 +23,7 @@ function handleScroll() {
       event.velocityY !== undefined ? event.velocityY : scrollAmount * -1;
 
     const amount = state.app.stage.pivot.y - scrollAmount * velocity;
-    animateCamera(Math.min(amount, 0), true);
+    animateCamera(Math.min(amount, state.camera.min()), true);
   };
 
   const scrollDown = (event) => {
@@ -37,11 +36,11 @@ function handleScroll() {
 
     let amount = state.app.stage.pivot.y - scrollAmount * velocity;
 
-    const limit =
-      amount <= Building.topFloor.position.y() - state.app.screen.height / 2;
+    const max = state.camera.max();
+    const limit = amount <= max;
 
     if (limit) {
-      return;
+      amount = max;
     }
 
     animateCamera(amount, true);
@@ -57,14 +56,17 @@ function handleScroll() {
     let amount =
       state.app.stage.pivot.y - scrollAmount - event.distance * velocity;
 
-    const top = Building.topFloor.position.y() - state.app.screen.height / 2;
-    const limit = amount <= top;
+    const max = state.camera.max();
+    const limit = amount <= max;
 
     if (limit) {
-      amount = top;
+      amount = max;
     }
 
-    animateCamera(Math.min(amount, 0), true);
+    const min = state.camera.min();
+    amount = Math.min(amount, min);
+
+    animateCamera(amount, true);
   };
 
   if (isMobileSizedScreen()) {
