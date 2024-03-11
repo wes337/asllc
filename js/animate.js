@@ -43,7 +43,7 @@ function animateIntro() {
     Background.pivot();
     Interface.render();
 
-    if (state.app.stage.pivot.y === 0) {
+    if (state.app.stage.pivot.y === state.camera.start()) {
       state.app.ticker.remove(animation);
       state.camera.currentAnimation = null;
       state.introFinished = true;
