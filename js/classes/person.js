@@ -161,6 +161,6 @@ export default class Person {
     const highlight =
       state.activeFloorNumber && this.floorNumber === state.activeFloorNumber;
 
-    this.character.filters = highlight ? [state.filters.highlight] : [];
+    this.character.filters = highlight ? [state.filters.highlight(2)] : [];
   }
 }

@@ -7,11 +7,10 @@ import events from "./events.js";
 import state from "./state.js";
 
 async function loadAssets() {
-  await Promise.all(
-    ALL_SPRITE_IMAGES.map(async (image) => {
-      await PIXI.Assets.load(image);
-    })
-  );
+  const loading = document.getElementById("loading");
+  const message = loading.querySelector("h1");
+
+  message.innerHTML = "Loading fonts...";
 
   PIXI.Assets.addBundle("fonts", [
     { alias: FONT_FAMILY.name, src: FONT_FAMILY.src },
@@ -19,7 +18,12 @@ async function loadAssets() {
 
   await PIXI.Assets.loadBundle("fonts");
 
-  const loading = document.getElementById("loading");
+  message.innerHTML = "Loading sprites...";
+
+  await PIXI.Assets.load(ALL_SPRITE_IMAGES, (progress) => {
+    message.innerHTML = `Loading sprites... ${Math.round(progress * 100)}%`;
+  });
+
   loading.remove();
 }
 
