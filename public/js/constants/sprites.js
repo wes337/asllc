@@ -141,6 +141,9 @@ export const SPRITES = {
     width: 140,
     height: 220,
     floor: "./img/sprites/floors/bruhmanegod-floor.png",
+    metadata: {
+      upsideDown: true,
+    },
   },
   bvdlvd: {
     src: [
@@ -231,6 +234,69 @@ export const SPRITES = {
     width: 160,
     height: 200,
     floor: "./img/sprites/floors/kamaara-floor.png",
+  },
+  mkultra: {
+    src: [
+      "./img/sprites/characters/mkultra-1.png",
+      "./img/sprites/characters/mkultra-2.png",
+    ],
+    width: 240,
+    height: 240,
+    floor: "./img/sprites/floors/mkultra-floor.png",
+  },
+  "plague-blvd": {
+    src: [
+      "./img/sprites/characters/plague-blvd-1.png",
+      "./img/sprites/characters/plague-blvd-2.png",
+    ],
+    width: 180,
+    height: 220,
+    floor: "./img/sprites/floors/plague-blvd-floor.png",
+  },
+  skotskr: {
+    src: [
+      "./img/sprites/characters/skotskr-1.png",
+      "./img/sprites/characters/skotskr-2.png",
+    ],
+    width: 180,
+    height: 200,
+    floor: "./img/sprites/floors/skotskr-floor.png",
+  },
+  sorbet: {
+    src: [
+      "./img/sprites/characters/sorbet-1.png",
+      "./img/sprites/characters/sorbet-2.png",
+    ],
+    width: 140,
+    height: 200,
+    floor: "./img/sprites/floors/sorbet-floor.png",
+  },
+  steel: {
+    src: [
+      "./img/sprites/characters/steel-1.png",
+      "./img/sprites/characters/steel-2.png",
+    ],
+    width: 200,
+    height: 240,
+    floor: "./img/sprites/floors/steel-floor.png",
+  },
+  wendigo: {
+    src: [
+      "./img/sprites/characters/wendigo-1.png",
+      "./img/sprites/characters/wendigo-2.png",
+    ],
+    width: 200,
+    height: 240,
+    floor: "./img/sprites/floors/wendigo-floor.png",
+  },
+  wud: {
+    src: [
+      "./img/sprites/characters/wud-1.png",
+      "./img/sprites/characters/wud-2.png",
+    ],
+    width: 140,
+    height: 200,
+    floor: "./img/sprites/floors/wud-floor.png",
   },
 };
 

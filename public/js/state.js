@@ -10,6 +10,7 @@ const state = {
   },
   shift: 0,
   busy: false,
+  skipIntro: true,
   introFinished: false,
   filters: {
     highlight: new PIXI.filters.OutlineFilter(2, COLORS.sky),

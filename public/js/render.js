@@ -1,4 +1,4 @@
-import { ALL_ARTIST_IDS } from "./constants/artists.js";
+import { ALL_ARTIST_IDS } from "./constants/floors.js";
 import { randomNumberBetween } from "./utils.js";
 import Interface from "./classes/interface.js";
 import Background from "./classes/background.js";

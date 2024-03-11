@@ -149,7 +149,7 @@ export default class Background {
       let positionY =
         state.app.screen.height -
         (image.height / 2) * scale -
-        Interface.bottomBar.height * scale;
+        Interface.bottomBar.height();
 
       if (breakpointY) {
         positionY = state.app.screen.height + margin;
@@ -174,7 +174,7 @@ export default class Background {
     this.ground.clear();
 
     const width = state.app.screen.width;
-    const height = Interface.bottomBar.height * scale;
+    const height = Interface.bottomBar.height();
 
     const positionY = state.app.screen.height - height;
 
