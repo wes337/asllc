@@ -12,7 +12,7 @@ const state = {
     return isMobileSizedScreen() ? 0.2 : 0.25;
   },
   busy: false,
-  skipIntro: true,
+  skipIntro: false,
   introFinished: false,
   filters: {
     highlight: new PIXI.filters.OutlineFilter(2, COLORS.sky),
