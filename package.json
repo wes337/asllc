@@ -3,7 +3,7 @@
   "homepage": "http://wes337.github.io/asllc",
   "version": "1.0.0",
   "description": "",
-  "main": "./public/main.js",
+  "main": "./public/main-test.js",
   "scripts": {
     "start": "serve ./public",
     "deploy": "gh-pages -d public"
