@@ -15,7 +15,8 @@ const state = {
   skipIntro: false,
   introFinished: false,
   filters: {
-    highlight: (size) => new PIXI.filters.OutlineFilter(size, COLORS.sky),
+    highlight: (size, color) =>
+      new PIXI.filters.OutlineFilter(size || 2, color || COLORS.sky),
   },
   camera: {
     currentAnimation: null,

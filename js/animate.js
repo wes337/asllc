@@ -1,3 +1,4 @@
+import { CONTENT } from "./constants/content.js";
 import Background from "./classes/background.js";
 import Building from "./classes/building.js";
 import Interface from "./classes/interface.js";
@@ -10,7 +11,7 @@ export default function animate() {
 
   if (state.skipIntro) {
     state.introFinished = true;
-    Interface.showBottomBar();
+    //   Interface.showBottomBar();
     state.app.stage.pivot.y = state.camera.start();
     Background.pivot();
   } else {
@@ -46,8 +47,17 @@ function animateIntro() {
     if (state.app.stage.pivot.y === state.camera.start()) {
       state.app.ticker.remove(animation);
       state.camera.currentAnimation = null;
-      state.introFinished = true;
-      Interface.showBottomBar();
+
+      Interface.showModal({
+        headerText: CONTENT.modals.intro.headerText,
+        bodyText: CONTENT.modals.intro.bodyText,
+        buttonText: CONTENT.modals.intro.buttonText,
+        callback: () => {
+          Interface.hideModal();
+          Interface.showBottomBar();
+          state.introFinished = true;
+        },
+      });
     }
   };
 

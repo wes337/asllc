@@ -7,4 +7,7 @@ export const COLORS = {
   interfaceBackground: "#10141f",
   dirt: "#3b221c",
   textShadow: "#3b2c4a",
+  sun: "#e8c170",
+  sunDark: "#be772b",
+  button: "#495588",
 };
