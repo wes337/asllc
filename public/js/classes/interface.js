@@ -1,6 +1,10 @@
 import { INTERFACE_SPRITES } from "../constants/sprites.js";
 import { COLORS } from "../constants/colors.js";
-import { TEXT_STYLES, DEFAULT_FONT_SIZE } from "../constants/text.js";
+import {
+  TEXT_STYLES,
+  DEFAULT_FONT_SIZE,
+  FONT_SIZES,
+} from "../constants/text.js";
 import { CONTENT } from "../constants/content.js";
 import { isMobileSizedScreen } from "../utils.js";
 import Building from "./building.js";
@@ -8,6 +12,7 @@ import state from "../state.js";
 
 export default class Interface {
   static title = PIXI.Sprite.from(INTERFACE_SPRITES.logo.src);
+
   static bottomBar = {
     container: new PIXI.Container(),
     upButton: PIXI.Sprite.from(INTERFACE_SPRITES.upButton.src),
@@ -23,8 +28,32 @@ export default class Interface {
   };
 
   static modal = {
+    show: false,
     container: new PIXI.Container(),
     background: new PIXI.Graphics(),
+    headerText: new PIXI.Text("", {
+      ...TEXT_STYLES.header,
+      fontVariant: "small-caps",
+      wordWrap: true,
+      align: "center",
+    }),
+    bodyText: new PIXI.Text("", {
+      ...TEXT_STYLES.default,
+      fontSize: FONT_SIZES.md,
+      wordWrap: true,
+      align: "center",
+    }),
+    button: {
+      text: new PIXI.Text("", {
+        ...TEXT_STYLES.default,
+        fontSize: FONT_SIZES.xl,
+        wordWrap: false,
+      }),
+      container: new PIXI.Container(),
+      background: new PIXI.Graphics(),
+    },
+
+    callback: null,
   };
 
   static {
@@ -113,20 +142,105 @@ export default class Interface {
     }
   }
 
-  static showModal() {
+  static renderModal() {
     this.modal.background.clear();
+    this.modal.button.background.clear();
+
+    if (!this.modal.show) {
+      return;
+    }
+
+    const margin = 32;
+    const width = isMobileSizedScreen() ? state.app.screen.width - margin : 550;
+    const height = 250;
+
+    const positionX = state.app.screen.width / 2 - width / 2;
+    const positionY =
+      state.app.stage.pivot.y + state.app.screen.height / 2 - height / 2;
+
     this.modal.background.beginFill(COLORS.interfaceBackground);
-    this.modal.background.drawRect(
-      state.app.screen.width / 4,
-      state.app.stage.pivot.y + state.app.screen.height / 4,
-      state.app.screen.width / 2,
-      state.app.screen.height / 2
-    );
+    this.modal.background.drawRect(positionX, positionY, width, height);
     this.modal.background.endFill();
     this.modal.background.filters = [state.filters.highlight(4)];
     this.modal.container.addChild(this.modal.background);
 
+    // Text
+    const textMargin = 8;
+    const textPositionX = positionX + width / 2;
+
+    // Header Text
+    const headerTextPositionY =
+      positionY + this.modal.headerText.height / 2 + margin;
+
+    this.modal.headerText.style.fontSize = isMobileSizedScreen()
+      ? FONT_SIZES.lg
+      : FONT_SIZES.xl;
+    this.modal.headerText.position.set(textPositionX, headerTextPositionY);
+    this.modal.headerText.anchor.set(0.5);
+    this.modal.headerText.style.wordWrapWidth = this.modal.container.width;
+
+    this.modal.container.addChild(this.modal.headerText);
+
+    // Body Text
+    const bodyTextPositionY = positionY + height / 2 - textMargin;
+
+    this.modal.bodyText.position.set(textPositionX, bodyTextPositionY);
+    this.modal.bodyText.anchor.set(0.5);
+
+    this.modal.bodyText.style.wordWrapWidth = this.modal.container.width * 0.95;
+
+    this.modal.container.addChild(this.modal.bodyText);
+
+    // Button
+    const buttonPadding = 8;
+    const buttonPositionY =
+      positionY + height - this.modal.button.text.height / 2 - margin;
+
+    this.modal.button.container.position.set(textPositionX, buttonPositionY);
+    this.modal.button.container.eventMode = "static";
+    this.modal.button.container.cursor = "pointer";
+    this.modal.button.container.addListener("pointerdown", () =>
+      this.modal.callback()
+    );
+
+    this.modal.button.background.beginFill(COLORS.button);
+    this.modal.button.background.drawRect(
+      (this.modal.button.text.width / 2) * -1 - buttonPadding - 4,
+      this.modal.button.text.height * -1 + buttonPadding,
+      this.modal.button.text.width + buttonPadding * 2,
+      this.modal.button.text.height + buttonPadding * 2
+    );
+    this.modal.button.background.endFill();
+    this.modal.button.container.addChild(this.modal.button.background);
+
+    this.modal.button.text.style.wordWrapWidth =
+      this.modal.container.width - textMargin;
+    this.modal.button.text.anchor.set(0.5);
+    this.modal.button.container.addChild(this.modal.button.text);
+
+    this.modal.button.container.filters = [
+      state.filters.highlight(4, COLORS.textShadow),
+    ];
+
+    this.modal.container.addChild(this.modal.button.container);
+
     state.app.stage.addChild(this.modal.container);
+  }
+
+  static showModal({ headerText, bodyText, buttonText, callback }) {
+    this.modal.headerText.text = headerText;
+    this.modal.bodyText.text = bodyText;
+    this.modal.button.text.text = buttonText.toUpperCase();
+    this.modal.callback = callback;
+    this.modal.show = true;
+  }
+
+  static hideModal() {
+    this.modal.headerText.text = "";
+    this.modal.bodyText.text = "";
+    this.modal.button.text.text = "";
+    this.modal.callback = () => {};
+    this.modal.show = false;
   }
 
   static renderBottomBar() {
@@ -221,6 +335,7 @@ export default class Interface {
 
     this.bottomBar.text.position.set(textPositionX, positionY);
     this.bottomBar.text.anchor.set(0.5);
+    this.bottomBar.text.style.fontSize = DEFAULT_FONT_SIZE();
 
     this.bottomBar.container.addChild(this.bottomBar.text);
 
@@ -234,5 +349,6 @@ export default class Interface {
   static render() {
     this.renderTitle();
     this.renderBottomBar();
+    this.renderModal();
   }
 }

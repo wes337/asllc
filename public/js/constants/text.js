@@ -9,6 +9,7 @@ export const FONT_SIZES = {
   md: 16,
   lg: 24,
   xl: 32,
+  xxl: 40,
 };
 
 export const TEXT_STYLES = {
@@ -18,7 +19,15 @@ export const TEXT_STYLES = {
     fontSize: FONT_SIZES.md,
     dropShadow: true,
     dropShadowColor: COLORS.textShadow,
-    dropShadowDistance: 2,
+    dropShadowDistance: 4,
+  },
+  header: {
+    fontFamily: FONT_FAMILY.name,
+    fill: COLORS.sun,
+    fontSize: FONT_SIZES.xl,
+    dropShadow: true,
+    dropShadowColor: COLORS.sunDark,
+    dropShadowDistance: 4,
   },
 };
 
