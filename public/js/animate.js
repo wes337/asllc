@@ -65,7 +65,16 @@ function animateIntro() {
   state.app.ticker.add(animation);
 }
 
-export function animateCamera(end, withDelta) {
+export function animateCamera(end, withDelta, instant) {
+  if (instant) {
+    state.app.stage.pivot.y = end;
+
+    Background.pivot();
+    Interface.render();
+
+    return;
+  }
+
   state.busy = true;
 
   if (state.camera.currentAnimation) {

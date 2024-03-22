@@ -3,6 +3,7 @@ import { COLORS } from "../constants/colors.js";
 import {
   TEXT_STYLES,
   DEFAULT_FONT_SIZE,
+  DEFAULT_LINE_HEIGHT,
   FONT_SIZES,
 } from "../constants/text.js";
 import { CONTENT } from "../constants/content.js";
@@ -21,6 +22,7 @@ export default class Interface {
     text: new PIXI.Text(CONTENT.interface.bottomBar.default, {
       ...TEXT_STYLES.default,
       fontSize: DEFAULT_FONT_SIZE(),
+      lineHeight: DEFAULT_LINE_HEIGHT(DEFAULT_FONT_SIZE()),
       wordWrap: true,
     }),
     background: new PIXI.Graphics(),
@@ -135,6 +137,7 @@ export default class Interface {
 
     if (size) {
       this.bottomBar.text.style.fontSize = size;
+      this.bottomBar.text.style.lineHeight = DEFAULT_LINE_HEIGHT(size);
     }
 
     if (color) {
@@ -216,6 +219,7 @@ export default class Interface {
     this.modal.button.text.style.wordWrapWidth =
       this.modal.container.width - textMargin;
     this.modal.button.text.anchor.set(0.5);
+    this.modal.button.text.position.y = -2;
     this.modal.button.container.addChild(this.modal.button.text);
 
     this.modal.button.container.filters = [
@@ -335,7 +339,6 @@ export default class Interface {
 
     this.bottomBar.text.position.set(textPositionX, positionY);
     this.bottomBar.text.anchor.set(0.5);
-    this.bottomBar.text.style.fontSize = DEFAULT_FONT_SIZE();
 
     this.bottomBar.container.addChild(this.bottomBar.text);
 
