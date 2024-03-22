@@ -11,6 +11,7 @@ export default class Elevator {
     SPRITES["elevator-wheel"].src.map((img) => PIXI.Texture.from(img))
   );
 
+  static bricks = PIXI.Sprite.from(SPRITES["elevator-bricks"].src);
   static generator = PIXI.Sprite.from(SPRITES["elevator-generator"].src);
   static rope = [];
 
@@ -59,46 +60,31 @@ export default class Elevator {
     const scaledWidth = SPRITES["elevator-rope"].width * scale;
 
     const offsetX = 90 * scale;
-    const offsetY = 4;
 
     // How to animate this? Draw all and stack, or use scale
     [...Building.floors, ...Building.basement].forEach((floor, i) => {
-      let rope = this.rope[i];
-
-      if (Building.activeFloor.number <= floor.number) {
-        rope = this.rope[i] || PIXI.Sprite.from(SPRITES["elevator-rope"].src);
-
-        const positionX =
-          floor.position.x() - floor.width() / 2 + scaledWidth / 2 + offsetX;
-
-        let positionY = floor.position.y() + offsetY;
-
-        if (Building.activeFloor.number === floor.number) {
-          const overlap = 8;
-          positionY = positionY - overlap;
-        }
-
-        if (this.inBasement) {
-          positionY = positionY + SPRITES.foundation.height * scale;
-        }
-
-        rope.position.set(positionX, positionY);
-        rope.scale.y = scale;
-        rope.scale.x = scale;
-        rope.anchor.set(0.5);
-
-        // Hides the rope if the active floor is the top floor
-        if (
-          Building.activeFloor.number === floor.number &&
-          Building.topFloor.number === floor.number
-        ) {
-          rope.scale.y = 0;
-        }
-
-        state.app.stage.addChild(rope);
-      } else if (rope) {
-        rope.scale.y = 0;
+      if (typeof floor.position.x !== "function") {
+        return;
       }
+
+      let rope = this.rope[i] || PIXI.Sprite.from(SPRITES["elevator-rope"].src);
+
+      const positionX =
+        floor.position.x() - floor.width() / 2 + scaledWidth / 2 + offsetX;
+
+      let positionY = floor.position.y() + SPRITES.foundation.height * scale;
+
+      const isTopFloor = Building.topFloor.number === floor.number;
+      if (isTopFloor) {
+        positionY = positionY + 8;
+      }
+
+      rope.position.set(positionX, positionY);
+      rope.scale.y = scale;
+      rope.scale.x = scale;
+      rope.anchor.set(0.5);
+
+      state.app.stage.addChild(rope);
 
       this.rope[i] = rope;
     });
@@ -126,8 +112,8 @@ export default class Elevator {
       offsetY;
 
     this.generator.position.set(positionX, positionY);
-    this.generator.scale.y = state.scale();
-    this.generator.scale.x = state.scale();
+    this.generator.scale.y = scale;
+    this.generator.scale.x = scale;
     this.generator.anchor.set(0.5);
 
     state.app.stage.addChild(this.generator);
@@ -140,7 +126,7 @@ export default class Elevator {
     const scaledHeight = SPRITES["elevator-shaft"].height * scale;
 
     const offsetX = 50 * scale;
-    const offsetY = 112 * scale;
+    const offsetY = 124 * scale;
 
     const positionX =
       Building.topFloor.position.x() -
@@ -172,6 +158,30 @@ export default class Elevator {
     state.app.stage.addChild(this.shaft);
   }
 
+  static renderBricks() {
+    const scale = state.scale();
+
+    const scaledWidth = SPRITES["elevator-bricks"].width * scale;
+    const scaledHeight = SPRITES["elevator-bricks"].height * scale;
+
+    const offsetX = 10 * scale;
+
+    const positionX =
+      Building.topFloor.position.x() -
+      Building.topFloor.width() / 2 +
+      scaledWidth / 2 +
+      offsetX;
+
+    const positionY = Building.foundation.position.y + scaledHeight / 2;
+
+    this.bricks.position.set(positionX, positionY);
+    this.bricks.scale.y = scale;
+    this.bricks.scale.x = scale;
+    this.bricks.anchor.set(0.5);
+
+    state.app.stage.addChild(this.bricks);
+  }
+
   static animateDoor() {
     this.render();
     this.shaft.gotoAndPlay(0);
@@ -179,6 +189,7 @@ export default class Elevator {
 
   static render() {
     this.renderWheel();
+    this.renderBricks();
     this.renderRope();
     this.renderGenerator();
     this.renderShaft();

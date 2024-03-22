@@ -10,7 +10,7 @@ const state = {
   people: [],
   scale: () => {
     if (isLargeSizedScreen()) {
-      return 0.35;
+      return 0.4;
     }
 
     return isMobileSizedScreen() ? 0.2 : 0.25;

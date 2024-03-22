@@ -149,7 +149,7 @@ export default class Floor {
     this.container.addChild(this.wall);
 
     this.separator.position.set(
-      this.position.x() + 1,
+      this.position.x() + 5 * scale,
       positionY + this.height() / 2
     );
     this.separator.scale.y = scale;

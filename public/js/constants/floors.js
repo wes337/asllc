@@ -1,6 +1,13 @@
-import { shuffleArray } from "../utils.js";
-
 export const FLOORS = {
+  wud: {
+    name: "Artist Services",
+  },
+  "plague-blvd": {
+    name: "Plague Blvd",
+  },
+  wendigo: {
+    name: "Wendigo",
+  },
   afourteen: {
     name: "Afourteen",
   },
@@ -12,9 +19,6 @@ export const FLOORS = {
   },
   bruhmanegod: {
     name: "BRUHMANEGOD",
-  },
-  bvdlvd: {
-    name: "BVDLVD",
   },
   changeline: {
     name: "Changeline",
@@ -37,17 +41,14 @@ export const FLOORS = {
   kamaara: {
     name: "KAMAARA",
   },
-  mkultra: {
-    name: "MKULTRA",
-  },
-  "plague-blvd": {
-    name: "Plague Blvd",
+  bvdlvd: {
+    name: "BVDLVD",
   },
   skotskr: {
     name: "Skotskr",
   },
-  wendigo: {
-    name: "Wendigo",
+  mkultra: {
+    name: "MKULTRA",
   },
   "gregory-diamond": {
     name: "Gregory Diamond",
@@ -67,7 +68,7 @@ export const FLOORS = {
   },
 };
 
-export const ALL_FLOOR_IDS = (() => shuffleArray(Object.keys(FLOORS)))();
+export const ALL_FLOOR_IDS = Object.keys(FLOORS);
 
 export const ABOVE_GROUND_FLOOR_IDS = ALL_FLOOR_IDS.filter(
   (id) => !FLOORS[id].basement
