@@ -14,9 +14,14 @@ export default class Elevator {
   static bricks = PIXI.Sprite.from(SPRITES["elevator-bricks"].src);
   static generator = PIXI.Sprite.from(SPRITES["elevator-generator"].src);
   static rope = [];
+  static elevatorFloorNumber = 0;
 
   static get inBasement() {
-    return Building.activeFloor.number < 0;
+    return this.elevatorFloorNumber < 0;
+  }
+
+  static get elevatorFloor() {
+    return Building.floors[this.elevatorFloorNumber];
   }
 
   static get width() {
@@ -49,9 +54,6 @@ export default class Elevator {
     this.wheel.animationSpeed = 0.5;
 
     state.app.stage.addChild(this.wheel);
-
-    // Testing animation
-    this.wheel.play();
   }
 
   static renderRope() {
@@ -62,7 +64,7 @@ export default class Elevator {
     const offsetX = 90 * scale;
 
     // How to animate this? Draw all and stack, or use scale
-    [...Building.floors, ...Building.basement].forEach((floor, i) => {
+    Building.allFloors.forEach((floor, i) => {
       if (typeof floor.position.x !== "function") {
         return;
       }
@@ -141,8 +143,8 @@ export default class Elevator {
       offsetY;
 
     // Animate this
-    const floorFromTop = Building.topFloor.number - Building.activeFloor.number;
-    positionY = positionY + floorFromTop * Building.activeFloor.height();
+    const floorFromTop = Building.topFloor.number - this.elevatorFloorNumber;
+    positionY = positionY + floorFromTop * this.elevatorFloor.height();
 
     if (this.inBasement) {
       positionY = positionY + SPRITES.foundation.height * scale + 4;
@@ -185,6 +187,11 @@ export default class Elevator {
   static animateDoor() {
     this.render();
     this.shaft.gotoAndPlay(0);
+  }
+
+  static animateWheel() {
+    this.render();
+    this.wheel.gotoAndPlay(0);
   }
 
   static render() {

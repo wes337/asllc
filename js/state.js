@@ -1,3 +1,4 @@
+import Cache from "./cache.js";
 import { isLargeSizedScreen, isMobileSizedScreen } from "./utils.js";
 import { COLORS } from "./constants/colors.js";
 import { SPRITES } from "./constants/sprites.js";
@@ -16,11 +17,11 @@ const state = {
     return isMobileSizedScreen() ? 0.2 : 0.25;
   },
   busy: false,
-  skipIntro: false,
+  skipIntro: Cache.get("skipIntro") ?? false,
   introFinished: false,
   filters: {
     highlight: (size, color) =>
-      new PIXI.filters.OutlineFilter(size || 2, color || COLORS.sky),
+      new PIXI.filters.OutlineFilter(size || 2, color || COLORS.indicator),
   },
   camera: {
     currentAnimation: null,

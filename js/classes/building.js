@@ -12,6 +12,10 @@ export default class Building {
   static floors = [];
   static basement = [];
 
+  static get allFloors() {
+    return [...this.floors, ...this.basement];
+  }
+
   static get topFloor() {
     return this.floors[this.floors.length - 1];
   }
