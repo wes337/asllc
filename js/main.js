@@ -32,7 +32,7 @@ async function main() {
   await loadAssets();
 
   const app = new PIXI.Application({
-    background: COLORS.skyLight,
+    background: COLORS.lightBlue,
     resizeTo: window,
     useContextAlpha: false,
     antialias: true,

@@ -12,6 +12,7 @@ export default class Elevator {
   );
 
   static bricks = PIXI.Sprite.from(SPRITES["elevator-bricks"].src);
+  static connector = PIXI.Sprite.from(SPRITES["underground-connector"].src);
   static generator = PIXI.Sprite.from(SPRITES["elevator-generator"].src);
   static rope = [];
   static elevatorFloorNumber = 0;
@@ -184,6 +185,29 @@ export default class Elevator {
     state.app.stage.addChild(this.bricks);
   }
 
+  static renderConnector() {
+    const scale = state.scale();
+
+    const scaledWidth = SPRITES["underground-connector"].width * scale;
+    const scaledHeight = SPRITES["underground-connector"].height * scale;
+
+    const positionX =
+      Building.topFloor.position.x() +
+      Building.topFloor.width() / 2 -
+      scaledWidth / 2;
+
+    const positionY = Building.foundation.position.y + scaledHeight / 2 + 1;
+
+    this.connector.position.set(positionX, positionY);
+    this.connector.scale.y = scale;
+    this.connector.scale.x = scale;
+    this.connector.anchor.set(0.5);
+
+    this.connector.height = scaledHeight + 2;
+
+    state.app.stage.addChild(this.connector);
+  }
+
   static animateDoor() {
     this.render();
     this.shaft.gotoAndPlay(0);
@@ -197,6 +221,7 @@ export default class Elevator {
   static render() {
     this.renderWheel();
     this.renderBricks();
+    this.renderConnector();
     this.renderRope();
     this.renderGenerator();
     this.renderShaft();

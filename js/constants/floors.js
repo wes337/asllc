@@ -22,6 +22,14 @@ export const FLOORS = {
   },
   changeline: {
     name: "Changeline",
+    extras: [
+      {
+        name: "flying-book",
+        moves: true,
+        positionX: 800,
+        positionY: 180,
+      },
+    ],
   },
   cherry: {
     name: "Cherry Ills",
@@ -31,6 +39,13 @@ export const FLOORS = {
   },
   cxrpse: {
     name: "CXRPSE",
+    extras: [
+      {
+        name: "hand",
+        moves: false,
+        positionX: 225,
+      },
+    ],
   },
   deerdeath: {
     name: "deer death",
@@ -61,6 +76,18 @@ export const FLOORS = {
   sorbet: {
     name: "Sorbet",
     basement: true,
+    extras: [
+      {
+        name: "cat",
+        moves: false,
+        positionX: 950,
+      },
+      {
+        name: "computer",
+        moves: false,
+        positionX: 0,
+      },
+    ],
   },
   steel: {
     name: "Steel",

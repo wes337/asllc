@@ -10,8 +10,9 @@ import { isMobileSizedScreen } from "../utils.js";
 import { animateCamera } from "../animate.js";
 import Elevator from "./elevator.js";
 import Interface from "./interface.js";
-import state from "../state.js";
 import Building from "./building.js";
+import Modal from "./modal.js";
+import state from "../state.js";
 
 export default class Floor {
   constructor(index, id, basement) {
@@ -19,10 +20,16 @@ export default class Floor {
     this.index = index;
     this.basement = basement;
     this.container = new PIXI.Container();
-    this.room = PIXI.Sprite.from(
-      SPRITES[id]?.floor || SPRITES[id]?.src || SPRITES.floor.src
-    );
+
+    const sprites = SPRITES[id]?.floor || SPRITES[id]?.src || SPRITES.floor.src;
+    const animated = Array.isArray(sprites);
+    this.animated = animated;
+    this.room = animated
+      ? new PIXI.AnimatedSprite(sprites.map((img) => PIXI.Texture.from(img)))
+      : PIXI.Sprite.from(sprites);
+
     this.wall = PIXI.Sprite.from(SPRITES.wall.src);
+    this.undergroundWall = PIXI.Sprite.from(SPRITES["underground-wall"].src);
     this.separator = PIXI.Sprite.from(SPRITES.separator.src);
     this.numberText = new PIXI.Text("", {
       ...TEXT_STYLES.default,
@@ -85,7 +92,7 @@ export default class Floor {
   }
 
   onClick() {
-    if (state.busy || !state.introFinished) {
+    if (state.busy || !state.introFinished || Modal.visible) {
       return;
     }
 
@@ -145,6 +152,20 @@ export default class Floor {
     this.wall.anchor.set(0.5);
     this.container.addChild(this.wall);
 
+    if (this.basement) {
+      this.undergroundWall.position.set(
+        this.position.x() +
+          (SPRITES.wall.width / 2) * scale -
+          (SPRITES["underground-connector"].width / 2) * scale +
+          17 * scale,
+        positionY
+      );
+      this.undergroundWall.scale.y = scale;
+      this.undergroundWall.scale.x = scale;
+      this.undergroundWall.anchor.set(0.5);
+      this.container.addChild(this.undergroundWall);
+    }
+
     // Separator
     this.separator.position.set(
       this.position.x() + 5 * scale,
@@ -192,5 +213,10 @@ export default class Floor {
     this.container.addChild(this.indicator);
 
     state.app.stage.addChild(this.container);
+
+    if (this.animated) {
+      this.room.animationSpeed = 0.05;
+      this.room.play();
+    }
   }
 }

@@ -1,4 +1,3 @@
-import { CONTENT } from "./constants/content.js";
 import Cache from "./cache.js";
 import Background from "./classes/background.js";
 import Building from "./classes/building.js";
@@ -49,17 +48,9 @@ function animateIntro() {
       state.app.ticker.remove(animation);
       state.camera.currentAnimation = null;
 
-      Interface.showModal({
-        headerText: CONTENT.modals.intro.headerText,
-        bodyText: CONTENT.modals.intro.bodyText,
-        buttonText: CONTENT.modals.intro.buttonText,
-        callback: () => {
-          Interface.hideModal();
-          Interface.showBottomBar();
-          state.introFinished = true;
-          Cache.set("skipIntro", true, 300);
-        },
-      });
+      Interface.showBottomBar();
+      state.introFinished = true;
+      Cache.set("skipIntro", true, 300);
     }
   };
 
