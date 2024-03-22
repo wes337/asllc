@@ -10,6 +10,11 @@ export default class Background {
   static clouds = [];
   static buildings = [];
   static ground = new PIXI.Graphics();
+  static dirt = new PIXI.TilingSprite(
+    PIXI.Texture.from(SPRITES.dirt.src),
+    SPRITES.dirt.width,
+    SPRITES.dirt.height
+  );
 
   static pivot() {
     this.sky.position.y = this.sky.initialPosition.y + state.app.stage.pivot.y;
@@ -169,6 +174,8 @@ export default class Background {
   }
 
   static renderGround() {
+    const scale = state.scale();
+
     this.ground.clear();
 
     const width = state.app.screen.width;
@@ -179,9 +186,17 @@ export default class Background {
     this.ground.drawRect(0, positionY, width, height);
     this.ground.endFill();
 
-    this.ground.initialPosition = { x: 0, y: 0 };
-
     state.app.stage.addChild(this.ground);
+
+    this.dirt.width = state.app.screen.width;
+    this.dirt.height = SPRITES.dirt.height * scale;
+
+    this.dirt.tileScale.x = scale;
+    this.dirt.tileScale.y = scale;
+
+    this.dirt.position.set(0, positionY + SPRITES.dirt.height * scale);
+
+    state.app.stage.addChild(this.dirt);
   }
 
   static animateClouds() {

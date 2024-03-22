@@ -102,8 +102,6 @@ export default class Elevator {
 
       this.rope[i] = rope;
     });
-
-    Building.renderFoundation();
   }
 
   static renderGenerator() {

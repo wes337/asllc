@@ -1,4 +1,4 @@
-import { isMobileSizedScreen } from "./utils.js";
+import { isLargeSizedScreen, isMobileSizedScreen } from "./utils.js";
 import { COLORS } from "./constants/colors.js";
 import { SPRITES } from "./constants/sprites.js";
 import Building from "./classes/building.js";
@@ -9,6 +9,10 @@ const state = {
   activeFloorNumber: null,
   people: [],
   scale: () => {
+    if (isLargeSizedScreen()) {
+      return 0.35;
+    }
+
     return isMobileSizedScreen() ? 0.2 : 0.25;
   },
   busy: false,
