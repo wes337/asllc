@@ -106,6 +106,11 @@ export const SPRITES = {
     width: 290,
     height: 430,
   },
+  "elevator-bricks": {
+    src: "./img/sprites/elevator-bricks.png",
+    width: 380,
+    height: 240,
+  },
   floor: {
     src: "./img/sprites/floors/empty-floor.png",
     width: 1280,
