@@ -4,7 +4,11 @@ import state from "../state.js";
 
 export default class Building {
   static roof = PIXI.Sprite.from(SPRITES.roof.src);
-  static foundation = PIXI.Sprite.from(SPRITES.foundation.src);
+  static foundation = new PIXI.TilingSprite(
+    PIXI.Texture.from(SPRITES.foundation.src),
+    window.innerWidth,
+    SPRITES.foundation.height
+  );
   static floors = [];
   static basement = [];
 
@@ -39,23 +43,20 @@ export default class Building {
   static renderFoundation() {
     const scale = state.scale();
 
+    this.foundation.width = state.app.screen.width;
+    this.foundation.height = SPRITES.foundation.height * scale;
+
+    this.foundation.tileScale.x = scale;
+    this.foundation.tileScale.y = scale;
+
     this.foundation.position.set(
-      this.lobby.position.x() -
-        this.lobby.width() / 2 +
-        (SPRITES.foundation.width * scale) / 2,
-      this.lobby.position.y() +
-        this.lobby.height() -
-        SPRITES.foundation.height * scale -
-        1
+      0,
+      this.lobby.position.y() + this.lobby.height() / 2 + 26 * scale
     );
 
-    this.foundation.scale.y = scale;
-    this.foundation.scale.x = scale;
-    this.foundation.anchor.set(0.5);
+    this.basement[0] = this.foundation;
 
     state.app.stage.addChild(this.foundation);
-
-    this.basement[0] = this.foundation;
   }
 
   static renderFloor(i, name) {

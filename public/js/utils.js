@@ -1,4 +1,7 @@
-import { MOBILE_BREAKPOINT } from "./constants/mobile.js";
+import {
+  LARGE_DESKTOP_BREAKPOINT,
+  MOBILE_BREAKPOINT,
+} from "./constants/mobile.js";
 
 export function randomNumberBetween(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -30,4 +33,12 @@ export function isMobileSizedScreen(app) {
   }
 
   return app.screen.width < MOBILE_BREAKPOINT;
+}
+
+export function isLargeSizedScreen(app) {
+  if (!app) {
+    return window.innerWidth >= LARGE_DESKTOP_BREAKPOINT;
+  }
+
+  return app.screen.width >= LARGE_DESKTOP_BREAKPOINT;
 }

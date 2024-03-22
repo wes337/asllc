@@ -37,7 +37,12 @@ export const SPRITES = {
   "building-green": {
     src: "./img/sprites/building-green.png",
     width: 1770,
-    height: 1700,
+    height: 1990,
+  },
+  dirt: {
+    src: "./img/sprites/dirt.png",
+    width: 160,
+    height: 160,
   },
   wall: {
     src: "./img/sprites/wall.png",
