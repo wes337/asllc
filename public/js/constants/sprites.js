@@ -116,6 +116,11 @@ export const SPRITES = {
     width: 1280,
     height: 550,
   },
+  indicator: {
+    src: "./img/sprites/indicator.png",
+    width: 70,
+    height: 50,
+  },
   lobby: {
     src: "./img/sprites/floors/lobby-floor.png",
     width: 1280,

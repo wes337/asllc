@@ -1,4 +1,5 @@
 import { CONTENT } from "./constants/content.js";
+import Cache from "./cache.js";
 import Background from "./classes/background.js";
 import Building from "./classes/building.js";
 import Interface from "./classes/interface.js";
@@ -11,7 +12,7 @@ export default function animate() {
 
   if (state.skipIntro) {
     state.introFinished = true;
-    //   Interface.showBottomBar();
+    Interface.showBottomBar();
     state.app.stage.pivot.y = state.camera.start();
     Background.pivot();
   } else {
@@ -56,6 +57,7 @@ function animateIntro() {
           Interface.hideModal();
           Interface.showBottomBar();
           state.introFinished = true;
+          Cache.set("skipIntro", true, 300);
         },
       });
     }

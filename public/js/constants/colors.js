@@ -10,4 +10,5 @@ export const COLORS = {
   sun: "#e8c170",
   sunDark: "#be772b",
   button: "#495588",
+  indicator: "#a53030",
 };
