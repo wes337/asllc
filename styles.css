@@ -1,4 +1,9 @@
 @font-face {
+  font-family: "Tiny Tower";
+  src: url("./fonts/tiny-tower.ttf") format("truetype");
+}
+
+@font-face {
   font-family: "Nokia";
   src: url("./fonts/nokiafc22.ttf") format("truetype");
 }
@@ -16,7 +21,7 @@
 html,
 body {
   background-color: #4f8fba;
-  font-family: "Nokia", monospace;
+  font-family: "Tiny Tower", monospace;
 }
 
 body {
@@ -53,4 +58,5 @@ canvas {
 
 #loading h1 {
   all: unset;
+  font-family: "Nokia", monospace;
 }

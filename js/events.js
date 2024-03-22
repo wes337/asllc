@@ -1,15 +1,21 @@
 import { isMobileSizedScreen } from "./utils.js";
 import { animateCamera } from "./animate.js";
+import Building from "./classes/building.js";
 import render from "./render.js";
 import state from "./state.js";
+
+var hammer = new Hammer(document.body);
 
 function handleResize() {
   window.addEventListener("resize", () => {
     render();
+
+    // Reposition camera if there is an active floor
+    if (Building.activeFloor) {
+      Building.activeFloor.onClick();
+    }
   });
 }
-
-const hammer = new Hammer(document.body);
 
 function handleScroll() {
   const scrollAmount = 16;

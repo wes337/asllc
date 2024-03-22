@@ -1,7 +1,15 @@
-import { isMobileSizedScreen } from "../utils.js";
+import { isLargeSizedScreen, isMobileSizedScreen } from "../utils.js";
 import { COLORS } from "./colors.js";
 
-export const FONT_FAMILY = { name: "Nokia", src: "./fonts/nokiafc22.ttf" };
+export const FONT_FAMILY = {
+  name: "Tiny Tower",
+  src: "./fonts/tiny-tower.ttf",
+};
+
+export const HEADER_FONT_FAMILY = {
+  name: "Nokia",
+  src: "./fonts/nokiafc22.ttf",
+};
 
 export const FONT_SIZES = {
   xs: 8,
@@ -22,7 +30,7 @@ export const TEXT_STYLES = {
     dropShadowDistance: 4,
   },
   header: {
-    fontFamily: FONT_FAMILY.name,
+    fontFamily: HEADER_FONT_FAMILY.name,
     fill: COLORS.sun,
     fontSize: FONT_SIZES.xl,
     dropShadow: true,
@@ -31,5 +39,18 @@ export const TEXT_STYLES = {
   },
 };
 
-export const DEFAULT_FONT_SIZE = () =>
-  isMobileSizedScreen() ? FONT_SIZES.sm : FONT_SIZES.md;
+export const DEFAULT_FONT_SIZE = () => {
+  if (isLargeSizedScreen()) {
+    return FONT_SIZES.lg;
+  }
+
+  return FONT_SIZES.md;
+};
+
+export const DEFAULT_LINE_HEIGHT = (fontSize) => {
+  if (isMobileSizedScreen()) {
+    return fontSize - 4;
+  }
+
+  return fontSize;
+};

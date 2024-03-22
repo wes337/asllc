@@ -24,7 +24,18 @@ const state = {
   },
   camera: {
     currentAnimation: null,
-    start: () => state.app.screen.height / 4,
+    start: () => {
+      const maxFloorsOnScreen = Math.floor(
+        state.app.screen.height / Building.lobby.height()
+      );
+
+      let cameraPosition =
+        maxFloorsOnScreen * Building.lobby.index * Building.lobby.height() * -1;
+      cameraPosition = cameraPosition - Building.lobby.height() / 2;
+      cameraPosition = cameraPosition + state.app.screen.height / 2;
+
+      return cameraPosition;
+    },
     max: () => Building.topFloor.position.y() - state.app.screen.height / 2,
     min: () =>
       Building.basement.length === 0

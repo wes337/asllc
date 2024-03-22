@@ -4,7 +4,6 @@ import { DEFAULT_FONT_SIZE, FONT_SIZES } from "../constants/text.js";
 import { CONTENT } from "../constants/content.js";
 import { animateCamera } from "../animate.js";
 import Elevator from "./elevator.js";
-import Building from "./building.js";
 import Interface from "./interface.js";
 import state from "../state.js";
 
@@ -66,50 +65,25 @@ export default class Floor {
   }
 
   onClick() {
-    if (
-      state.activeFloorNumber === this.number ||
-      state.busy ||
-      !state.introFinished
-    ) {
+    if (state.busy || !state.introFinished) {
       return;
     }
 
-    if (this.name === "lobby") {
-      animateCamera(state.camera.start());
-    } else {
-      const maxRoomsOnScreen = Math.floor(
-        state.app.screen.height / this.room.height
-      );
+    const maxFloorsOnScreen = Math.floor(
+      state.app.screen.height / this.room.height
+    );
 
-      let section = this.number / maxRoomsOnScreen;
+    const section = this.number / maxFloorsOnScreen;
 
-      if (section >= 0 && section < 0.8) {
-        section = 0;
-      }
+    let cameraPosition = maxFloorsOnScreen * section * this.room.height * -1;
+    cameraPosition = cameraPosition - this.room.height / 2;
+    cameraPosition = cameraPosition + state.app.screen.height / 2;
 
-      let cameraPosition = Math.min(
-        maxRoomsOnScreen *
-          section *
-          (this.room.height / (maxRoomsOnScreen / 4)) *
-          -1,
-        state.camera.min()
-      );
-
-      const numberFromTop = Building.floors.length - 1 - this.number;
-      if (numberFromTop < maxRoomsOnScreen) {
-        cameraPosition = cameraPosition - (this.room.height / 2) * this.number;
-        cameraPosition =
-          cameraPosition + state.app.screen.height * state.scale() * 4;
-      }
-
-      if (this.basement) {
-        cameraPosition = cameraPosition * 1 + state.app.screen.height;
-      }
-
-      cameraPosition = Math.min(cameraPosition, state.camera.min());
-
-      animateCamera(cameraPosition);
+    if (this.basement) {
+      cameraPosition = cameraPosition * 1;
     }
+
+    animateCamera(cameraPosition);
 
     state.activeFloorNumber = this.number;
 
@@ -118,7 +92,7 @@ export default class Floor {
     Interface.updateBottomBarText({
       text:
         this.name === "lobby" ? CONTENT.interface.bottomBar.default : this.name,
-      size: this.name === "lobby" ? DEFAULT_FONT_SIZE() : FONT_SIZES.lg,
+      size: this.name !== "lobby" ? FONT_SIZES.xl : DEFAULT_FONT_SIZE(),
     });
   }
 

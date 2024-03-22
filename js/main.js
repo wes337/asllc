@@ -1,6 +1,6 @@
 import { ALL_SPRITE_IMAGES } from "./constants/sprites.js";
 import { COLORS } from "./constants/colors.js";
-import { FONT_FAMILY } from "./constants/text.js";
+import { FONT_FAMILY, HEADER_FONT_FAMILY } from "./constants/text.js";
 import render from "./render.js";
 import animate from "./animate.js";
 import events from "./events.js";
@@ -14,6 +14,7 @@ async function loadAssets() {
 
   PIXI.Assets.addBundle("fonts", [
     { alias: FONT_FAMILY.name, src: FONT_FAMILY.src },
+    { alias: HEADER_FONT_FAMILY.name, src: HEADER_FONT_FAMILY.src },
   ]);
 
   await PIXI.Assets.loadBundle("fonts");
