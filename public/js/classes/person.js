@@ -1,11 +1,13 @@
 import { SPRITES } from "../constants/sprites.js";
-import { randomNumberBetween } from "../utils.js";
+import { isLargeSizedScreen, randomNumberBetween } from "../utils.js";
 import Interface from "./interface.js";
 import Building from "./building.js";
 import Elevator from "./elevator.js";
 import state from "../state.js";
 
 export default class Person {
+  offsetY = 0;
+
   constructor(name) {
     this.name = name;
     this.floorNumber = 0;
@@ -64,7 +66,8 @@ export default class Person {
         this.currentFloor.width() / 2 +
         Elevator.width +
         this.width() * 2 +
-        wallThickness,
+        wallThickness -
+        8,
 
       max: () =>
         this.currentFloor.position.x() +
@@ -133,6 +136,10 @@ export default class Person {
       this.destination = null;
     }
 
+    if (this.metadata && this.metadata.loop) {
+      this.character.play();
+    }
+
     positionX = Math.min(positionX, max);
 
     let positionY =
@@ -140,7 +147,12 @@ export default class Person {
       this.currentFloor.separator.height / 2 -
       this.height() / 2;
 
-    if (this.metadata && this.metadata.upsideDown) {
+    if (this.offsetY) {
+      positionY = positionY - this.offsetY;
+    }
+
+    const isUpsideDown = this.metadata && this.metadata.upsideDown;
+    if (isUpsideDown) {
       positionY =
         positionY -
         this.height() -
@@ -158,9 +170,16 @@ export default class Person {
 
     state.app.stage.addChild(this.character);
 
-    const highlight =
-      state.activeFloorNumber && this.floorNumber === state.activeFloorNumber;
+    const isExtra = this.metadata && this.metadata.extra;
 
-    this.character.filters = highlight ? [state.filters.highlight(2)] : [];
+    const highlight =
+      !isExtra &&
+      state.activeFloorNumber &&
+      this.floorNumber === state.activeFloorNumber;
+
+    const highlightSize = isLargeSizedScreen() ? 3 : 2;
+    this.character.filters = highlight
+      ? [state.filters.highlight(highlightSize)]
+      : [];
   }
 }

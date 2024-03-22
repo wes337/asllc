@@ -35,15 +35,15 @@ export default class Background {
     const skyMidSize = skySize / 2;
     const stroke = 4;
 
-    this.sky.beginFill(COLORS.skyDark);
+    this.sky.beginFill(COLORS.darkBlue);
     this.sky.drawRect(0, 0, width, skySize);
 
-    this.sky.beginFill(COLORS.sky);
+    this.sky.beginFill(COLORS.blue);
     this.sky.drawRect(0, skySize - stroke * 2, width, stroke);
     this.sky.drawRect(0, skySize - stroke * 5, width, stroke);
     this.sky.drawRect(0, skySize, width, skyMidSize);
 
-    this.sky.beginFill(COLORS.skyLight);
+    this.sky.beginFill(COLORS.lightBlue);
     this.sky.drawRect(0, skySize + skyMidSize - stroke * 2, width, stroke);
     this.sky.drawRect(0, skySize + skyMidSize - stroke * 5, width, stroke);
 
@@ -182,7 +182,7 @@ export default class Background {
     const height = state.app.screen.height * 2;
     const positionY = state.app.screen.height - Interface.bottomBar.height();
 
-    this.ground.beginFill(COLORS.dirt);
+    this.ground.beginFill(COLORS.brown);
     this.ground.drawRect(0, positionY, width, height);
     this.ground.endFill();
 

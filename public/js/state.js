@@ -21,7 +21,8 @@ const state = {
   introFinished: false,
   filters: {
     highlight: (size, color) =>
-      new PIXI.filters.OutlineFilter(size || 2, color || COLORS.indicator),
+      new PIXI.filters.OutlineFilter(size || 2, color || COLORS.red),
+    opacity: (alpha) => new PIXI.filters.AlphaFilter(alpha || 0.5),
   },
   camera: {
     currentAnimation: null,

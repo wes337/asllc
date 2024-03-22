@@ -1,19 +1,26 @@
 import { isMobileSizedScreen } from "./utils.js";
 import { animateCamera } from "./animate.js";
 import Building from "./classes/building.js";
+import Modal from "./classes/modal.js";
 import render from "./render.js";
 import state from "./state.js";
 
 var hammer = new Hammer(document.body);
 
+var debouncedResize = null;
+
 function handleResize() {
   window.addEventListener("resize", () => {
-    render();
+    clearTimeout(debouncedResize);
 
-    // Reposition camera if there is an active floor
-    if (Building.activeFloor) {
-      Building.activeFloor.onClick();
-    }
+    debouncedResize = setTimeout(() => {
+      render();
+
+      // Reposition camera if there is an active floor
+      if (Building.activeFloor) {
+        Building.activeFloor.onClick();
+      }
+    }, 25);
   });
 }
 
@@ -21,7 +28,7 @@ function handleScroll() {
   const scrollAmount = 16;
 
   const scrollUp = (event) => {
-    if (!state.introFinished) {
+    if (!state.introFinished || Modal.visible) {
       return;
     }
 
@@ -33,7 +40,7 @@ function handleScroll() {
   };
 
   const scrollDown = (event) => {
-    if (!state.introFinished) {
+    if (!state.introFinished || Modal.visible) {
       return;
     }
 
@@ -53,7 +60,7 @@ function handleScroll() {
   };
 
   const scrollEnd = (event) => {
-    if (!state.introFinished) {
+    if (!state.introFinished || Modal.visible) {
       return;
     }
     const velocity =

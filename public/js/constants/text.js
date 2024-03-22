@@ -26,15 +26,15 @@ export const TEXT_STYLES = {
     fill: COLORS.white,
     fontSize: FONT_SIZES.md,
     dropShadow: true,
-    dropShadowColor: COLORS.textShadow,
+    dropShadowColor: COLORS.darkPurple,
     dropShadowDistance: 4,
   },
   header: {
     fontFamily: HEADER_FONT_FAMILY.name,
-    fill: COLORS.sun,
+    fill: COLORS.yellow,
     fontSize: FONT_SIZES.xl,
     dropShadow: true,
-    dropShadowColor: COLORS.sunDark,
+    dropShadowColor: COLORS.darkYellow,
     dropShadowDistance: 4,
   },
 };
