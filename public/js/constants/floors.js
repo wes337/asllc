@@ -7,6 +7,13 @@ export const FLOORS = {
   },
   wendigo: {
     name: "Wendigo",
+    extras: [
+      {
+        name: "fishmonger",
+        moves: false,
+        positionX: 480,
+      },
+    ],
   },
   afourteen: {
     name: "Afourteen",
@@ -16,6 +23,20 @@ export const FLOORS = {
   },
   blckk: {
     name: "Blckk",
+    extras: [
+      {
+        name: "corona",
+        moves: false,
+        positionX: 10,
+        positionY: 300,
+      },
+      {
+        name: "cigar",
+        moves: false,
+        positionX: 1120,
+        positionY: 110,
+      },
+    ],
   },
   bruhmanegod: {
     name: "BRUHMANEGOD",
@@ -43,7 +64,7 @@ export const FLOORS = {
       {
         name: "hand",
         moves: false,
-        positionX: 225,
+        positionX: 80,
       },
     ],
   },
@@ -85,7 +106,7 @@ export const FLOORS = {
       {
         name: "computer",
         moves: false,
-        positionX: 0,
+        positionX: 20,
       },
     ],
   },

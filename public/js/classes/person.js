@@ -15,10 +15,15 @@ export default class Person {
       SPRITES[name].src.map((img) => PIXI.Texture.from(img))
     );
 
-    this.direction = Math.random() < 0.5 ? "left" : "right";
     this.destination = null;
     this.walkRandomly = true;
     this.metadata = SPRITES[name].metadata;
+    this.extra = this.metadata && this.metadata.extra;
+    this.direction = this.extra
+      ? "left"
+      : Math.random() < 0.5
+      ? "left"
+      : "right";
   }
 
   set startingPosition(position) {
@@ -58,16 +63,14 @@ export default class Person {
   }
 
   get boundaries() {
-    const wallThickness = 10;
+    const wallThickness = 100 * state.scale();
 
     return {
       min: () =>
-        this.currentFloor.position.x() -
-        this.currentFloor.width() / 2 +
-        Elevator.width +
-        this.width() * 2 +
-        wallThickness -
-        8,
+        state.app.screen.width / 2 -
+        (SPRITES.wall.width * state.scale()) / 2 +
+        wallThickness * 4 +
+        (this.extra ? 0 : 70 * state.scale()),
 
       max: () =>
         this.currentFloor.position.x() +
@@ -151,6 +154,10 @@ export default class Person {
       positionY = positionY - this.offsetY;
     }
 
+    if (this.extra) {
+      positionY = positionY - this.height() / 2;
+    }
+
     const isUpsideDown = this.metadata && this.metadata.upsideDown;
     if (isUpsideDown) {
       positionY =
@@ -164,16 +171,14 @@ export default class Person {
 
     this.character.scale.y = scale;
     this.character.scale.x = this.direction === "left" ? scale : scale * -1;
-    this.character.anchor.set(0.5);
+    this.character.anchor.set(this.extra && !this.walkRandomly ? 0 : 0.5);
     this.character.animationSpeed = 0.1;
     this.character.loop = true;
 
     state.app.stage.addChild(this.character);
 
-    const isExtra = this.metadata && this.metadata.extra;
-
     const highlight =
-      !isExtra &&
+      !this.extra &&
       state.activeFloorNumber &&
       this.floorNumber === state.activeFloorNumber;
 
