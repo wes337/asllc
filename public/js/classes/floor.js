@@ -1,11 +1,6 @@
 import { SPRITES } from "../constants/sprites.js";
 import { FLOORS } from "../constants/floors.js";
-import {
-  DEFAULT_FONT_SIZE,
-  FONT_SIZES,
-  TEXT_STYLES,
-} from "../constants/text.js";
-import { CONTENT } from "../constants/content.js";
+import { DEFAULT_FONT_SIZE, TEXT_STYLES } from "../constants/text.js";
 import { isMobileSizedScreen } from "../utils.js";
 import { animateCamera } from "../animate.js";
 import Elevator from "./elevator.js";
@@ -16,6 +11,7 @@ import state from "../state.js";
 
 export default class Floor {
   constructor(index, id, basement) {
+    this.id = id;
     this.name = FLOORS[id]?.name || id;
     this.index = index;
     this.basement = basement;
@@ -67,7 +63,7 @@ export default class Floor {
           (SPRITES.wall.height / 2) * state.scale() -
           (SPRITES.separator.height / 2) * state.scale() -
           SPRITES.wall.height * state.scale() * this.number -
-          Interface.bottomBar.height()
+          Interface.navBar.height()
         );
       },
     };
@@ -114,11 +110,7 @@ export default class Floor {
 
     state.activeFloorNumber = this.number;
 
-    Interface.updateBottomBarText({
-      text:
-        this.name === "lobby" ? CONTENT.interface.bottomBar.default : this.name,
-      size: this.name !== "lobby" ? FONT_SIZES.xl : DEFAULT_FONT_SIZE(),
-    });
+    Interface.setArtistInfo(this.name);
 
     Building.allFloors.forEach((floor) => {
       if (typeof floor.toggleIndicator !== "function") {

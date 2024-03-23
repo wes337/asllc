@@ -43,7 +43,7 @@ const state = {
       Building.basement.length === 0
         ? 0
         : SPRITES.floor.height * Building.basement.length * state.scale() +
-          Interface.bottomBar.height(),
+          Interface.navBar.height(),
   },
 };
 

@@ -11,7 +11,7 @@ export default function animate() {
 
   if (state.skipIntro) {
     state.introFinished = true;
-    Interface.showBottomBar();
+    Interface.showNavBar();
     state.app.stage.pivot.y = state.camera.start();
     Background.pivot();
   } else {
@@ -48,7 +48,7 @@ function animateIntro() {
       state.app.ticker.remove(animation);
       state.camera.currentAnimation = null;
 
-      Interface.showBottomBar();
+      Interface.showNavBar();
       state.introFinished = true;
       Cache.set("skipIntro", true, 300);
     }

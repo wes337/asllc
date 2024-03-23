@@ -3,7 +3,7 @@ export const FLOORS = {
     name: "Artist Services",
   },
   "plague-blvd": {
-    name: "Plague Blvd",
+    name: "Plague BLVD",
   },
   wendigo: {
     name: "Wendigo",
@@ -69,7 +69,7 @@ export const FLOORS = {
     ],
   },
   deerdeath: {
-    name: "deer death",
+    name: "Deer Death",
   },
   dirtybutt: {
     name: "DIRTYBUTT",
@@ -81,21 +81,21 @@ export const FLOORS = {
     name: "BVDLVD",
   },
   skotskr: {
-    name: "Skotskr",
+    name: "SKOTSKR",
   },
   mkultra: {
     name: "MKULTRA",
   },
   "gregory-diamond": {
-    name: "Gregory Diamond",
+    name: "Greg",
     basement: true,
   },
   "jake-zimmerman": {
-    name: "Jake Zimmerman",
+    name: "Jake",
     basement: true,
   },
   sorbet: {
-    name: "Sorbet",
+    name: "sorbet",
     basement: true,
     extras: [
       {
@@ -111,7 +111,7 @@ export const FLOORS = {
     ],
   },
   steel: {
-    name: "Steel",
+    name: "SteelSoldier",
     basement: true,
   },
 };

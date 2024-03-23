@@ -154,7 +154,7 @@ export default class Background {
       let positionY =
         state.app.screen.height -
         (image.height / 2) * scale -
-        Interface.bottomBar.height();
+        Interface.navBar.height();
 
       if (breakpointY) {
         positionY = state.app.screen.height + margin;
@@ -180,7 +180,7 @@ export default class Background {
 
     const width = state.app.screen.width;
     const height = state.app.screen.height * 2;
-    const positionY = state.app.screen.height - Interface.bottomBar.height();
+    const positionY = state.app.screen.height - Interface.navBar.height();
 
     this.ground.beginFill(COLORS.brown);
     this.ground.drawRect(0, positionY, width, height);

@@ -1,11 +1,6 @@
 import { INTERFACE_SPRITES } from "../constants/sprites.js";
 import { COLORS } from "../constants/colors.js";
-import {
-  TEXT_STYLES,
-  DEFAULT_FONT_SIZE,
-  DEFAULT_LINE_HEIGHT,
-} from "../constants/text.js";
-import { CONTENT } from "../constants/content.js";
+import { TEXT_STYLES, FONT_SIZES } from "../constants/text.js";
 import { isLargeSizedScreen, isMobileSizedScreen } from "../utils.js";
 import Building from "./building.js";
 import Modal from "./modal.js";
@@ -15,17 +10,10 @@ import state from "../state.js";
 export default class Interface {
   static title = PIXI.Sprite.from(INTERFACE_SPRITES.logo.src);
 
-  static bottomBar = {
+  static navBar = {
     container: new PIXI.Container(),
-    upButton: PIXI.Sprite.from(INTERFACE_SPRITES.upButton.src),
-    downButton: PIXI.Sprite.from(INTERFACE_SPRITES.downButton.src),
-    height: () => (INTERFACE_SPRITES.downButton.height + 4) * state.scale(),
-    text: new PIXI.Text(CONTENT.interface.bottomBar.default, {
-      ...TEXT_STYLES.default,
-      fontSize: DEFAULT_FONT_SIZE(),
-      lineHeight: DEFAULT_LINE_HEIGHT(DEFAULT_FONT_SIZE()),
-      wordWrap: true,
-    }),
+    height: () =>
+      isLargeSizedScreen() ? 200 * state.scale() : 300 * state.scale(),
     background: new PIXI.Graphics(),
     show: false,
     buttons: {
@@ -35,8 +23,22 @@ export default class Interface {
     },
   };
 
+  static artistInfo = {
+    container: new PIXI.Container(),
+    background: new PIXI.Graphics(),
+    height: () =>
+      isLargeSizedScreen() ? 200 * state.scale() : 300 * state.scale(),
+    show: false,
+    text: new PIXI.Text("", {
+      ...TEXT_STYLES.default,
+      fill: COLORS.yellow,
+      wordWrap: true,
+      align: "center",
+    }),
+  };
+
   static {
-    this.bottomBar.buttons.about.callback = () => {
+    this.navBar.buttons.about.callback = () => {
       if (Modal.visible) {
         return;
       }
@@ -51,7 +53,7 @@ export default class Interface {
       });
     };
 
-    this.bottomBar.buttons.artists.callback = () => {
+    this.navBar.buttons.artists.callback = () => {
       if (Modal.visible) {
         return;
       }
@@ -66,7 +68,7 @@ export default class Interface {
       });
     };
 
-    this.bottomBar.buttons.contact.callback = () => {
+    this.navBar.buttons.contact.callback = () => {
       if (Modal.visible) {
         return;
       }
@@ -114,43 +116,63 @@ export default class Interface {
     state.app.stage.addChild(this.title);
   }
 
-  static showBottomBar() {
+  static showBar(bar) {
     state.busy = true;
 
-    this.bottomBar.show = true;
-    this.bottomBar.container.pivot.y = this.bottomBar.height() * -1;
+    this[bar].show = true;
+    this[bar].container.pivot.y = this[bar].height() * -1;
 
     const animation = (delta) => {
       const speed = 4 * delta;
-      this.bottomBar.container.pivot.y += speed;
+      this[bar].container.pivot.y += speed;
 
-      if (this.bottomBar.container.pivot.y >= -2) {
+      if (this[bar].container.pivot.y >= -2) {
         state.app.ticker.remove(animation);
         state.busy = false;
-        this.bottomBar.container.pivot.y = -2;
+        this[bar].container.pivot.y = -2;
       }
     };
 
     state.app.ticker.add(animation);
   }
 
-  static updateBottomBarText({ text, size, color }) {
-    // if (text) {
-    //   this.bottomBar.text.text = text;
-    // }
-    // if (size) {
-    //   this.bottomBar.text.style.fontSize = size;
-    //   this.bottomBar.text.style.lineHeight = DEFAULT_LINE_HEIGHT(size);
-    // }
-    // if (color) {
-    //   this.bottomBar.text.style.fill = color;
-    // }
+  static hideBar(bar) {
+    state.busy = true;
+
+    this[bar].container.pivot.y = -2;
+
+    const animation = (delta) => {
+      const speed = 4 * delta;
+      this[bar].container.pivot.y -= speed;
+
+      if (this[bar].container.pivot.y <= this[bar].height() * -1) {
+        state.app.ticker.remove(animation);
+        state.busy = false;
+        this[bar].container.pivot.y = this[bar].height() * -1;
+        this[bar].show = false;
+      }
+    };
+
+    state.app.ticker.add(animation);
   }
 
-  static renderBottomBar() {
+  static showNavBar() {
+    this.showBar("navBar");
+  }
+
+  static setArtistInfo(artistId) {
+    this.artistInfo.text.text = artistId || "";
+
+    if (artistId === "lobby") {
+      this.hideBar("artistInfo");
+    } else if (artistId && !this.artistInfo.show) {
+      this.showBar("artistInfo");
+    }
+  }
+
+  static renderArtistInfo() {
     const scale = state.scale();
 
-    const bottomBarHeight = isLargeSizedScreen() ? 200 * scale : 300 * scale;
     const backgroundColor = COLORS.darkGray;
     const borderColor = COLORS.purple;
     const borderSize = 4;
@@ -162,59 +184,138 @@ export default class Interface {
     const positionX = isMobileSizedScreen() ? 0 : state.app.screen.width / 4;
 
     const positionY =
-      state.app.screen.height - bottomBarHeight / 2 + state.app.stage.pivot.y;
+      state.app.screen.height -
+      this.artistInfo.height() / 2 -
+      this.navBar.height() +
+      state.app.stage.pivot.y;
 
     // Background
-    this.bottomBar.background.clear();
-    this.bottomBar.background.beginFill(backgroundColor);
-    this.bottomBar.background.drawRect(
+    this.artistInfo.background.clear();
+    this.artistInfo.background.beginFill(backgroundColor);
+    this.artistInfo.background.drawRect(
       0,
-      positionY - bottomBarHeight / 2,
+      positionY - this.artistInfo.height() / 2,
       width,
-      bottomBarHeight
+      this.artistInfo.height()
     );
 
+    this.artistInfo.background.endFill();
+    this.artistInfo.container.addChild(this.artistInfo.background);
+    this.artistInfo.container.position.x = positionX;
+
     // Top border
-    this.bottomBar.background.beginFill(borderColor);
-    this.bottomBar.background.drawRect(
+    this.artistInfo.background.beginFill(borderColor);
+    this.artistInfo.background.drawRect(
       0,
-      positionY - bottomBarHeight / 2 - borderSize,
+      positionY - this.artistInfo.height() / 2 - borderSize,
       width + borderSize,
       borderSize
     );
 
     if (!isMobileSizedScreen()) {
       // Left border
-      this.bottomBar.background.drawRect(
+      this.artistInfo.background.drawRect(
         positionX - state.app.screen.width / 4,
-        positionY - bottomBarHeight / 2,
+        positionY - this.artistInfo.height() / 2,
         borderSize,
-        bottomBarHeight
+        this.artistInfo.height()
       );
 
       // Right border
-      this.bottomBar.background.drawRect(
+      this.artistInfo.background.drawRect(
         positionX + state.app.screen.width / 4,
-        positionY - bottomBarHeight / 2,
+        positionY - this.artistInfo.height() / 2,
         borderSize,
-        bottomBarHeight
+        this.artistInfo.height()
       );
     }
 
-    this.bottomBar.background.endFill();
-    this.bottomBar.container.addChild(this.bottomBar.background);
-    this.bottomBar.container.position.x = positionX;
+    // Text
+    this.artistInfo.text.position.y =
+      positionY - this.artistInfo.text.height / 2;
+    this.artistInfo.text.position.x = isMobileSizedScreen()
+      ? state.app.screen.width / 2 - this.artistInfo.text.width / 2
+      : positionX - this.artistInfo.text.width / 2;
+    this.artistInfo.text.style.wordWrapWidth = width;
+    this.artistInfo.text.style.fontSize = isMobileSizedScreen()
+      ? FONT_SIZES.xl
+      : FONT_SIZES.xxl;
+    this.artistInfo.container.addChild(this.artistInfo.text);
+
+    state.app.stage.addChild(this.artistInfo.container);
+
+    if (!this.artistInfo.show) {
+      this.artistInfo.container.pivot.y = this.artistInfo.height() * -2;
+    }
+  }
+
+  static renderBottomBar() {
+    const backgroundColor = COLORS.darkGray;
+    const borderColor = COLORS.purple;
+    const borderSize = 4;
+
+    const width = isMobileSizedScreen()
+      ? state.app.screen.width
+      : state.app.screen.width / 2;
+
+    const positionX = isMobileSizedScreen() ? 0 : state.app.screen.width / 4;
+
+    const positionY =
+      state.app.screen.height -
+      this.navBar.height() / 2 +
+      state.app.stage.pivot.y;
+
+    // Background
+    this.navBar.background.clear();
+    this.navBar.background.beginFill(backgroundColor);
+    this.navBar.background.drawRect(
+      0,
+      positionY - this.navBar.height() / 2,
+      width,
+      this.navBar.height()
+    );
+
+    // Top border
+    this.navBar.background.beginFill(borderColor);
+    this.navBar.background.drawRect(
+      0,
+      positionY - this.navBar.height() / 2 - borderSize,
+      width + borderSize,
+      borderSize
+    );
+
+    if (!isMobileSizedScreen()) {
+      // Left border
+      this.navBar.background.drawRect(
+        positionX - state.app.screen.width / 4,
+        positionY - this.navBar.height() / 2,
+        borderSize,
+        this.navBar.height()
+      );
+
+      // Right border
+      this.navBar.background.drawRect(
+        positionX + state.app.screen.width / 4,
+        positionY - this.navBar.height() / 2,
+        borderSize,
+        this.navBar.height()
+      );
+    }
+
+    this.navBar.background.endFill();
+    this.navBar.container.addChild(this.navBar.background);
+    this.navBar.container.position.x = positionX;
 
     // Nav Buttons
-    const { about, artists, contact } = this.bottomBar.buttons;
+    const { about, artists, contact } = this.navBar.buttons;
 
-    this.bottomBar.container.addChild(about.button);
-    this.bottomBar.container.addChild(artists.button);
-    this.bottomBar.container.addChild(contact.button);
+    this.navBar.container.addChild(about.button);
+    this.navBar.container.addChild(artists.button);
+    this.navBar.container.addChild(contact.button);
 
     const buttonMargin = 8;
-    const buttonWidth = this.bottomBar.background.width / 3 - buttonMargin;
-    const buttonHeight = bottomBarHeight - borderSize - buttonMargin;
+    const buttonWidth = this.navBar.background.width / 3 - buttonMargin;
+    const buttonHeight = this.navBar.height() - borderSize - buttonMargin;
     const buttonPositionY = positionY - buttonHeight / 2 - borderSize / 4;
 
     // About
@@ -244,16 +345,18 @@ export default class Interface {
       : buttonWidth * 2 + buttonMargin * 2.5 - borderSize;
     contact.render();
 
-    state.app.stage.addChild(this.bottomBar.container);
+    state.app.stage.addChild(this.navBar.container);
 
-    if (!this.bottomBar.show) {
-      this.bottomBar.container.pivot.y = this.bottomBar.height() * -1;
+    if (!this.navBar.show) {
+      this.navBar.container.pivot.y = this.navBar.height() * -1;
     }
   }
 
   static render() {
     this.renderTitle();
+    this.renderArtistInfo();
     this.renderBottomBar();
+
     Modal.render();
   }
 }
