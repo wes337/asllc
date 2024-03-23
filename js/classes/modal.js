@@ -5,6 +5,8 @@ import state from "../state.js";
 
 export default class Modal {
   static visible = false;
+  static height = 250;
+  static width = 800;
   static container = new PIXI.Container();
   static background = new PIXI.Graphics();
   static backdrop = new PIXI.Graphics();
@@ -33,6 +35,22 @@ export default class Modal {
 
   static callback = null;
 
+  static animateIn() {
+    this.container.scale.y = 0;
+
+    const animation = (delta) => {
+      const amount = 0.25 * delta;
+      this.container.scale.y += amount;
+
+      if (this.container.scale.y >= 1) {
+        this.container.scale.y = 1;
+        state.app.ticker.remove(animation);
+      }
+    };
+
+    state.app.ticker.add(animation);
+  }
+
   static renderModal() {
     this.background.clear();
     this.button.background.clear();
@@ -42,15 +60,16 @@ export default class Modal {
     }
 
     const margin = 32;
-    const width = isMobileSizedScreen() ? state.app.screen.width - margin : 550;
-    const height = 250;
+    const width = isMobileSizedScreen()
+      ? state.app.screen.width - margin
+      : this.width;
 
     const positionX = state.app.screen.width / 2 - width / 2;
     const positionY =
-      state.app.stage.pivot.y + state.app.screen.height / 2 - height / 2;
+      state.app.stage.pivot.y + state.app.screen.height / 2 - this.height / 2;
 
     this.background.beginFill(COLORS.darkGray);
-    this.background.drawRect(positionX, positionY, width, height);
+    this.background.drawRect(positionX, positionY, width, this.height);
     this.background.endFill();
     this.background.filters = [state.filters.highlight(4, COLORS.darkPurple)];
     this.container.addChild(this.background);
@@ -72,7 +91,7 @@ export default class Modal {
     this.container.addChild(this.headerText);
 
     // Body Text
-    const bodyTextPositionY = positionY + height / 2 - textMargin;
+    const bodyTextPositionY = positionY + this.height / 2 - textMargin;
 
     this.bodyText.position.set(textPositionX, bodyTextPositionY);
     this.bodyText.anchor.set(0.5);
@@ -84,7 +103,7 @@ export default class Modal {
     // Button
     const buttonPadding = 8;
     const buttonPositionY =
-      positionY + height - this.button.text.height / 2 - margin;
+      positionY + this.height - this.button.text.height / 2 - margin;
 
     this.button.container.position.set(textPositionX, buttonPositionY);
     this.button.container.eventMode = "static";
@@ -121,6 +140,8 @@ export default class Modal {
     this.button.text.text = buttonText.toUpperCase();
     this.callback = callback;
     this.visible = true;
+
+    this.animateIn();
   }
 
   static hide() {
