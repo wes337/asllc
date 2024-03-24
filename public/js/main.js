@@ -5,6 +5,7 @@ import render from "./render.js";
 import animate from "./animate.js";
 import events from "./events.js";
 import state from "./state.js";
+import interval from "./interval.js";
 
 async function loadAssets() {
   const loading = document.getElementById("loading");
@@ -48,6 +49,7 @@ async function main() {
   render();
   animate();
   events();
+  interval();
 }
 
 main();
