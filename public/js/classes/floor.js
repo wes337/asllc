@@ -110,7 +110,7 @@ export default class Floor {
 
     state.activeFloorNumber = this.number;
 
-    Interface.setArtistInfo(this.name);
+    Interface.setArtistInfo(this.id);
 
     Building.allFloors.forEach((floor) => {
       if (typeof floor.toggleIndicator !== "function") {

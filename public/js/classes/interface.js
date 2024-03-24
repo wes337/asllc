@@ -1,4 +1,5 @@
 import { INTERFACE_SPRITES } from "../constants/sprites.js";
+import { FLOORS } from "../constants/floors.js";
 import { COLORS } from "../constants/colors.js";
 import { TEXT_STYLES, FONT_SIZES } from "../constants/text.js";
 import { isLargeSizedScreen, isMobileSizedScreen } from "../utils.js";
@@ -9,6 +10,12 @@ import state from "../state.js";
 
 export default class Interface {
   static title = PIXI.Sprite.from(INTERFACE_SPRITES.logo.src);
+
+  static socialMediaLinks = {
+    apple: PIXI.Sprite.from(INTERFACE_SPRITES.apple.src),
+    spotify: PIXI.Sprite.from(INTERFACE_SPRITES.spotify.src),
+    ig: PIXI.Sprite.from(INTERFACE_SPRITES.soundcloud.src),
+  };
 
   static navBar = {
     container: new PIXI.Container(),
@@ -24,11 +31,13 @@ export default class Interface {
   };
 
   static artistInfo = {
+    artistId: "",
     container: new PIXI.Container(),
     background: new PIXI.Graphics(),
     height: () =>
-      isLargeSizedScreen() ? 200 * state.scale() : 300 * state.scale(),
+      isMobileSizedScreen() ? 400 * state.scale() : 350 * state.scale(),
     show: false,
+    margin: 16,
     text: new PIXI.Text("", {
       ...TEXT_STYLES.default,
       fill: COLORS.yellow,
@@ -82,6 +91,27 @@ export default class Interface {
         },
       });
     };
+
+    Object.entries(this.socialMediaLinks).forEach(([name, socialMediaLink]) => {
+      socialMediaLink.eventMode = "static";
+      socialMediaLink.cursor = "pointer";
+
+      socialMediaLink.addListener("pointerenter", () => {
+        socialMediaLink.filters = [state.filters.highlight(4, COLORS.purple)];
+      });
+
+      socialMediaLink.addListener("pointerleave", () => {
+        socialMediaLink.filters = [];
+      });
+
+      socialMediaLink.addListener("pointerdown", () => {
+        const link = FLOORS[this.artistId]?.links?.[name];
+
+        if (link) {
+          window.open(link, "_blank");
+        }
+      });
+    });
   }
 
   static onClickUpButton() {
@@ -161,7 +191,9 @@ export default class Interface {
   }
 
   static setArtistInfo(artistId) {
-    this.artistInfo.text.text = artistId || "";
+    this.artistId = artistId || "";
+    const artistName = FLOORS[artistId].name;
+    this.artistInfo.text.text = artistName || "";
 
     if (artistId === "lobby") {
       this.hideBar("artistInfo");
@@ -234,19 +266,59 @@ export default class Interface {
     this.artistInfo.text.position.y =
       positionY - this.artistInfo.text.height / 2;
     this.artistInfo.text.position.x = isMobileSizedScreen()
-      ? state.app.screen.width / 2 - this.artistInfo.text.width / 2
+      ? this.artistInfo.margin
       : positionX - this.artistInfo.text.width / 2;
     this.artistInfo.text.style.wordWrapWidth = width;
     this.artistInfo.text.style.fontSize = isMobileSizedScreen()
-      ? FONT_SIZES.xl
-      : FONT_SIZES.xxl;
+      ? FONT_SIZES.xxl
+      : FONT_SIZES.xxxl;
     this.artistInfo.container.addChild(this.artistInfo.text);
+
+    this.renderSocialMediaLinks();
 
     state.app.stage.addChild(this.artistInfo.container);
 
     if (!this.artistInfo.show) {
       this.artistInfo.container.pivot.y = this.artistInfo.height() * -2;
     }
+  }
+
+  static renderSocialMediaLinks() {
+    const links = this.artistId && FLOORS[this.artistId]?.links;
+
+    Object.values(this.socialMediaLinks).forEach((socialMediaLink) => {
+      socialMediaLink.visible = !!links;
+    });
+
+    if (!links) {
+      return;
+    }
+
+    const scale = state.scale();
+
+    const linkWidth = INTERFACE_SPRITES.spotify.width * scale;
+
+    const positionX = isMobileSizedScreen()
+      ? state.app.screen.width - linkWidth / 2
+      : state.app.screen.width / 2 - linkWidth / 2;
+
+    const positionY =
+      state.app.screen.height -
+      this.artistInfo.height() / 2 -
+      this.navBar.height() -
+      2 +
+      state.app.stage.pivot.y;
+
+    Object.keys(links).forEach((icon, i) => {
+      this.socialMediaLinks[icon].position.x =
+        positionX - linkWidth * i - this.artistInfo.margin * (i + 1);
+      this.socialMediaLinks[icon].position.y = positionY;
+      this.socialMediaLinks[icon].scale.x = scale;
+      this.socialMediaLinks[icon].scale.y = scale;
+      this.socialMediaLinks[icon].anchor.set(0.5);
+
+      this.artistInfo.container.addChild(this.socialMediaLinks[icon]);
+    });
   }
 
   static renderBottomBar() {

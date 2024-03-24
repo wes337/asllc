@@ -18,6 +18,7 @@ export const FONT_SIZES = {
   lg: 24,
   xl: 32,
   xxl: 40,
+  xxxl: 64,
 };
 
 export const TEXT_STYLES = {
