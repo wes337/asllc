@@ -30,6 +30,11 @@ export const TEXT_STYLES = {
     dropShadowColor: COLORS.darkPurple,
     dropShadowDistance: 4,
   },
+  chat: {
+    fontFamily: FONT_FAMILY.name,
+    fill: COLORS.black,
+    fontSize: FONT_SIZES.md,
+  },
   header: {
     fontFamily: HEADER_FONT_FAMILY.name,
     fill: COLORS.yellow,

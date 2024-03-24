@@ -1,13 +1,14 @@
 import { SPRITES } from "../constants/sprites.js";
 import { FLOORS } from "../constants/floors.js";
 import { DEFAULT_FONT_SIZE, TEXT_STYLES } from "../constants/text.js";
-import { isMobileSizedScreen } from "../utils.js";
+import { getRandomElementFromArray, isMobileSizedScreen } from "../utils.js";
 import { animateCamera } from "../animate.js";
 import Elevator from "./elevator.js";
 import Interface from "./interface.js";
 import Building from "./building.js";
 import Modal from "./modal.js";
 import state from "../state.js";
+import { CONTENT } from "../constants/content.js";
 
 export default class Floor {
   constructor(index, id, basement) {
@@ -44,6 +45,12 @@ export default class Floor {
     }
 
     return this.index;
+  }
+
+  personOnFloor() {
+    return state.people.find(
+      (person) => person.floorNumber === this.number && person.name === this.id
+    );
   }
 
   get width() {
@@ -109,6 +116,12 @@ export default class Floor {
     animateCamera(cameraPosition);
 
     state.activeFloorNumber = this.number;
+
+    const person = this.personOnFloor();
+    if (person) {
+      const randomMessage = getRandomElementFromArray(CONTENT.chat.all);
+      person.chatBubble.show(randomMessage);
+    }
 
     Interface.setArtistInfo(this.id);
 
