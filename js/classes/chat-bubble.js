@@ -1,7 +1,7 @@
 import { COLORS } from "../constants/colors.js";
 import { TEXT_STYLES, FONT_SIZES } from "../constants/text.js";
-import state from "../state.js";
 import { isLargeSizedScreen } from "../utils.js";
+import state from "../state.js";
 
 export default class ChatBubble {
   background = new PIXI.Graphics();
@@ -81,7 +81,7 @@ export default class ChatBubble {
     const isUpsideDown =
       this.target.metadata && this.target.metadata.upsideDown;
     if (isUpsideDown) {
-      positionY = targetPosition.y + targetHeight;
+      positionY = targetPosition.y + targetHeight / 2 + arrowSize * 4;
     }
 
     const backgroundColor = COLORS.lightGray;
@@ -100,13 +100,13 @@ export default class ChatBubble {
     this.background.endFill();
 
     // Arrow
-    this.background.beginFill(COLORS.white);
+    this.background.beginFill(COLORS.lightGray);
 
     let arrowPositionX = targetPosition.x;
     let arrowPositionY = targetPosition.y - targetHeight / 2 - arrowSize * 3;
 
     if (isUpsideDown) {
-      arrowPositionY = positionY - height + arrowSize * 3;
+      arrowPositionY = targetPosition.y + targetHeight / 2 + arrowSize * 2;
     }
 
     this.background.drawRect(

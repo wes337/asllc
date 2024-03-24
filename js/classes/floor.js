@@ -1,4 +1,5 @@
 import { SPRITES } from "../constants/sprites.js";
+import { CONTENT } from "../constants/content.js";
 import { FLOORS } from "../constants/floors.js";
 import { DEFAULT_FONT_SIZE, TEXT_STYLES } from "../constants/text.js";
 import { getRandomElementFromArray, isMobileSizedScreen } from "../utils.js";
@@ -8,7 +9,6 @@ import Interface from "./interface.js";
 import Building from "./building.js";
 import Modal from "./modal.js";
 import state from "../state.js";
-import { CONTENT } from "../constants/content.js";
 
 export default class Floor {
   constructor(index, id, basement) {

@@ -17,16 +17,77 @@ export default class Elevator {
   static rope = [];
   static elevatorFloorNumber = 0;
 
+  static moving = false;
+
   static get inBasement() {
     return this.elevatorFloorNumber < 0;
   }
 
   static get elevatorFloor() {
+    if (this.elevatorFloorNumber < 0) {
+      return Building.basement[this.elevatorFloorNumber * -1];
+    }
+
     return Building.floors[this.elevatorFloorNumber];
   }
 
   static get width() {
     return 145 * state.scale();
+  }
+
+  static getFloorPosition(floor) {
+    const scale = state.scale();
+
+    const offsetY = floor.basement ? 60 * scale : 40 * scale;
+
+    return floor.basement
+      ? floor.position.y() + SPRITES.foundation.height * scale + offsetY
+      : floor.position.y() + offsetY;
+  }
+
+  static gotoFloor(floorNumber) {
+    return new Promise((resolve) => {
+      if (this.moving) {
+        return;
+      }
+
+      this.moving = true;
+
+      this.wheel.loop = true;
+      this.wheel.play();
+
+      const animation = (delta) => {
+        const current = this.getFloorPosition(this.elevatorFloor);
+
+        const targetFloor =
+          floorNumber < 0
+            ? Building.basement[floorNumber * -1]
+            : Building.floors[floorNumber];
+
+        const end = this.getFloorPosition(targetFloor);
+
+        const goingDown = current <= end;
+
+        const amount = goingDown ? 10 : -10;
+
+        this.shaft.position.y += amount * delta;
+
+        const finished = goingDown
+          ? this.shaft.position.y >= end
+          : this.shaft.position.y <= end;
+
+        if (finished) {
+          state.app.ticker.remove(animation);
+          this.elevatorFloorNumber = floorNumber;
+          this.wheel.loop = false;
+          this.wheel.gotoAndPlay(0);
+          this.moving = false;
+          resolve();
+        }
+      };
+
+      state.app.ticker.add(animation);
+    });
   }
 
   static renderWheel() {
@@ -126,36 +187,22 @@ export default class Elevator {
     const scale = state.scale();
 
     const scaledWidth = SPRITES["elevator-shaft"].width * scale;
-    const scaledHeight = SPRITES["elevator-shaft"].height * scale;
 
     const offsetX = 50 * scale;
-    const offsetY = 124 * scale;
 
     const positionX =
-      Building.topFloor.position.x() -
-      Building.topFloor.width() / 2 +
+      this.elevatorFloor.position.x() -
+      this.elevatorFloor.width() / 2 +
       scaledWidth / 2 +
       offsetX;
 
-    let positionY =
-      Building.topFloor.position.y() -
-      Building.topFloor.height() / 2 +
-      scaledHeight -
-      offsetY;
-
-    // Animate this
-    const floorFromTop = Building.topFloor.number - this.elevatorFloorNumber;
-    positionY = positionY + floorFromTop * this.elevatorFloor.height();
-
-    if (this.inBasement) {
-      positionY = positionY + SPRITES.foundation.height * scale + 4;
-    }
+    const positionY = this.getFloorPosition(this.elevatorFloor);
 
     this.shaft.position.set(positionX, positionY);
     this.shaft.scale.y = scale;
     this.shaft.scale.x = scale;
     this.shaft.anchor.set(0.5);
-    this.shaft.animationSpeed = 0.5;
+    this.shaft.animationSpeed = 0.2;
     this.shaft.loop = false;
 
     state.app.stage.addChild(this.shaft);
@@ -209,8 +256,14 @@ export default class Elevator {
   }
 
   static animateDoor() {
-    this.render();
-    this.shaft.gotoAndPlay(0);
+    return new Promise((resolve) => {
+      this.render();
+      this.shaft.gotoAndPlay(0);
+
+      setTimeout(() => {
+        resolve();
+      }, 1000);
+    });
   }
 
   static animateWheel() {

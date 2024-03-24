@@ -24,6 +24,7 @@ const state = {
       new PIXI.filters.OutlineFilter(size || 2, color || COLORS.red),
     opacity: (alpha) => new PIXI.filters.AlphaFilter(alpha || 0.5),
   },
+  headingToLobby: null,
   camera: {
     currentAnimation: null,
     start: () => {

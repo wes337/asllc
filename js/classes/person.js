@@ -12,6 +12,7 @@ export default class Person {
   constructor(name) {
     this.name = name;
     this.floorNumber = 0;
+    this.inElevator = false;
     this.character = new PIXI.AnimatedSprite(
       SPRITES[name].src.map((img) => PIXI.Texture.from(img))
     );
@@ -89,14 +90,68 @@ export default class Person {
   }
 
   updateDirection() {
+    if (this.inElevator || this.extra) {
+      this.direction = "left";
+    }
+
     this.direction =
       this.destination && this.destination < this.character.position.x
         ? "left"
         : "right";
   }
 
+  enterLobby() {
+    return new Promise((resolve) => {
+      this.inElevator = false;
+      this.floorNumber = 0;
+      this.destination = null;
+
+      const scale = state.scale();
+      const doorWidth = 60 * scale;
+      const doorPosition = state.app.screen.width / 2 - doorWidth;
+      this.character.position.x = doorPosition;
+
+      setTimeout(() => {
+        this.walkRandomly = true;
+        resolve();
+      }, 200);
+    });
+  }
+
+  leaveRoom() {
+    return new Promise((resolve) => {
+      this.walkRandomly = false;
+
+      const animation = (delta) => {
+        const scale = state.scale();
+        const doorWidth = 60 * scale;
+        const doorPosition = state.app.screen.width / 2 - doorWidth;
+        this.destination = doorPosition;
+
+        if (doorPosition !== Math.floor(this.character.position.x)) {
+          const min = this.boundaries.min();
+          let positionX = Math.max(this.character.position.x, min);
+          this.updateDirection();
+          const speed = randomNumberBetween(4, 5) / 10;
+          const amount = this.direction === "right" ? speed : speed * -1;
+          positionX += amount * delta;
+          this.character.play();
+        } else {
+          this.destination = null;
+          this.character.stop();
+          this.inElevator = true;
+          this.updateDirection();
+          state.app.ticker.remove(animation);
+          resolve();
+        }
+      };
+
+      state.app.ticker.add(animation);
+    });
+  }
+
   goToRandomDestination() {
-    if (this.walking || this.destination) {
+    if (this.walking || this.destination || this.inElevator) {
       return;
     }
 
@@ -193,5 +248,19 @@ export default class Person {
     this.character.filters = highlight
       ? [state.filters.highlight(highlightSize)]
       : [];
+
+    if (this.inElevator) {
+      this.character.position.x =
+        Building.lobby.position.x() -
+        Building.lobby.width() / 2 +
+        this.character.width +
+        Elevator.width / 2;
+
+      this.character.position.y =
+        Elevator.shaft.position.y + 120 * scale - this.character.height / 8;
+
+      this.character.loop = false;
+      this.destination = null;
+    }
   }
 }
