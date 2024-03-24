@@ -25,6 +25,10 @@ export default class ChatBubble {
 
     this.text.text = text;
 
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+
     this.timeout = setTimeout(() => {
       this.hide();
     }, this.duration);
@@ -61,11 +65,8 @@ export default class ChatBubble {
     let width = this.text.width + margin;
     this.text.style.wordWrap = true;
     this.text.style.wordWrapWidth = state.app.screen.width / 2;
-
-    if (width > state.app.screen.width / 2) {
-      this.text.style.fontSize = FONT_SIZES.sm;
-      width = this.text.width;
-    }
+    this.text.style.lineHeight =
+      (isLargeSizedScreen() ? FONT_SIZES.lg : FONT_SIZES.md) + 20 * scale;
 
     const height = this.text.height + margin / 2;
     const targetHeight = this.target.height();
