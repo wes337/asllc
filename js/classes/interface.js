@@ -257,13 +257,29 @@ export default class Interface {
     // Text
     this.artistInfo.text.position.y =
       positionY - this.artistInfo.text.height / 2;
-    this.artistInfo.text.position.x = isMobileSizedScreen()
-      ? this.artistInfo.margin
-      : positionX - this.artistInfo.text.width / 2;
+
     this.artistInfo.text.style.wordWrapWidth = width;
-    this.artistInfo.text.style.fontSize = isMobileSizedScreen()
-      ? FONT_SIZES.xxl
-      : FONT_SIZES.xxxl;
+
+    const hasSocialMediaLinks = this.artistId && FLOORS[this.artistId]?.links;
+    const hasLongName =
+      isMobileSizedScreen() &&
+      hasSocialMediaLinks &&
+      this.artistInfo.text.text.length >= 8;
+
+    if (hasLongName) {
+      this.artistInfo.text.style.letterSpacing = -2;
+      this.artistInfo.text.style.fontSize = FONT_SIZES.xl;
+      this.artistInfo.text.position.x = this.artistInfo.margin / 2;
+    } else {
+      this.artistInfo.text.style.letterSpacing = 0;
+      this.artistInfo.text.style.fontSize = isMobileSizedScreen()
+        ? FONT_SIZES.xxl
+        : FONT_SIZES.xxxl;
+      this.artistInfo.text.position.x = isMobileSizedScreen()
+        ? this.artistInfo.margin
+        : positionX - this.artistInfo.text.width / 2;
+    }
+
     this.artistInfo.container.addChild(this.artistInfo.text);
 
     this.renderSocialMediaLinks();
@@ -278,8 +294,8 @@ export default class Interface {
   static renderSocialMediaLinks() {
     const links = this.artistId && FLOORS[this.artistId]?.links;
 
-    Object.values(this.socialMediaLinks).forEach((socialMediaLink) => {
-      socialMediaLink.visible = !!links;
+    Object.entries(this.socialMediaLinks).forEach(([name, socialMediaLink]) => {
+      socialMediaLink.visible = !!(links && links[name]);
     });
 
     if (!links) {
