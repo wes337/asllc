@@ -184,7 +184,7 @@ export default class Interface {
 
   static setArtistInfo(artistId) {
     this.artistId = artistId || "";
-    const artistName = FLOORS[artistId].name;
+    const artistName = FLOORS[artistId]?.name;
     this.artistInfo.text.text = artistName || "";
 
     if (!artistName || ["Lobby", "Artist Services"].includes(artistName)) {
@@ -417,6 +417,14 @@ export default class Interface {
   }
 
   static render() {
+    // Need to reverse so the chat bubble draws
+    // on top of the floors above the person
+    [...state.people].reverse().forEach((person) => {
+      if (person.chatBubble) {
+        person.chatBubble.render();
+      }
+    });
+
     this.renderTitle();
     this.renderArtistInfo();
     this.renderBottomBar();

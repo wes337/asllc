@@ -3,6 +3,7 @@ import { isLargeSizedScreen, randomNumberBetween } from "../utils.js";
 import Interface from "./interface.js";
 import Building from "./building.js";
 import Elevator from "./elevator.js";
+import ChatBubble from "./chat-bubble.js";
 import state from "../state.js";
 
 export default class Person {
@@ -24,6 +25,8 @@ export default class Person {
       : Math.random() < 0.5
       ? "left"
       : "right";
+
+    this.chatBubble = new ChatBubble(this);
   }
 
   set startingPosition(position) {
@@ -45,6 +48,10 @@ export default class Person {
 
   get height() {
     return () => SPRITES[this.name].height * state.scale();
+  }
+
+  get position() {
+    return () => this.character.position;
   }
 
   get walking() {
