@@ -127,9 +127,9 @@ export const FLOORS = {
     name: "DIRTYBUTT",
     links: {
       apple: "https://music.apple.com/artist/dirtybutt/1561568417",
+      ig: "https://www.instagram.com/dirtybutt/",
       spotify:
         "https://open.spotify.com/artist/4VDTVWfSLGgU37g7Yrbnyj?si=v6uf_HojRhyhPYDXk9W1MA",
-      ig: "https://www.instagram.com/dirtybutt/",
     },
   },
   kamaara: {

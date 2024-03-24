@@ -114,14 +114,6 @@ export default class Interface {
     });
   }
 
-  static onClickUpButton() {
-    Building.selectNextOrPreviousFloor(false);
-  }
-
-  static onClickDownButton() {
-    Building.selectNextOrPreviousFloor(true);
-  }
-
   static renderTitle() {
     const margin = 8;
     const minWidth = 360;
@@ -153,7 +145,7 @@ export default class Interface {
     this[bar].container.pivot.y = this[bar].height() * -1;
 
     const animation = (delta) => {
-      const speed = 4 * delta;
+      const speed = 8 * delta;
       this[bar].container.pivot.y += speed;
 
       if (this[bar].container.pivot.y >= -2) {
@@ -172,7 +164,7 @@ export default class Interface {
     this[bar].container.pivot.y = -2;
 
     const animation = (delta) => {
-      const speed = 4 * delta;
+      const speed = 8 * delta;
       this[bar].container.pivot.y -= speed;
 
       if (this[bar].container.pivot.y <= this[bar].height() * -1) {
@@ -195,7 +187,7 @@ export default class Interface {
     const artistName = FLOORS[artistId].name;
     this.artistInfo.text.text = artistName || "";
 
-    if (artistId === "lobby") {
+    if (!artistName || ["Lobby", "Artist Services"].includes(artistName)) {
       this.hideBar("artistInfo");
     } else if (artistId && !this.artistInfo.show) {
       this.showBar("artistInfo");
