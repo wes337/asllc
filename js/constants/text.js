@@ -34,6 +34,7 @@ export const TEXT_STYLES = {
     fontFamily: FONT_FAMILY.name,
     fill: COLORS.black,
     fontSize: FONT_SIZES.md,
+    letterSpacing: -2,
   },
   header: {
     fontFamily: HEADER_FONT_FAMILY.name,
