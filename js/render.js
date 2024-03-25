@@ -9,11 +9,11 @@ import Background from "./classes/background.js";
 import Building from "./classes/building.js";
 import Elevator from "./classes/elevator.js";
 import Person from "./classes/person.js";
-import state from "./state.js";
+import State from "./classes/state.js";
 
 function renderPerson(artistId, floorNumber) {
   const artist =
-    state.people.find((person) => person.name === artistId) ||
+    State.people.find((person) => person.name === artistId) ||
     new Person(artistId);
 
   artist.startingPosition = randomNumberBetween(
@@ -21,31 +21,33 @@ function renderPerson(artistId, floorNumber) {
     artist.boundaries.max()
   );
 
-  artist.floorNumber = floorNumber;
+  artist.originalFloorNumber = floorNumber;
+  artist.floorNumber =
+    artist.floorNumber !== null ? artist.floorNumber : floorNumber;
 
-  state.people.push(artist);
+  State.people.push(artist);
 }
 
 function renderExtra(floorExtra, floorNumber) {
   const extra =
-    state.people.find((person) => person.name === floorExtra.name) ||
+    State.people.find((person) => person.name === floorExtra.name) ||
     new Person(floorExtra.name);
 
   extra.startingPosition =
-    extra.boundaries.min() + floorExtra.positionX * state.scale();
+    extra.boundaries.min() + floorExtra.positionX * State.scale();
 
   if (floorExtra.positionY) {
-    extra.offsetY = floorExtra.positionY * state.scale();
+    extra.offsetY = floorExtra.positionY * State.scale();
   }
 
   extra.floorNumber = floorNumber;
   extra.walkRandomly = floorExtra.moves;
   extra.character.play();
-  state.people.push(extra);
+  State.people.push(extra);
 }
 
 export default function render() {
-  state.app.renderer.resize(window.innerWidth, window.innerHeight);
+  State.app.renderer.resize(window.innerWidth, window.innerHeight);
 
   Background.render();
   Building.renderFloor(0, "lobby");

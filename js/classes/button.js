@@ -1,7 +1,6 @@
 import { TEXT_STYLES, FONT_SIZES } from "../constants/text.js";
 import { COLORS } from "../constants/colors.js";
 import { isMobileSizedScreen } from "../utils.js";
-import state from "../state.js";
 
 export default class Button {
   button = new PIXI.Container();
@@ -12,18 +11,14 @@ export default class Button {
     wordWrap: false,
   });
   background = new PIXI.Graphics();
-
   position = {
     x: 0,
     y: 0,
   };
-
   width = null;
   height = null;
-
   backgroundColor = COLORS.purple;
   textColor = COLORS.white;
-
   callback = () => {};
 
   constructor(id, label) {
@@ -55,8 +50,6 @@ export default class Button {
   }
 
   render() {
-    const scale = state.scale();
-
     this.button.position.x = this.position.x;
     this.button.position.y = this.position.y;
 

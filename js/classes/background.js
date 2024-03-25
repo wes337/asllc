@@ -2,7 +2,7 @@ import { COLORS } from "../constants/colors.js";
 import { SPRITES } from "../constants/sprites.js";
 import { randomNumberBetween, isMobileSizedScreen } from "../utils.js";
 import Interface from "./interface.js";
-import state from "../state.js";
+import State from "./state.js";
 
 export default class Background {
   static sky = new PIXI.Graphics();
@@ -17,19 +17,19 @@ export default class Background {
   );
 
   static pivot() {
-    this.sky.position.y = this.sky.initialPosition.y + state.app.stage.pivot.y;
-    this.sun.position.y = this.sun.initialPosition.y + state.app.stage.pivot.y;
+    this.sky.position.y = this.sky.initialPosition.y + State.app.stage.pivot.y;
+    this.sun.position.y = this.sun.initialPosition.y + State.app.stage.pivot.y;
 
     [...this.clouds].flat().forEach((cloud) => {
-      cloud.position.y = cloud.initialPosition.y + state.app.stage.pivot.y;
+      cloud.position.y = cloud.initialPosition.y + State.app.stage.pivot.y;
     });
   }
 
   static renderSky() {
     this.sky.clear();
 
-    const width = state.app.screen.width;
-    const height = state.app.screen.height;
+    const width = State.app.screen.width;
+    const height = State.app.screen.height;
 
     const skySize = height / 4;
     const skyMidSize = skySize / 2;
@@ -51,16 +51,16 @@ export default class Background {
 
     this.sky.initialPosition = { x: 0, y: 0 };
 
-    state.app.stage.addChild(this.sky);
+    State.app.stage.addChild(this.sky);
   }
 
   static renderSun() {
-    const scale = state.scale();
+    const scale = State.scale();
 
     const marginX = 16;
     const marginY = 8;
     const positionX =
-      state.app.screen.width - (SPRITES.sun.width * scale) / 2 - marginX;
+      State.app.screen.width - (SPRITES.sun.width * scale) / 2 - marginX;
     const positionY = (SPRITES.sun.height * scale) / 2 + marginY;
 
     this.sun.initialPosition = { x: positionX, y: positionY };
@@ -70,13 +70,13 @@ export default class Background {
     this.sun.scale.x = scale;
     this.sun.anchor.set(0.5);
 
-    state.app.stage.addChild(this.sun);
+    State.app.stage.addChild(this.sun);
   }
 
   static renderClouds() {
-    const scale = state.scale();
+    const scale = State.scale();
 
-    const ROWS = isMobileSizedScreen(state.app)
+    const ROWS = isMobileSizedScreen(State.app)
       ? [2, 2, 3, 2, 1, 1]
       : [4, 4, 3, 4, 3, 3];
     const ROW_OFFSET_X = [0, 128, 56, 8, 120, 288];
@@ -104,10 +104,10 @@ export default class Background {
         const marginY = 32 - ROW_OFFSET_Y[i];
         const positionX =
           SPRITES["cloud-xs"].width +
-          (state.app.screen.width / numberOfClouds) * j +
+          (State.app.screen.width / numberOfClouds) * j +
           1 -
           marginX;
-        const positionY = state.app.screen.height / 4 - marginY;
+        const positionY = State.app.screen.height / 4 - marginY;
 
         cloud.initialPosition = { x: positionX, y: positionY };
 
@@ -116,13 +116,13 @@ export default class Background {
         cloud.scale.x = scale;
         cloud.anchor.set(0.5);
 
-        state.app.stage.addChild(cloud);
+        State.app.stage.addChild(cloud);
       }
     }
   }
 
   static renderBuildings() {
-    const scale = state.scale();
+    const scale = State.scale();
 
     const NUMBER_OF_BUILDINGS = 2;
 
@@ -136,8 +136,8 @@ export default class Background {
       const scaledHeight = image.height * scale;
       const margin = 24;
       const breakpointX =
-        state.app.screen.width <= scaledWidth * NUMBER_OF_BUILDINGS + margin;
-      const breakpointY = state.app.screen.height < scaledHeight + margin;
+        State.app.screen.width <= scaledWidth * NUMBER_OF_BUILDINGS + margin;
+      const breakpointY = State.app.screen.height < scaledHeight + margin;
 
       let positionX = 0;
 
@@ -147,17 +147,17 @@ export default class Background {
           : scaledWidth / 2 - margin;
       } else if (i === 1) {
         positionX = breakpointX
-          ? state.app.screen.width - scaledWidth / 4 + margin * 10
-          : state.app.screen.width - scaledWidth / 2 + margin;
+          ? State.app.screen.width - scaledWidth / 4 + margin * 10
+          : State.app.screen.width - scaledWidth / 2 + margin;
       }
 
       let positionY =
-        state.app.screen.height -
+        State.app.screen.height -
         (image.height / 2) * scale -
         Interface.navBar.height();
 
       if (breakpointY) {
-        positionY = state.app.screen.height + margin;
+        positionY = State.app.screen.height + margin;
       }
 
       building.initialPosition = { x: positionX, y: positionY };
@@ -167,28 +167,28 @@ export default class Background {
       building.scale.x = scale;
       building.anchor.set(0.5);
 
-      state.app.stage.addChild(building);
+      State.app.stage.addChild(building);
 
       this.buildings[i] = building;
     }
   }
 
   static renderGround() {
-    const scale = state.scale();
+    const scale = State.scale();
 
     this.ground.clear();
 
-    const width = state.app.screen.width;
-    const height = state.app.screen.height * 2;
-    const positionY = state.app.screen.height - Interface.navBar.height();
+    const width = State.app.screen.width;
+    const height = State.app.screen.height * 2;
+    const positionY = State.app.screen.height - Interface.navBar.height();
 
     this.ground.beginFill(COLORS.brown);
     this.ground.drawRect(0, positionY, width, height);
     this.ground.endFill();
 
-    state.app.stage.addChild(this.ground);
+    State.app.stage.addChild(this.ground);
 
-    this.dirt.width = state.app.screen.width;
+    this.dirt.width = State.app.screen.width;
     this.dirt.height = SPRITES.dirt.height * scale;
 
     this.dirt.tileScale.x = scale;
@@ -196,15 +196,15 @@ export default class Background {
 
     this.dirt.position.set(0, positionY + SPRITES.dirt.height * scale);
 
-    state.app.stage.addChild(this.dirt);
+    State.app.stage.addChild(this.dirt);
   }
 
   static animateClouds() {
     const clouds = this.clouds.flat();
 
     clouds.forEach((cloud) => {
-      state.app.ticker.add((delta) => {
-        if (cloud.position.x >= state.app.screen.width) {
+      State.app.ticker.add((delta) => {
+        if (cloud.position.x >= State.app.screen.width) {
           cloud.reverse = true;
         } else if (cloud.position.x <= 0) {
           cloud.reverse = false;

@@ -1,7 +1,7 @@
 import { COLORS } from "../constants/colors.js";
 import { TEXT_STYLES, FONT_SIZES } from "../constants/text.js";
 import { isMobileSizedScreen } from "../utils.js";
-import state from "../state.js";
+import State from "./state.js";
 
 export default class Modal {
   static visible = false;
@@ -44,11 +44,11 @@ export default class Modal {
 
       if (this.container.scale.y >= 1) {
         this.container.scale.y = 1;
-        state.app.ticker.remove(animation);
+        State.app.ticker.remove(animation);
       }
     };
 
-    state.app.ticker.add(animation);
+    State.app.ticker.add(animation);
   }
 
   static renderModal() {
@@ -61,17 +61,17 @@ export default class Modal {
 
     const margin = 32;
     const width = isMobileSizedScreen()
-      ? state.app.screen.width - margin
+      ? State.app.screen.width - margin
       : this.width;
 
-    const positionX = state.app.screen.width / 2 - width / 2;
+    const positionX = State.app.screen.width / 2 - width / 2;
     const positionY =
-      state.app.stage.pivot.y + state.app.screen.height / 2 - this.height / 2;
+      State.app.stage.pivot.y + State.app.screen.height / 2 - this.height / 2;
 
     this.background.beginFill(COLORS.darkGray);
     this.background.drawRect(positionX, positionY, width, this.height);
     this.background.endFill();
-    this.background.filters = [state.filters.highlight(4, COLORS.darkPurple)];
+    this.background.filters = [State.filters.highlight(4, COLORS.darkPurple)];
     this.container.addChild(this.background);
 
     // Text
@@ -126,12 +126,12 @@ export default class Modal {
     this.button.container.addChild(this.button.text);
 
     this.button.container.filters = [
-      state.filters.highlight(4, COLORS.darkPurple),
+      State.filters.highlight(4, COLORS.darkPurple),
     ];
 
     this.container.addChild(this.button.container);
 
-    state.app.stage.addChild(this.container);
+    State.app.stage.addChild(this.container);
   }
 
   static show({ headerText, bodyText, buttonText, callback }) {
@@ -163,15 +163,15 @@ export default class Modal {
 
     this.backdrop.drawRect(
       0,
-      state.app.stage.pivot.y,
-      state.app.screen.width,
-      state.app.screen.height
+      State.app.stage.pivot.y,
+      State.app.screen.width,
+      State.app.screen.height
     );
     this.backdrop.endFill();
 
-    this.backdrop.filters = [state.filters.opacity(0.5)];
+    this.backdrop.filters = [State.filters.opacity(0.5)];
 
-    state.app.stage.addChild(this.backdrop);
+    State.app.stage.addChild(this.backdrop);
   }
 
   static render() {

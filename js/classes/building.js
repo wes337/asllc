@@ -1,6 +1,6 @@
 import { SPRITES } from "../constants/sprites.js";
 import Floor from "./floor.js";
-import state from "../state.js";
+import State from "./state.js";
 
 export default class Building {
   static roof = PIXI.Sprite.from(SPRITES.roof.src);
@@ -36,21 +36,21 @@ export default class Building {
   }
 
   static get activeFloor() {
-    if (state.activeFloorNumber === null) {
+    if (State.activeFloorNumber === null) {
       return this.lobby;
     }
 
-    if (state.activeFloorNumber < 0) {
-      return this.basement[state.activeFloorNumber * -1];
+    if (State.activeFloorNumber < 0) {
+      return this.basement[State.activeFloorNumber * -1];
     }
 
-    return this.floors[state.activeFloorNumber];
+    return this.floors[State.activeFloorNumber];
   }
 
   static renderFoundation() {
-    const scale = state.scale();
+    const scale = State.scale();
 
-    this.foundation.width = state.app.screen.width;
+    this.foundation.width = State.app.screen.width;
     this.foundation.height = SPRITES.cement.height * scale;
 
     this.foundation.tileScale.x = scale;
@@ -63,7 +63,7 @@ export default class Building {
 
     this.basement[0] = this.foundation;
 
-    state.app.stage.addChild(this.foundation);
+    State.app.stage.addChild(this.foundation);
   }
 
   static renderFloor(i, name) {
@@ -85,7 +85,7 @@ export default class Building {
   }
 
   static renderRoof() {
-    const scale = state.scale();
+    const scale = State.scale();
 
     this.roof.position.set(
       this.topFloor.position.x(),
@@ -96,11 +96,11 @@ export default class Building {
     this.roof.scale.x = scale;
     this.roof.anchor.set(0.5);
 
-    state.app.stage.addChild(this.roof);
+    State.app.stage.addChild(this.roof);
   }
 
   static renderUndergroundFoundation() {
-    const scale = state.scale();
+    const scale = State.scale();
 
     this.undergroundFoundation.position.set(
       this.bottomFloor.position.x() - 5 * scale,
@@ -111,17 +111,17 @@ export default class Building {
     this.undergroundFoundation.scale.x = scale;
     this.undergroundFoundation.anchor.set(0.5);
 
-    state.app.stage.addChild(this.undergroundFoundation);
+    State.app.stage.addChild(this.undergroundFoundation);
   }
 
   static selectNextOrPreviousFloor(previous) {
-    if (state.busy || !state.introFinished) {
+    if (State.busy || !State.introFinished) {
       return;
     }
 
     const index = previous ? -1 : +1;
 
-    let nextIndex = (state.activeFloorNumber || 0) + index;
+    let nextIndex = (State.activeFloorNumber || 0) + index;
 
     let floor;
 

@@ -6,7 +6,7 @@ import { isLargeSizedScreen, isMobileSizedScreen } from "../utils.js";
 import Building from "./building.js";
 import Modal from "./modal.js";
 import Button from "./button.js";
-import state from "../state.js";
+import State from "./state.js";
 
 export default class Interface {
   static title = PIXI.Sprite.from(INTERFACE_SPRITES.logo.src);
@@ -20,7 +20,7 @@ export default class Interface {
   static navBar = {
     container: new PIXI.Container(),
     height: () =>
-      isLargeSizedScreen() ? 200 * state.scale() : 300 * state.scale(),
+      isLargeSizedScreen() ? 200 * State.scale() : 300 * State.scale(),
     background: new PIXI.Graphics(),
     show: false,
     buttons: {
@@ -35,7 +35,7 @@ export default class Interface {
     container: new PIXI.Container(),
     background: new PIXI.Graphics(),
     height: () =>
-      isMobileSizedScreen() ? 400 * state.scale() : 350 * state.scale(),
+      isMobileSizedScreen() ? 400 * State.scale() : 350 * State.scale(),
     show: false,
     margin: 16,
     text: new PIXI.Text("", {
@@ -97,7 +97,7 @@ export default class Interface {
       socialMediaLink.cursor = "pointer";
 
       socialMediaLink.addListener("pointerenter", () => {
-        socialMediaLink.filters = [state.filters.highlight(4, COLORS.purple)];
+        socialMediaLink.filters = [State.filters.highlight(4, COLORS.purple)];
       });
 
       socialMediaLink.addListener("pointerleave", () => {
@@ -121,27 +121,27 @@ export default class Interface {
     const minWidth = 360;
 
     const positionY = Math.max(
-      state.app.stage.pivot.y + this.title.height / 2 + margin,
+      State.app.stage.pivot.y + this.title.height / 2 + margin,
       Building.topFloor.position.y() - this.title.height * 3
     );
 
-    this.title.position.set(state.app.screen.width / 2, positionY);
+    this.title.position.set(State.app.screen.width / 2, positionY);
 
     if (
-      this.title.width >= state.app.screen.width &&
+      this.title.width >= State.app.screen.width &&
       this.title.width !== minWidth
     ) {
-      this.title.width = Math.max(state.app.screen.width - 10, minWidth);
+      this.title.width = Math.max(State.app.screen.width - 10, minWidth);
       this.title.scale.y = this.title.scale.y - 0.1;
     }
 
     this.title.anchor.set(0.5);
 
-    state.app.stage.addChild(this.title);
+    State.app.stage.addChild(this.title);
   }
 
   static showBar(bar) {
-    state.busy = true;
+    State.busy = true;
 
     this[bar].show = true;
     this[bar].container.pivot.y = this[bar].height() * -1;
@@ -151,17 +151,17 @@ export default class Interface {
       this[bar].container.pivot.y += speed;
 
       if (this[bar].container.pivot.y >= -2) {
-        state.app.ticker.remove(animation);
-        state.busy = false;
+        State.app.ticker.remove(animation);
+        State.busy = false;
         this[bar].container.pivot.y = -2;
       }
     };
 
-    state.app.ticker.add(animation);
+    State.app.ticker.add(animation);
   }
 
   static hideBar(bar) {
-    state.busy = true;
+    State.busy = true;
 
     this[bar].container.pivot.y = -2;
 
@@ -170,14 +170,14 @@ export default class Interface {
       this[bar].container.pivot.y -= speed;
 
       if (this[bar].container.pivot.y <= this[bar].height() * -1) {
-        state.app.ticker.remove(animation);
-        state.busy = false;
+        State.app.ticker.remove(animation);
+        State.busy = false;
         this[bar].container.pivot.y = this[bar].height() * -1;
         this[bar].show = false;
       }
     };
 
-    state.app.ticker.add(animation);
+    State.app.ticker.add(animation);
   }
 
   static showNavBar() {
@@ -197,23 +197,23 @@ export default class Interface {
   }
 
   static renderArtistInfo() {
-    const scale = state.scale();
+    const scale = State.scale();
 
     const backgroundColor = COLORS.darkGray;
     const borderColor = COLORS.purple;
     const borderSize = 4;
 
     const width = isMobileSizedScreen()
-      ? state.app.screen.width
-      : state.app.screen.width / 2;
+      ? State.app.screen.width
+      : State.app.screen.width / 2;
 
-    const positionX = isMobileSizedScreen() ? 0 : state.app.screen.width / 4;
+    const positionX = isMobileSizedScreen() ? 0 : State.app.screen.width / 4;
 
     const positionY =
-      state.app.screen.height -
+      State.app.screen.height -
       this.artistInfo.height() / 2 -
       this.navBar.height() +
-      state.app.stage.pivot.y;
+      State.app.stage.pivot.y;
 
     // Background
     this.artistInfo.background.clear();
@@ -241,7 +241,7 @@ export default class Interface {
     if (!isMobileSizedScreen()) {
       // Left border
       this.artistInfo.background.drawRect(
-        positionX - state.app.screen.width / 4,
+        positionX - State.app.screen.width / 4,
         positionY - this.artistInfo.height() / 2,
         borderSize,
         this.artistInfo.height()
@@ -249,7 +249,7 @@ export default class Interface {
 
       // Right border
       this.artistInfo.background.drawRect(
-        positionX + state.app.screen.width / 4,
+        positionX + State.app.screen.width / 4,
         positionY - this.artistInfo.height() / 2,
         borderSize,
         this.artistInfo.height()
@@ -286,7 +286,7 @@ export default class Interface {
 
     this.renderSocialMediaLinks();
 
-    state.app.stage.addChild(this.artistInfo.container);
+    State.app.stage.addChild(this.artistInfo.container);
 
     if (!this.artistInfo.show) {
       this.artistInfo.container.pivot.y = this.artistInfo.height() * -2;
@@ -304,20 +304,20 @@ export default class Interface {
       return;
     }
 
-    const scale = state.scale();
+    const scale = State.scale();
 
     const linkWidth = INTERFACE_SPRITES.spotify.width * scale;
 
     const positionX = isMobileSizedScreen()
-      ? state.app.screen.width - linkWidth / 2
-      : state.app.screen.width / 2 - linkWidth / 2;
+      ? State.app.screen.width - linkWidth / 2
+      : State.app.screen.width / 2 - linkWidth / 2;
 
     const positionY =
-      state.app.screen.height -
+      State.app.screen.height -
       this.artistInfo.height() / 2 -
       this.navBar.height() -
       2 +
-      state.app.stage.pivot.y;
+      State.app.stage.pivot.y;
 
     Object.keys(links).forEach((icon, i) => {
       this.socialMediaLinks[icon].position.x =
@@ -337,15 +337,15 @@ export default class Interface {
     const borderSize = 4;
 
     const width = isMobileSizedScreen()
-      ? state.app.screen.width
-      : state.app.screen.width / 2;
+      ? State.app.screen.width
+      : State.app.screen.width / 2;
 
-    const positionX = isMobileSizedScreen() ? 0 : state.app.screen.width / 4;
+    const positionX = isMobileSizedScreen() ? 0 : State.app.screen.width / 4;
 
     const positionY =
-      state.app.screen.height -
+      State.app.screen.height -
       this.navBar.height() / 2 +
-      state.app.stage.pivot.y;
+      State.app.stage.pivot.y;
 
     // Background
     this.navBar.background.clear();
@@ -369,7 +369,7 @@ export default class Interface {
     if (!isMobileSizedScreen()) {
       // Left border
       this.navBar.background.drawRect(
-        positionX - state.app.screen.width / 4,
+        positionX - State.app.screen.width / 4,
         positionY - this.navBar.height() / 2,
         borderSize,
         this.navBar.height()
@@ -377,7 +377,7 @@ export default class Interface {
 
       // Right border
       this.navBar.background.drawRect(
-        positionX + state.app.screen.width / 4,
+        positionX + State.app.screen.width / 4,
         positionY - this.navBar.height() / 2,
         borderSize,
         this.navBar.height()
@@ -427,7 +427,7 @@ export default class Interface {
       : buttonWidth * 2 + buttonMargin * 2.5 - borderSize;
     contact.render();
 
-    state.app.stage.addChild(this.navBar.container);
+    State.app.stage.addChild(this.navBar.container);
 
     if (!this.navBar.show) {
       this.navBar.container.pivot.y = this.navBar.height() * -1;
@@ -437,7 +437,7 @@ export default class Interface {
   static render() {
     // Need to reverse so the chat bubble draws
     // on top of the floors above the person
-    [...state.people].reverse().forEach((person) => {
+    [...State.people].reverse().forEach((person) => {
       if (person.chatBubble) {
         person.chatBubble.render();
       }
