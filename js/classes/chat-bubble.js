@@ -1,7 +1,7 @@
 import { COLORS } from "../constants/colors.js";
 import { TEXT_STYLES, FONT_SIZES } from "../constants/text.js";
 import { isLargeSizedScreen } from "../utils.js";
-import State from "./State.js";
+import State from "./state.js";
 
 export default class ChatBubble {
   background = new PIXI.Graphics();
