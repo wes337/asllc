@@ -51,7 +51,7 @@ export default function render() {
   Building.renderFloor(0, "lobby");
   Building.renderFoundation();
 
-  for (let i = 1; i <= BASEMENT_FLOOR_IDS.length; i++) {
+  for (let i = BASEMENT_FLOOR_IDS.length; i >= 1; i--) {
     const artistId = BASEMENT_FLOOR_IDS[i - 1];
 
     Building.renderBasementFloor(i, artistId);
@@ -86,6 +86,7 @@ export default function render() {
   }
 
   Building.renderRoof();
+  Building.renderUndergroundFoundation();
 
   Elevator.render();
   Interface.render();

@@ -70,22 +70,23 @@ export default class Person {
     return Building.floors[this.floorNumber];
   }
 
-  get boundaries() {
-    const wallThickness = 100 * state.scale();
+  get inBasement() {
+    return this.floorNumber < 0;
+  }
 
+  get boundaries() {
     return {
       min: () =>
-        state.app.screen.width / 2 -
-        (SPRITES.wall.width * state.scale()) / 2 +
-        wallThickness * 4 +
-        (this.extra ? 0 : 70 * state.scale()),
+        this.currentFloor.position.x() -
+        this.currentFloor.width() / 2 +
+        (this.extra ? 0 : this.width() / 2) +
+        this.currentFloor.leftWall.width,
 
       max: () =>
         this.currentFloor.position.x() +
-        this.currentFloor.width() / 2 +
-        Elevator.width -
-        this.width() * 2 -
-        wallThickness,
+        this.currentFloor.width() / 2 -
+        this.width() / 2 -
+        this.currentFloor.rightWall.width,
     };
   }
 
@@ -210,14 +211,16 @@ export default class Person {
     let positionY =
       this.currentFloor.separator.position.y -
       this.currentFloor.separator.height / 2 -
-      this.height() / 2;
+      this.height() / 2 -
+      10 * scale;
 
     if (this.offsetY) {
       positionY = positionY - this.offsetY;
     }
 
     if (this.extra) {
-      positionY = positionY - this.height() / 2;
+      const extraOffset = this.inBasement ? 0 : 20 * scale;
+      positionY = positionY - this.height() / 2 - extraOffset;
     }
 
     const isUpsideDown = this.metadata && this.metadata.upsideDown;

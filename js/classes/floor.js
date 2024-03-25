@@ -2,7 +2,7 @@ import { SPRITES } from "../constants/sprites.js";
 import { CONTENT } from "../constants/content.js";
 import { FLOORS } from "../constants/floors.js";
 import { DEFAULT_FONT_SIZE, TEXT_STYLES } from "../constants/text.js";
-import { getRandomElementFromArray, isMobileSizedScreen } from "../utils.js";
+import { getRandomElementFromArray } from "../utils.js";
 import { animateCamera } from "../animate.js";
 import Elevator from "./elevator.js";
 import Interface from "./interface.js";
@@ -25,8 +25,10 @@ export default class Floor {
       ? new PIXI.AnimatedSprite(sprites.map((img) => PIXI.Texture.from(img)))
       : PIXI.Sprite.from(sprites);
 
-    this.wall = PIXI.Sprite.from(SPRITES.wall.src);
-    this.undergroundWall = PIXI.Sprite.from(SPRITES["underground-wall"].src);
+    this.leftWall = PIXI.Sprite.from(SPRITES["left-wall"].src);
+    this.rightWall = basement
+      ? PIXI.Sprite.from(SPRITES["underground-wall"].src)
+      : PIXI.Sprite.from(SPRITES["right-wall"].src);
     this.separator = PIXI.Sprite.from(SPRITES.separator.src);
     this.numberText = new PIXI.Text("", {
       ...TEXT_STYLES.default,
@@ -54,11 +56,11 @@ export default class Floor {
   }
 
   get width() {
-    return () => SPRITES.wall.width * state.scale();
+    return () => 1720 * state.scale();
   }
 
   get height() {
-    return () => SPRITES.wall.height * state.scale();
+    return () => 550 * state.scale();
   }
 
   get position() {
@@ -67,9 +69,9 @@ export default class Floor {
       y: () => {
         return (
           state.app.screen.height -
-          (SPRITES.wall.height / 2) * state.scale() -
+          this.height() / 2 -
           (SPRITES.separator.height / 2) * state.scale() -
-          SPRITES.wall.height * state.scale() * this.number -
+          this.height() * this.number -
           Interface.navBar.height()
         );
       },
@@ -88,7 +90,7 @@ export default class Floor {
 
     if (this.basement) {
       const offset = Math.floor(32 * scale);
-      positionY = positionY + SPRITES.foundation.height * scale + offset;
+      positionY = positionY + SPRITES.cement.height * scale + offset;
     }
 
     return positionY;
@@ -138,48 +140,60 @@ export default class Floor {
     this.indicator.visible = this.isActive;
   }
 
+  renderSeparator() {
+    const scale = state.scale();
+
+    let positionY = this.positionYOffset;
+
+    this.separator.position.set(
+      this.position.x() - 5 * scale,
+      positionY + this.height() / 2
+    );
+
+    this.separator.scale.y = scale;
+    this.separator.scale.x = scale;
+    this.separator.anchor.set(0.5);
+    this.container.addChild(this.separator);
+  }
+
   render() {
     const scale = state.scale();
 
     let positionY = this.positionYOffset;
 
     // Room
-    this.room.position.set(this.position.x() + Elevator.width, positionY);
+    this.room.position.set(
+      this.position.x() + Elevator.width - 10 * scale,
+      positionY - 30 * scale
+    );
     this.room.scale.y = scale;
     this.room.scale.x = scale;
     this.room.anchor.set(0.5);
     this.container.addChild(this.room);
 
-    // Wall
-    this.wall.position.set(this.position.x(), positionY);
-    this.wall.scale.y = scale;
-    this.wall.scale.x = scale;
-    this.wall.anchor.set(0.5);
-    this.container.addChild(this.wall);
-
-    if (this.basement) {
-      this.undergroundWall.position.set(
-        this.position.x() +
-          (SPRITES.wall.width / 2) * scale -
-          (SPRITES["underground-connector"].width / 2) * scale +
-          17 * scale,
-        positionY
-      );
-      this.undergroundWall.scale.y = scale;
-      this.undergroundWall.scale.x = scale;
-      this.undergroundWall.anchor.set(0.5);
-      this.container.addChild(this.undergroundWall);
-    }
-
-    // Separator
-    this.separator.position.set(
-      this.position.x() + 5 * scale,
-      positionY + this.height() / 2
+    // Left wall
+    const leftWallOffset = 680 * scale;
+    this.leftWall.position.set(
+      this.position.x() - leftWallOffset,
+      positionY - 30 * scale
     );
-    this.separator.scale.y = scale;
-    this.separator.scale.x = scale;
-    this.separator.anchor.set(0.5);
-    this.container.addChild(this.separator);
+    this.leftWall.scale.y = scale;
+    this.leftWall.scale.x = scale;
+    this.leftWall.anchor.set(0.5);
+    this.container.addChild(this.leftWall);
+
+    // Right wall
+    const rightWallOffset = 810 * scale;
+    this.rightWall.position.set(
+      this.position.x() + rightWallOffset,
+      positionY - 30 * scale
+    );
+    this.rightWall.scale.y = scale;
+    this.rightWall.scale.x = scale;
+    this.rightWall.anchor.set(0.5);
+    this.container.addChild(this.rightWall);
+
+    this.renderSeparator();
 
     // Floor number
     const floorNumber = this.basement ? this.number : this.number + 1;
@@ -188,15 +202,13 @@ export default class Floor {
     this.numberText.style.fontSize = DEFAULT_FONT_SIZE();
 
     let floorNumberPositionX =
-      this.position.x() - this.wall.width / 2 + Elevator.width;
+      this.position.x() - this.width() / 2 + Elevator.width;
 
-    if (floorNumber < 0) {
-      floorNumberPositionX = floorNumberPositionX + 10 * scale;
-    } else if (floorNumber >= 10) {
-      const amount = isMobileSizedScreen() ? 10 : 20;
+    if (floorNumber < 10 && floorNumber >= 0) {
+      const amount = 20;
       floorNumberPositionX = floorNumberPositionX + amount * scale;
-    } else {
-      const amount = isMobileSizedScreen() ? 30 : 35;
+    } else if (floorNumber < 0) {
+      const amount = -10;
       floorNumberPositionX = floorNumberPositionX + amount * scale;
     }
 
@@ -206,10 +218,17 @@ export default class Floor {
 
     // Indicator
     let indicatorPositionY = this.positionYOffset + 85 * scale - 30 * scale;
-    this.indicator.position.set(
-      this.position.x() - this.wall.width / 2 + Elevator.width + 50 * scale,
-      indicatorPositionY
-    );
+    let indicatorPositionX = floorNumberPositionX + 30 * scale;
+
+    if (floorNumber < 10 && floorNumber >= 0) {
+      const amount = -20;
+      indicatorPositionX = indicatorPositionX + amount * scale;
+    } else if (floorNumber < 0) {
+      const amount = 10;
+      indicatorPositionX = indicatorPositionX + amount * scale;
+    }
+
+    this.indicator.position.set(indicatorPositionX, indicatorPositionY);
     this.indicator.scale.y = scale;
     this.indicator.scale.x = scale;
     this.indicator.anchor.set(0.5);

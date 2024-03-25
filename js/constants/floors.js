@@ -11,7 +11,7 @@ export const FLOORS = {
       {
         name: "fishmonger",
         moves: false,
-        positionX: 480,
+        positionX: 465,
       },
     ],
     links: {
@@ -188,7 +188,7 @@ export const FLOORS = {
       {
         name: "computer",
         moves: false,
-        positionX: 20,
+        positionX: 5,
       },
     ],
   },

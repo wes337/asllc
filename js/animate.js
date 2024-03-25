@@ -59,6 +59,10 @@ function animateIntro() {
 }
 
 export function animateCamera(end, withDelta, instant) {
+  if (end > state.camera.min()) {
+    end = state.camera.min();
+  }
+
   if (instant) {
     state.app.stage.pivot.y = end;
 
