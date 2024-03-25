@@ -53,12 +53,9 @@ export default class Interface {
       }
 
       Modal.show({
-        headerText: "About",
-        bodyText: "",
-        buttonText: "Okay",
-        callback: () => {
-          Modal.hide();
-        },
+        headerText: "About Artist Services",
+        bodyText:
+          "Helping artists capitalize on and invest in their careers without compromising creative vision.",
       });
     };
 
@@ -104,7 +101,7 @@ export default class Interface {
         socialMediaLink.filters = [];
       });
 
-      socialMediaLink.addListener("pointerdown", (event) => {
+      socialMediaLink.addListener("pointertap", (event) => {
         event.stopPropagation();
 
         const link = FLOORS[this.artistId]?.links?.[name];
