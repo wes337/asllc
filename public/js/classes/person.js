@@ -4,14 +4,15 @@ import Interface from "./interface.js";
 import Building from "./building.js";
 import Elevator from "./elevator.js";
 import ChatBubble from "./chat-bubble.js";
-import state from "../state.js";
+import State from "./state.js";
 
 export default class Person {
   offsetY = 0;
 
   constructor(name) {
     this.name = name;
-    this.floorNumber = 0;
+    this.floorNumber = null;
+    this.originalFloorNumber = 0;
     this.inElevator = false;
     this.character = new PIXI.AnimatedSprite(
       SPRITES[name].src.map((img) => PIXI.Texture.from(img))
@@ -44,11 +45,11 @@ export default class Person {
   }
 
   get width() {
-    return () => SPRITES[this.name].width * state.scale();
+    return () => SPRITES[this.name].width * State.scale();
   }
 
   get height() {
-    return () => SPRITES[this.name].height * state.scale();
+    return () => SPRITES[this.name].height * State.scale();
   }
 
   get position() {
@@ -63,6 +64,10 @@ export default class Person {
   }
 
   get currentFloor() {
+    if (!this.floorNumber) {
+      return Building.lobby;
+    }
+
     if (this.floorNumber < 0) {
       return Building.basement[this.floorNumber * -1];
     }
@@ -101,15 +106,15 @@ export default class Person {
         : "right";
   }
 
-  enterLobby() {
+  enterRoom(floorNumber) {
     return new Promise((resolve) => {
       this.inElevator = false;
-      this.floorNumber = 0;
+      this.floorNumber = floorNumber;
       this.destination = null;
 
-      const scale = state.scale();
+      const scale = State.scale();
       const doorWidth = 60 * scale;
-      const doorPosition = state.app.screen.width / 2 - doorWidth;
+      const doorPosition = State.app.screen.width / 2 - doorWidth;
       this.character.position.x = doorPosition;
 
       setTimeout(() => {
@@ -119,14 +124,14 @@ export default class Person {
     });
   }
 
-  leaveRoom() {
+  enterElevator() {
     return new Promise((resolve) => {
       this.walkRandomly = false;
 
       const animation = (delta) => {
-        const scale = state.scale();
+        const scale = State.scale();
         const doorWidth = 60 * scale;
-        const doorPosition = state.app.screen.width / 2 - doorWidth;
+        const doorPosition = State.app.screen.width / 2 - doorWidth;
         this.destination = doorPosition;
 
         if (doorPosition !== Math.floor(this.character.position.x)) {
@@ -142,12 +147,12 @@ export default class Person {
           this.character.stop();
           this.inElevator = true;
           this.updateDirection();
-          state.app.ticker.remove(animation);
+          State.app.ticker.remove(animation);
           resolve();
         }
       };
 
-      state.app.ticker.add(animation);
+      State.app.ticker.add(animation);
     });
   }
 
@@ -165,7 +170,7 @@ export default class Person {
   }
 
   animate() {
-    state.app.ticker.add((delta) => {
+    State.app.ticker.add((delta) => {
       this.render(delta);
 
       const chance = 0.005;
@@ -180,7 +185,15 @@ export default class Person {
   }
 
   render(delta) {
-    const scale = state.scale();
+    const scale = State.scale();
+
+    if (this.inElevator) {
+      this.character.position.x = Elevator.shaft.position.x;
+      this.character.position.y = Elevator.shaft.position.y + 90 * scale;
+      this.destination = null;
+      State.app.stage.addChild(this.character);
+      return;
+    }
 
     const min = this.boundaries.min();
     const max = this.boundaries.max();
@@ -239,30 +252,16 @@ export default class Person {
     this.character.animationSpeed = 0.1;
     this.character.loop = true;
 
-    state.app.stage.addChild(this.character);
+    State.app.stage.addChild(this.character);
 
     const highlight =
       !this.extra &&
-      state.activeFloorNumber &&
-      this.floorNumber === state.activeFloorNumber;
+      State.activeFloorNumber &&
+      this.floorNumber === State.activeFloorNumber;
 
     const highlightSize = isLargeSizedScreen() ? 3 : 2;
     this.character.filters = highlight
-      ? [state.filters.highlight(highlightSize)]
+      ? [State.filters.highlight(highlightSize)]
       : [];
-
-    if (this.inElevator) {
-      this.character.position.x =
-        Building.lobby.position.x() -
-        Building.lobby.width() / 2 +
-        this.character.width +
-        Elevator.width / 2;
-
-      this.character.position.y =
-        Elevator.shaft.position.y + 120 * scale - this.character.height / 8;
-
-      this.character.loop = false;
-      this.destination = null;
-    }
   }
 }

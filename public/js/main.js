@@ -1,10 +1,10 @@
 import { ALL_SPRITE_IMAGES } from "./constants/sprites.js";
 import { COLORS } from "./constants/colors.js";
 import { FONT_FAMILY, HEADER_FONT_FAMILY } from "./constants/text.js";
+import State from "./classes/state.js";
 import render from "./render.js";
 import animate from "./animate.js";
 import events from "./events.js";
-import state from "./state.js";
 import interval from "./interval.js";
 
 async function loadAssets() {
@@ -44,7 +44,7 @@ async function main() {
 
   document.body.appendChild(app.view);
 
-  state.app = app;
+  State.app = app;
 
   render();
   animate();

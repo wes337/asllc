@@ -8,7 +8,7 @@ import Elevator from "./elevator.js";
 import Interface from "./interface.js";
 import Building from "./building.js";
 import Modal from "./modal.js";
-import state from "../state.js";
+import State from "./state.js";
 
 export default class Floor {
   constructor(index, id, basement) {
@@ -50,27 +50,27 @@ export default class Floor {
   }
 
   personOnFloor() {
-    return state.people.find(
+    return State.people.find(
       (person) => person.floorNumber === this.number && person.name === this.id
     );
   }
 
   get width() {
-    return () => 1720 * state.scale();
+    return () => 1720 * State.scale();
   }
 
   get height() {
-    return () => 550 * state.scale();
+    return () => 550 * State.scale();
   }
 
   get position() {
     return {
-      x: () => state.app.screen.width / 2,
+      x: () => State.app.screen.width / 2,
       y: () => {
         return (
-          state.app.screen.height -
+          State.app.screen.height -
           this.height() / 2 -
-          (SPRITES.separator.height / 2) * state.scale() -
+          (SPRITES.separator.height / 2) * State.scale() -
           this.height() * this.number -
           Interface.navBar.height()
         );
@@ -79,12 +79,12 @@ export default class Floor {
   }
 
   get isActive() {
-    return state.activeFloorNumber && this.number === state.activeFloorNumber;
+    return State.activeFloorNumber && this.number === State.activeFloorNumber;
   }
 
   // This is really hacky but it's working...
   get positionYOffset() {
-    const scale = state.scale();
+    const scale = State.scale();
 
     let positionY = this.position.y();
 
@@ -97,19 +97,19 @@ export default class Floor {
   }
 
   onClick() {
-    if (state.busy || !state.introFinished || Modal.visible) {
+    if (State.busy || !State.introFinished || Modal.visible) {
       return;
     }
 
     const maxFloorsOnScreen = Math.floor(
-      state.app.screen.height / this.room.height
+      State.app.screen.height / this.room.height
     );
 
     const section = this.number / maxFloorsOnScreen;
 
     let cameraPosition = maxFloorsOnScreen * section * this.room.height * -1;
     cameraPosition = cameraPosition - this.room.height / 2;
-    cameraPosition = cameraPosition + state.app.screen.height / 2;
+    cameraPosition = cameraPosition + State.app.screen.height / 2;
 
     if (this.basement) {
       cameraPosition = cameraPosition * 1;
@@ -117,7 +117,7 @@ export default class Floor {
 
     animateCamera(cameraPosition);
 
-    state.activeFloorNumber = this.number;
+    State.activeFloorNumber = this.number;
 
     const person = this.personOnFloor();
     if (person) {
@@ -141,7 +141,7 @@ export default class Floor {
   }
 
   renderSeparator() {
-    const scale = state.scale();
+    const scale = State.scale();
 
     let positionY = this.positionYOffset;
 
@@ -157,7 +157,7 @@ export default class Floor {
   }
 
   render() {
-    const scale = state.scale();
+    const scale = State.scale();
 
     let positionY = this.positionYOffset;
 
@@ -236,7 +236,7 @@ export default class Floor {
 
     this.container.addChild(this.indicator);
 
-    state.app.stage.addChild(this.container);
+    State.app.stage.addChild(this.container);
 
     if (this.animated) {
       this.room.animationSpeed = 0.05;

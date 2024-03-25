@@ -1,6 +1,6 @@
 import { SPRITES } from "../constants/sprites.js";
 import Building from "./building.js";
-import state from "../state.js";
+import State from "./state.js";
 
 export default class Elevator {
   static shaft = new PIXI.AnimatedSprite(
@@ -16,7 +16,7 @@ export default class Elevator {
   static generator = PIXI.Sprite.from(SPRITES["elevator-generator"].src);
   static rope = [];
   static elevatorFloorNumber = 0;
-
+  static busy = false;
   static moving = false;
 
   static get inBasement() {
@@ -32,11 +32,11 @@ export default class Elevator {
   }
 
   static get width() {
-    return 145 * state.scale();
+    return 145 * State.scale();
   }
 
   static getFloorPosition(floor) {
-    const scale = state.scale();
+    const scale = State.scale();
 
     const offsetY = floor.basement ? 60 * scale : 30 * scale;
 
@@ -77,7 +77,7 @@ export default class Elevator {
           : this.shaft.position.y <= end;
 
         if (finished) {
-          state.app.ticker.remove(animation);
+          State.app.ticker.remove(animation);
           this.elevatorFloorNumber = floorNumber;
           this.wheel.loop = false;
           this.wheel.gotoAndPlay(0);
@@ -86,16 +86,16 @@ export default class Elevator {
         }
       };
 
-      state.app.ticker.add(animation);
+      State.app.ticker.add(animation);
     });
   }
 
   static renderWheel() {
-    const scaledWidth = SPRITES["elevator-wheel"].width * state.scale();
-    const scaledHeight = SPRITES["elevator-wheel"].height * state.scale();
+    const scaledWidth = SPRITES["elevator-wheel"].width * State.scale();
+    const scaledHeight = SPRITES["elevator-wheel"].height * State.scale();
 
-    const offsetX = 100 * state.scale();
-    const offsetY = 110 * state.scale();
+    const offsetX = 100 * State.scale();
+    const offsetY = 110 * State.scale();
 
     const positionX =
       Building.topFloor.position.x() -
@@ -110,22 +110,21 @@ export default class Elevator {
       offsetY;
 
     this.wheel.position.set(positionX, positionY);
-    this.wheel.scale.y = state.scale();
-    this.wheel.scale.x = state.scale();
+    this.wheel.scale.y = State.scale();
+    this.wheel.scale.x = State.scale();
     this.wheel.anchor.set(0.5);
     this.wheel.animationSpeed = 0.5;
 
-    state.app.stage.addChild(this.wheel);
+    State.app.stage.addChild(this.wheel);
   }
 
   static renderRope() {
-    const scale = state.scale();
+    const scale = State.scale();
 
     const scaledWidth = SPRITES["elevator-rope"].width * scale;
 
     const offsetX = 70 * scale;
 
-    // How to animate this? Draw all and stack, or use scale
     Building.allFloors.forEach((floor, i) => {
       if (typeof floor.position.x !== "function") {
         return;
@@ -143,14 +142,14 @@ export default class Elevator {
       rope.scale.x = scale;
       rope.anchor.set(0.5);
 
-      state.app.stage.addChild(rope);
+      State.app.stage.addChild(rope);
 
       this.rope[i] = rope;
     });
   }
 
   static renderGenerator() {
-    const scale = state.scale();
+    const scale = State.scale();
 
     const scaledWidth = SPRITES["elevator-generator"].width * scale;
     const scaledHeight = SPRITES["elevator-generator"].height * scale;
@@ -175,11 +174,11 @@ export default class Elevator {
     this.generator.scale.x = scale;
     this.generator.anchor.set(0.5);
 
-    state.app.stage.addChild(this.generator);
+    State.app.stage.addChild(this.generator);
   }
 
   static renderShaft() {
-    const scale = state.scale();
+    const scale = State.scale();
 
     const scaledWidth = SPRITES["elevator-shaft"].width * scale;
 
@@ -200,11 +199,11 @@ export default class Elevator {
     this.shaft.animationSpeed = 0.2;
     this.shaft.loop = false;
 
-    state.app.stage.addChild(this.shaft);
+    State.app.stage.addChild(this.shaft);
   }
 
   static renderBricks() {
-    const scale = state.scale();
+    const scale = State.scale();
 
     const scaledWidth = SPRITES["elevator-bricks"].width * scale;
     const scaledHeight = SPRITES["elevator-bricks"].height * scale;
@@ -224,11 +223,11 @@ export default class Elevator {
     this.bricks.scale.x = scale;
     this.bricks.anchor.set(0.5);
 
-    state.app.stage.addChild(this.bricks);
+    State.app.stage.addChild(this.bricks);
   }
 
   static renderConnector() {
-    const scale = state.scale();
+    const scale = State.scale();
 
     const scaledWidth = SPRITES["underground-connector"].width * scale;
     const scaledHeight = SPRITES["underground-connector"].height * scale;
@@ -247,7 +246,7 @@ export default class Elevator {
 
     this.connector.height = scaledHeight + 2;
 
-    state.app.stage.addChild(this.connector);
+    State.app.stage.addChild(this.connector);
   }
 
   static animateDoor() {

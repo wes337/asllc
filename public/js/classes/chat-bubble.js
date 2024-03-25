@@ -1,7 +1,7 @@
 import { COLORS } from "../constants/colors.js";
 import { TEXT_STYLES, FONT_SIZES } from "../constants/text.js";
 import { isLargeSizedScreen } from "../utils.js";
-import state from "../state.js";
+import State from "./State.js";
 
 export default class ChatBubble {
   background = new PIXI.Graphics();
@@ -54,7 +54,7 @@ export default class ChatBubble {
       return;
     }
 
-    const scale = state.scale();
+    const scale = State.scale();
 
     const margin = 40 * scale;
 
@@ -64,7 +64,7 @@ export default class ChatBubble {
 
     let width = this.text.width + margin;
     this.text.style.wordWrap = true;
-    this.text.style.wordWrapWidth = state.app.screen.width / 2;
+    this.text.style.wordWrapWidth = State.app.screen.width / 2;
     this.text.style.lineHeight =
       (isLargeSizedScreen() ? FONT_SIZES.lg : FONT_SIZES.md) + 20 * scale;
 
@@ -135,7 +135,7 @@ export default class ChatBubble {
       this.text.scale.x = -1;
     }
 
-    state.app.stage.addChild(this.background);
-    state.app.stage.addChild(this.text);
+    State.app.stage.addChild(this.background);
+    State.app.stage.addChild(this.text);
   }
 }
