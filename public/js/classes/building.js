@@ -5,9 +5,12 @@ import state from "../state.js";
 export default class Building {
   static roof = PIXI.Sprite.from(SPRITES.roof.src);
   static foundation = new PIXI.TilingSprite(
-    PIXI.Texture.from(SPRITES.foundation.src),
+    PIXI.Texture.from(SPRITES.cement.src),
     window.innerWidth,
-    SPRITES.foundation.height
+    SPRITES.cement.height
+  );
+  static undergroundFoundation = PIXI.Sprite.from(
+    SPRITES["underground-foundation"].src
   );
   static floors = [];
   static basement = [];
@@ -29,7 +32,7 @@ export default class Building {
       return this.lobby;
     }
 
-    return this.basement[this.basement.length];
+    return this.basement[this.basement.length - 1];
   }
 
   static get activeFloor() {
@@ -48,7 +51,7 @@ export default class Building {
     const scale = state.scale();
 
     this.foundation.width = state.app.screen.width;
-    this.foundation.height = SPRITES.foundation.height * scale;
+    this.foundation.height = SPRITES.cement.height * scale;
 
     this.foundation.tileScale.x = scale;
     this.foundation.tileScale.y = scale;
@@ -86,7 +89,7 @@ export default class Building {
 
     this.roof.position.set(
       this.topFloor.position.x(),
-      this.topFloor.position.y() - this.topFloor.height() / 2
+      this.topFloor.position.y() - this.topFloor.height() / 2 - 20 * scale
     );
 
     this.roof.scale.y = scale;
@@ -94,6 +97,21 @@ export default class Building {
     this.roof.anchor.set(0.5);
 
     state.app.stage.addChild(this.roof);
+  }
+
+  static renderUndergroundFoundation() {
+    const scale = state.scale();
+
+    this.undergroundFoundation.position.set(
+      this.bottomFloor.position.x() - 5 * scale,
+      this.bottomFloor.position.y() + this.bottomFloor.height() + 370 * scale
+    );
+
+    this.undergroundFoundation.scale.y = scale;
+    this.undergroundFoundation.scale.x = scale;
+    this.undergroundFoundation.anchor.set(0.5);
+
+    state.app.stage.addChild(this.undergroundFoundation);
   }
 
   static selectNextOrPreviousFloor(previous) {

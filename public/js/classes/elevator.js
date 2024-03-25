@@ -38,10 +38,10 @@ export default class Elevator {
   static getFloorPosition(floor) {
     const scale = state.scale();
 
-    const offsetY = floor.basement ? 60 * scale : 40 * scale;
+    const offsetY = floor.basement ? 60 * scale : 30 * scale;
 
     return floor.basement
-      ? floor.position.y() + SPRITES.foundation.height * scale + offsetY
+      ? floor.position.y() + SPRITES.cement.height * scale + offsetY
       : floor.position.y() + offsetY;
   }
 
@@ -94,8 +94,8 @@ export default class Elevator {
     const scaledWidth = SPRITES["elevator-wheel"].width * state.scale();
     const scaledHeight = SPRITES["elevator-wheel"].height * state.scale();
 
-    const offsetX = 120 * state.scale();
-    const offsetY = 140 * state.scale();
+    const offsetX = 100 * state.scale();
+    const offsetY = 110 * state.scale();
 
     const positionX =
       Building.topFloor.position.x() -
@@ -123,7 +123,7 @@ export default class Elevator {
 
     const scaledWidth = SPRITES["elevator-rope"].width * scale;
 
-    const offsetX = 90 * scale;
+    const offsetX = 70 * scale;
 
     // How to animate this? Draw all and stack, or use scale
     Building.allFloors.forEach((floor, i) => {
@@ -136,12 +136,7 @@ export default class Elevator {
       const positionX =
         floor.position.x() - floor.width() / 2 + scaledWidth / 2 + offsetX;
 
-      let positionY = floor.position.y() + SPRITES.foundation.height * scale;
-
-      const isTopFloor = Building.topFloor.number === floor.number;
-      if (isTopFloor) {
-        positionY = positionY + 8;
-      }
+      let positionY = floor.position.y() + SPRITES.cement.height * scale;
 
       rope.position.set(positionX, positionY);
       rope.scale.y = scale;
@@ -160,8 +155,8 @@ export default class Elevator {
     const scaledWidth = SPRITES["elevator-generator"].width * scale;
     const scaledHeight = SPRITES["elevator-generator"].height * scale;
 
-    const offsetX = 50 * scale;
-    const offsetY = 4;
+    const offsetX = 30 * scale;
+    const offsetY = 0;
 
     const positionX =
       Building.topFloor.position.x() -
@@ -188,7 +183,7 @@ export default class Elevator {
 
     const scaledWidth = SPRITES["elevator-shaft"].width * scale;
 
-    const offsetX = 50 * scale;
+    const offsetX = 30 * scale;
 
     const positionX =
       this.elevatorFloor.position.x() -
@@ -219,7 +214,7 @@ export default class Elevator {
     const positionX =
       Building.topFloor.position.x() -
       Building.topFloor.width() / 2 +
-      scaledWidth / 2 +
+      scaledWidth / 2 -
       offsetX;
 
     const positionY = Building.foundation.position.y + scaledHeight / 2;

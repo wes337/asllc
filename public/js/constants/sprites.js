@@ -31,27 +31,27 @@ export const SPRITES = {
   },
   "building-red": {
     src: "./img/sprites/building-red.png",
-    width: 1770,
-    height: 1700,
+    width: 1850,
+    height: 1990,
   },
   "building-green": {
     src: "./img/sprites/building-green.png",
     width: 1770,
     height: 1990,
   },
+  "underground-foundation": {
+    src: "./img/sprites/underground-foundation3.png",
+    width: 1730,
+    height: 850,
+  },
   dirt: {
     src: "./img/sprites/dirt.png",
     width: 160,
     height: 160,
   },
-  wall: {
-    src: "./img/sprites/wall.png",
-    width: 1770,
-    height: 550,
-  },
   separator: {
-    src: "./img/sprites/separator.png",
-    width: 1760,
+    src: "./img/sprites/separator4.png",
+    width: 1730,
     height: 60,
   },
   roof: {
@@ -59,9 +59,9 @@ export const SPRITES = {
     width: 1770,
     height: 50,
   },
-  foundation: {
-    src: "./img/sprites/foundation.png",
-    width: 1770,
+  cement: {
+    src: "./img/sprites/cement.png",
+    width: 160,
     height: 160,
   },
   "elevator-generator": {
@@ -110,6 +110,16 @@ export const SPRITES = {
     src: "./img/sprites/elevator-bricks.png",
     width: 380,
     height: 240,
+  },
+  "left-wall": {
+    src: "./img/sprites/left-wall.png",
+    width: 380,
+    height: 550,
+  },
+  "right-wall": {
+    src: "./img/sprites/right-wall.png",
+    width: 100,
+    height: 550,
   },
   floor: {
     src: "./img/sprites/floors/empty-floor.png",
