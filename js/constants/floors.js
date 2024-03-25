@@ -46,13 +46,13 @@ export const FLOORS = {
         name: "corona",
         moves: false,
         positionX: 10,
-        positionY: 300,
+        positionY: 320,
       },
       {
         name: "cigar",
         moves: false,
         positionX: 1120,
-        positionY: 110,
+        positionY: 130,
       },
     ],
     links: {

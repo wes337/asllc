@@ -104,7 +104,9 @@ export default class Interface {
         socialMediaLink.filters = [];
       });
 
-      socialMediaLink.addListener("pointerdown", () => {
+      socialMediaLink.addListener("pointerdown", (event) => {
+        event.stopPropagation();
+
         const link = FLOORS[this.artistId]?.links?.[name];
 
         if (link) {

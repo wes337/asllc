@@ -219,8 +219,7 @@ export default class Person {
     }
 
     if (this.extra) {
-      const extraOffset = this.inBasement ? 0 : 20 * scale;
-      positionY = positionY - this.height() / 2 - extraOffset;
+      positionY = positionY - this.height() / 2;
     }
 
     const isUpsideDown = this.metadata && this.metadata.upsideDown;
