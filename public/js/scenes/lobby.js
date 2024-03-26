@@ -1,6 +1,7 @@
 import { getRandomElementFromArray } from "../utils.js";
 import Elevator from "../classes/elevator.js";
 import State from "../classes/state.js";
+import Interface from "../classes/interface.js";
 
 export default async function lobbyScene() {
   if (!State.introFinished || Elevator.busy) {
@@ -29,7 +30,19 @@ export default async function lobbyScene() {
 }
 
 async function returnToRoomScene(person) {
-  sendPersonToFloorScene(person, person.originalFloorNumber);
+  const random = Math.random() < 0.5;
+
+  if (random) {
+    return;
+  }
+
+  Elevator.busy = true;
+  await Elevator.gotoFloor(person.floorNumber);
+  await person.enterElevator();
+  await Elevator.animateDoor();
+
+  Interface.notification.show = true;
+  State.personWantsToGotoFloor = person.originalFloorNumber;
 }
 
 async function sendToLobbyScene(person) {

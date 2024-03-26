@@ -6,7 +6,6 @@ import { getRandomElementFromArray } from "../utils.js";
 import { animateCamera } from "../animate.js";
 import Elevator from "./elevator.js";
 import Interface from "./interface.js";
-import Building from "./building.js";
 import Modal from "./modal.js";
 import State from "./state.js";
 
@@ -96,11 +95,7 @@ export default class Floor {
     return positionY;
   }
 
-  onClick() {
-    if (State.busy || !State.introFinished || Modal.visible) {
-      return;
-    }
-
+  async moveCameraToFloor(instant) {
     const maxFloorsOnScreen = Math.floor(
       State.app.screen.height / this.room.height
     );
@@ -115,7 +110,15 @@ export default class Floor {
       cameraPosition = cameraPosition * 1;
     }
 
-    animateCamera(cameraPosition);
+    await animateCamera(cameraPosition, instant);
+  }
+
+  async onClick() {
+    if (State.busy || !State.introFinished || Modal.visible) {
+      return;
+    }
+
+    await this.moveCameraToFloor();
 
     State.activeFloorNumber = this.number;
 
@@ -126,18 +129,10 @@ export default class Floor {
     }
 
     Interface.setArtistInfo(this.id);
-
-    Building.allFloors.forEach((floor) => {
-      if (typeof floor.toggleIndicator !== "function") {
-        return;
-      }
-
-      floor.toggleIndicator();
-    });
   }
 
-  toggleIndicator() {
-    this.indicator.visible = this.isActive;
+  toggleIndicator(visible) {
+    this.indicator.visible = visible;
   }
 
   renderSeparator() {

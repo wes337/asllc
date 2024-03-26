@@ -1,5 +1,9 @@
-import { SPRITES } from "../constants/sprites.js";
+import { INTERFACE_SPRITES, SPRITES } from "../constants/sprites.js";
+import { THANKS } from "../constants/chat.js";
+import { getRandomElementFromArray, isMobileSizedScreen } from "../utils.js";
+import Background from "./background.js";
 import Building from "./building.js";
+import Interface from "./interface.js";
 import State from "./state.js";
 
 export default class Elevator {
@@ -19,6 +23,37 @@ export default class Elevator {
   static busy = false;
   static moving = false;
 
+  static movingAnimation = null;
+
+  static controls = {
+    show: false,
+    downButton: PIXI.Sprite.from(INTERFACE_SPRITES["down-button"].src),
+    upButton: PIXI.Sprite.from(INTERFACE_SPRITES["up-button"].src),
+  };
+
+  static {
+    this.controls.downButton.id = "down";
+    this.controls.downButton.eventMode = "static";
+    this.controls.downButton.cursor = "pointer";
+    this.controls.downButton.addListener(
+      "pointerdown",
+      this.startMoving.bind(this)
+    );
+    this.controls.downButton.addListener(
+      "pointerup",
+      this.stopMoving.bind(this)
+    );
+
+    this.controls.upButton.id = "up";
+    this.controls.upButton.eventMode = "static";
+    this.controls.upButton.cursor = "pointer";
+    this.controls.upButton.addListener(
+      "pointerdown",
+      this.startMoving.bind(this)
+    );
+    this.controls.upButton.addListener("pointerup", this.stopMoving.bind(this));
+  }
+
   static get inBasement() {
     return this.elevatorFloorNumber < 0;
   }
@@ -35,58 +70,157 @@ export default class Elevator {
     return 145 * State.scale();
   }
 
+  static get personInside() {
+    const personInElevator = State.people.find((person) => person.inElevator);
+    return personInElevator || null;
+  }
+
+  static startMoving(event) {
+    event.stopPropagation();
+
+    if (!this.controls.show || this.moving || this.movingAnimation) {
+      return;
+    }
+
+    this.moving = true;
+    this.wheel.loop = true;
+    this.wheel.play();
+
+    const animation = (delta) => {
+      const goingUp = event.target.id === "up";
+      const amount = (goingUp ? -10 : 10) * delta;
+      this.shaft.position.y += amount;
+
+      const topFloorPosition = this.getFloorPosition(Building.topFloor);
+      const bottomFloorPosition = this.getFloorPosition(Building.bottomFloor);
+
+      if (this.shaft.position.y < topFloorPosition) {
+        this.shaft.position.y = topFloorPosition;
+      } else if (this.shaft.position.y > bottomFloorPosition) {
+        this.shaft.position.y = bottomFloorPosition;
+      } else {
+        const pivot = State.app.stage.pivot.y + amount;
+        State.app.stage.pivot.y = pivot;
+
+        Background.pivot();
+        Interface.render();
+      }
+    };
+
+    this.movingAnimation = animation;
+    State.app.ticker.add(this.movingAnimation);
+  }
+
+  static async stopMoving(event) {
+    event.stopPropagation();
+    const goingDown = event.target.id === "down";
+
+    this.moving = false;
+    this.wheel.loop = false;
+    this.wheel.stop();
+
+    if (this.movingAnimation) {
+      State.app.ticker.remove(this.movingAnimation);
+      this.movingAnimation = null;
+    }
+
+    let closestFloor = Building.floors[0];
+
+    Building.allFloors.forEach((floor) => {
+      const currentClosestFloorPosition = this.getFloorPosition(closestFloor);
+
+      const offset = goingDown
+        ? (this.shaft.height / 2) * -1
+        : this.shaft.height / 2;
+
+      const floorPosition = this.getFloorPosition(floor) + offset;
+
+      if (
+        Math.abs(this.shaft.position.y - floorPosition) <
+        Math.abs(this.shaft.position.y - currentClosestFloorPosition)
+      ) {
+        closestFloor = floor;
+      }
+    });
+
+    await this.gotoFloor(closestFloor.number);
+    await this.elevatorFloor.moveCameraToFloor();
+
+    if (
+      this.personInside &&
+      State.personWantsToGotoFloor &&
+      State.personWantsToGotoFloor === this.elevatorFloorNumber
+    ) {
+      this.elevatorFloor.toggleIndicator(false);
+      const thanks = getRandomElementFromArray(THANKS);
+      this.personInside.chatBubble.show(thanks);
+      await this.animateDoor();
+      await this.personInside.enterRoom(this.elevatorFloorNumber);
+      this.busy = false;
+      State.personWantsToGotoFloor = null;
+      this.controls.show = false;
+    }
+  }
+
   static getFloorPosition(floor) {
-    const scale = State.scale();
+    try {
+      const scale = State.scale();
 
-    const offsetY = floor.basement ? 60 * scale : 30 * scale;
+      const offsetY = floor.basement ? 60 * scale : 30 * scale;
 
-    return floor.basement
-      ? floor.position.y() + SPRITES.cement.height * scale + offsetY
-      : floor.position.y() + offsetY;
+      return floor.basement
+        ? floor.position.y() + SPRITES.cement.height * scale + offsetY
+        : floor.position.y() + offsetY;
+    } catch {
+      // Do nothing
+      return;
+    }
   }
 
   static gotoFloor(floorNumber) {
     return new Promise((resolve) => {
-      if (this.moving) {
-        return;
+      const targetFloor =
+        floorNumber < 0
+          ? Building.basement[floorNumber * -1]
+          : Building.floors[floorNumber];
+
+      const end = this.getFloorPosition(targetFloor);
+
+      if (this.moving || this.elevatorFloorNumber === floorNumber) {
+        this.shaft.position.y = end;
+        resolve();
+      } else {
+        this.moving = true;
+
+        this.wheel.loop = true;
+        this.wheel.play();
+
+        const animation = (delta) => {
+          const current = this.getFloorPosition(this.elevatorFloor);
+
+          const goingDown = current <= end;
+
+          const amount = goingDown ? 10 : -10;
+
+          this.shaft.position.y += amount * delta;
+
+          const finished = goingDown
+            ? this.shaft.position.y >= end
+            : this.shaft.position.y <= end;
+
+          if (finished) {
+            State.app.ticker.remove(animation);
+            this.elevatorFloorNumber = floorNumber;
+            this.wheel.loop = false;
+            this.wheel.gotoAndPlay(0);
+            this.moving = false;
+            this.shaft.position.y = end;
+            resolve();
+          }
+        };
+
+        State.app.ticker.add(animation);
       }
-
-      this.moving = true;
-
-      this.wheel.loop = true;
-      this.wheel.play();
-
-      const animation = (delta) => {
-        const current = this.getFloorPosition(this.elevatorFloor);
-
-        const targetFloor =
-          floorNumber < 0
-            ? Building.basement[floorNumber * -1]
-            : Building.floors[floorNumber];
-
-        const end = this.getFloorPosition(targetFloor);
-
-        const goingDown = current <= end;
-
-        const amount = goingDown ? 10 : -10;
-
-        this.shaft.position.y += amount * delta;
-
-        const finished = goingDown
-          ? this.shaft.position.y >= end
-          : this.shaft.position.y <= end;
-
-        if (finished) {
-          State.app.ticker.remove(animation);
-          this.elevatorFloorNumber = floorNumber;
-          this.wheel.loop = false;
-          this.wheel.gotoAndPlay(0);
-          this.moving = false;
-          resolve();
-        }
-      };
-
-      State.app.ticker.add(animation);
     });
   }
 
@@ -247,6 +381,46 @@ export default class Elevator {
     this.connector.height = scaledHeight + 2;
 
     State.app.stage.addChild(this.connector);
+  }
+
+  static renderControls() {
+    this.controls.upButton.visible = this.controls.show;
+    this.controls.downButton.visible = this.controls.show;
+
+    if (!this.controls.show) {
+      return;
+    }
+
+    const scale = isMobileSizedScreen() ? State.scale() * 1.5 : State.scale();
+
+    const scaledWidth = INTERFACE_SPRITES["down-button"].width * scale;
+    const scaledHeight = INTERFACE_SPRITES["up-button"].height * scale;
+
+    const margin = isMobileSizedScreen() ? 100 * scale : 50 * scale;
+
+    const positionX = State.app.screen.width / 2;
+    const positionY =
+      State.app.screen.height -
+      (Interface.artistInfo.show ? Interface.artistInfo.height() : 0) -
+      Interface.navBar.height() -
+      scaledHeight / 2 -
+      margin +
+      State.app.stage.pivot.y;
+
+    const upButtonPositionX = positionX - scaledWidth / 2;
+    this.controls.upButton.position.set(upButtonPositionX, positionY);
+    this.controls.upButton.scale.y = scale;
+    this.controls.upButton.scale.x = scale;
+    this.controls.upButton.anchor.set(0.5);
+
+    const downButtonPositionX = positionX + scaledWidth / 2;
+    this.controls.downButton.position.set(downButtonPositionX, positionY);
+    this.controls.downButton.scale.y = scale;
+    this.controls.downButton.scale.x = scale;
+    this.controls.downButton.anchor.set(0.5);
+
+    State.app.stage.addChild(this.controls.upButton);
+    State.app.stage.addChild(this.controls.downButton);
   }
 
   static animateDoor() {

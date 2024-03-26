@@ -9,6 +9,7 @@ export default class State {
   static app = null;
   static activeFloorNumber = null;
   static people = [];
+  static personWantsToGotoFloor = null;
   static scale = () => {
     if (isLargeSizedScreen()) {
       return 0.4;

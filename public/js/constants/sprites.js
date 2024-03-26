@@ -44,6 +44,11 @@ export const SPRITES = {
     width: 1730,
     height: 850,
   },
+  fossil: {
+    src: "./img/sprites/fossil.png",
+    width: 270,
+    height: 320,
+  },
   dirt: {
     src: "./img/sprites/dirt.png",
     width: 160,
@@ -509,12 +514,17 @@ export const INTERFACE_SPRITES = {
     width: 512,
     height: 61,
   },
-  downButton: {
+  notification: {
+    src: "./img/sprites/notification.png",
+    width: 230,
+    height: 200,
+  },
+  "down-button": {
     src: "./img/sprites/down-button.png",
     width: 300,
     height: 343,
   },
-  upButton: {
+  "up-button": {
     src: "./img/sprites/up-button.png",
     width: 300,
     height: 343,

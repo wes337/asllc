@@ -4,6 +4,7 @@ import { COLORS } from "../constants/colors.js";
 import { TEXT_STYLES, FONT_SIZES } from "../constants/text.js";
 import { isLargeSizedScreen, isMobileSizedScreen } from "../utils.js";
 import Building from "./building.js";
+import Elevator from "./elevator.js";
 import Modal from "./modal.js";
 import Button from "./button.js";
 import State from "./state.js";
@@ -46,7 +47,19 @@ export default class Interface {
     }),
   };
 
+  static notification = {
+    show: false,
+    button: PIXI.Sprite.from(INTERFACE_SPRITES.notification.src),
+  };
+
   static {
+    this.notification.button.eventMode = "static";
+    this.notification.button.cursor = "pointer";
+    this.notification.button.addListener(
+      "pointertap",
+      this.onNotificationClick.bind(this)
+    );
+
     this.navBar.buttons.about.callback = () => {
       if (Modal.visible) {
         return;
@@ -194,8 +207,6 @@ export default class Interface {
   }
 
   static renderArtistInfo() {
-    const scale = State.scale();
-
     const backgroundColor = COLORS.darkGray;
     const borderColor = COLORS.purple;
     const borderSize = 4;
@@ -431,6 +442,76 @@ export default class Interface {
     }
   }
 
+  static async onNotificationClick(event) {
+    if (!this.notification.show) {
+      return;
+    }
+
+    event.stopPropagation();
+
+    this.notification.show = false;
+
+    // Get person in elevator
+    const person = Elevator.personInside;
+    if (!person) {
+      return;
+    }
+
+    await Building.lobby.moveCameraToFloor();
+    Elevator.controls.show = true;
+    this.setArtistInfo("");
+
+    person.chatBubble.show(
+      `${
+        person.originalFloorNumber < 0
+          ? person.originalFloorNumber
+          : person.originalFloorNumber + 1
+      }`
+    );
+
+    Building.allFloors.forEach((floor) => {
+      if (typeof floor.toggleIndicator !== "function") {
+        return;
+      }
+
+      floor.toggleIndicator(floor.number === person.originalFloorNumber);
+    });
+  }
+
+  static renderNotification() {
+    this.notification.button.visible = this.notification.show;
+
+    if (!this.notification.show) {
+      return;
+    }
+
+    const scale = isMobileSizedScreen() ? State.scale() * 2 : State.scale();
+
+    const scaledWidth = INTERFACE_SPRITES.notification.width * scale;
+    const scaledHeight = INTERFACE_SPRITES.notification.height * scale;
+
+    const margin = isMobileSizedScreen() ? 10 * scale : 50 * scale;
+
+    const positionX = isMobileSizedScreen()
+      ? scaledWidth / 2 + margin
+      : State.app.screen.width / 4 + scaledWidth / 2;
+
+    const positionY =
+      State.app.screen.height -
+      (this.artistInfo.show ? this.artistInfo.height() : 0) -
+      this.navBar.height() -
+      scaledHeight / 2 +
+      State.app.stage.pivot.y -
+      margin;
+
+    this.notification.button.position.set(positionX, positionY);
+    this.notification.button.scale.y = scale;
+    this.notification.button.scale.x = scale;
+    this.notification.button.anchor.set(0.5);
+
+    State.app.stage.addChild(this.notification.button);
+  }
+
   static render() {
     // Need to reverse so the chat bubble draws
     // on top of the floors above the person
@@ -443,7 +524,9 @@ export default class Interface {
     this.renderTitle();
     this.renderArtistInfo();
     this.renderBottomBar();
+    this.renderNotification();
 
     Modal.render();
+    Elevator.renderControls();
   }
 }
