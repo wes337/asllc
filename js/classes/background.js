@@ -1,6 +1,7 @@
 import { COLORS } from "../constants/colors.js";
 import { SPRITES } from "../constants/sprites.js";
 import { randomNumberBetween, isMobileSizedScreen } from "../utils.js";
+import Building from "./building.js";
 import Interface from "./interface.js";
 import State from "./state.js";
 
@@ -15,6 +16,7 @@ export default class Background {
     SPRITES.dirt.width,
     SPRITES.dirt.height
   );
+  static fossil = PIXI.Sprite.from(SPRITES.fossil.src);
 
   static pivot() {
     this.sky.position.y = this.sky.initialPosition.y + State.app.stage.pivot.y;
@@ -199,6 +201,28 @@ export default class Background {
     State.app.stage.addChild(this.dirt);
   }
 
+  static renderFossil() {
+    const scale = State.scale();
+
+    const marginX = 16;
+    const marginY = 16;
+    const positionX = isMobileSizedScreen()
+      ? (SPRITES.fossil.width * scale) / 2 + marginX
+      : SPRITES.fossil.width * scale * 2;
+
+    const positionY =
+      State.app.screen.height * 2 - SPRITES.fossil.height * 4 * scale + marginY;
+
+    this.fossil.initialPosition = { x: positionX, y: positionY };
+
+    this.fossil.position.set(positionX, positionY);
+    this.fossil.scale.y = scale;
+    this.fossil.scale.x = scale;
+    this.fossil.anchor.set(0.5);
+
+    State.app.stage.addChild(this.fossil);
+  }
+
   static animateClouds() {
     const clouds = this.clouds.flat();
 
@@ -227,6 +251,7 @@ export default class Background {
     this.renderClouds();
     this.renderBuildings();
     this.renderGround();
+    this.renderFossil();
     this.pivot();
   }
 }

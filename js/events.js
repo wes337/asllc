@@ -36,7 +36,7 @@ function handleScroll() {
       event.velocityY !== undefined ? event.velocityY : scrollAmount * -1;
 
     const amount = State.app.stage.pivot.y - scrollAmount * velocity;
-    animateCamera(Math.min(amount, State.camera.min()), true);
+    animateCamera(Math.min(amount, State.camera.min()));
   };
 
   const scrollDown = (event) => {
@@ -56,7 +56,7 @@ function handleScroll() {
       amount = max;
     }
 
-    animateCamera(amount, true);
+    animateCamera(amount);
   };
 
   const scrollEnd = (event) => {
@@ -79,7 +79,7 @@ function handleScroll() {
     const min = State.camera.min();
     amount = Math.min(amount, min);
 
-    animateCamera(amount, true);
+    animateCamera(amount);
   };
 
   if (isMobileSizedScreen()) {
