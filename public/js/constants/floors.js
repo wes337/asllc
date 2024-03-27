@@ -163,9 +163,9 @@ export const FLOORS = {
     name: "MKULTRA",
     links: {
       apple: "https://music.apple.com/artist/mkultra/1449283624",
+      ig: "https://www.instagram.com/mkultra47",
       spotify:
         "https://open.spotify.com/artist/62q4VhTETdekmQYoyws6Dl?si=gb6j7SEARKi9LGGVKdZgXQ",
-      ig: "https://www.instagram.com/mkultra47",
     },
   },
   "gregory-diamond": {
