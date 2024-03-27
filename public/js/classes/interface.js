@@ -470,7 +470,7 @@ export default class Interface {
       return;
     }
 
-    const scale = isMobileSizedScreen() ? State.scale() * 2 : State.scale();
+    const scale = isMobileSizedScreen() ? State.scale() * 1.5 : State.scale();
 
     const scaledWidth = INTERFACE_SPRITES.notification.width * scale;
     const scaledHeight = INTERFACE_SPRITES.notification.height * scale;
