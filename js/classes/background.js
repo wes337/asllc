@@ -144,10 +144,12 @@ export default class Background {
       let positionX = 0;
 
       if (i === 0) {
+        // Green building
         positionX = breakpointX
           ? (positionX = scaledWidth / 4 - margin * 10)
           : scaledWidth / 2 - margin;
       } else if (i === 1) {
+        // Red building
         positionX = breakpointX
           ? State.app.screen.width - scaledWidth / 4 + margin * 10
           : State.app.screen.width - scaledWidth / 2 + margin;
