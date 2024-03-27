@@ -60,7 +60,7 @@ export default class Person {
   get walking() {
     return (
       this.destination &&
-      this.destination !== Math.floor(this.character.position.x)
+      Math.floor(this.destination) !== Math.floor(this.character.position.x)
     );
   }
 
@@ -135,7 +135,9 @@ export default class Person {
         const doorPosition = State.app.screen.width / 2 - doorWidth;
         this.destination = doorPosition;
 
-        if (doorPosition !== Math.floor(this.character.position.x)) {
+        if (
+          Math.floor(doorPosition) !== Math.floor(this.character.position.x)
+        ) {
           const min = this.boundaries.min();
           let positionX = Math.max(this.character.position.x, min);
           this.updateDirection();

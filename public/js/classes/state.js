@@ -15,7 +15,7 @@ export default class State {
       return 0.4;
     }
 
-    return isMobileSizedScreen() ? 0.21 : 0.25;
+    return isMobileSizedScreen() ? 0.2 : 0.25;
   };
   static busy = false;
   static skipIntro = Cache.get("skipIntro") ?? false;
