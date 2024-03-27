@@ -43,6 +43,7 @@ async function returnToRoomScene(person) {
 
   Interface.notification.show = true;
   State.personWantsToGotoFloor = person.originalFloorNumber;
+  Interface.startHighlight(Interface.notification.button, 9999);
 }
 
 async function sendToLobbyScene(person) {

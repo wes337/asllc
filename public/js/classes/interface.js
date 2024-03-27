@@ -432,6 +432,8 @@ export default class Interface {
 
     event.stopPropagation();
 
+    this.stopHighlight(this.notification.button);
+
     this.notification.show = false;
 
     // Get person in elevator
@@ -493,6 +495,63 @@ export default class Interface {
     this.notification.button.anchor.set(0.5);
 
     State.app.stage.addChild(this.notification.button);
+  }
+
+  static flashHighlightAnimation = null;
+
+  static stopHighlight(sprite) {
+    if (this.flashHighlightAnimation) {
+      State.app.ticker.remove(this.flashHighlightAnimation);
+    }
+
+    if (typeof sprite.highlight === "undefined") {
+      sprite.filters = [];
+    } else {
+      sprite.highlight = false;
+    }
+  }
+
+  static startHighlight(sprite, times = 5) {
+    try {
+      if (this.flashHighlightAnimation) {
+        State.app.ticker.remove(this.flashHighlightAnimation);
+      }
+
+      let start = State.app.ticker.lastTime;
+      let count = 0;
+
+      this.flashHighlightAnimation = (delta) => {
+        if (State.app.ticker.lastTime >= start + 1000 * delta) {
+          count++;
+          start = State.app.ticker.lastTime;
+        }
+
+        const show = count % 2;
+
+        if (typeof sprite.highlight === "undefined") {
+          sprite.filters = show ? [State.filters.highlight(4)] : [];
+        } else {
+          sprite.highlight = !!show;
+        }
+
+        if (count >= times * 2) {
+          State.app.ticker.remove(this.flashHighlightAnimation);
+          if (typeof sprite.highlight === "undefined") {
+            sprite.filters = [];
+          } else {
+            sprite.highlight = false;
+          }
+        }
+      };
+
+      State.app.ticker.add(this.flashHighlightAnimation);
+    } catch (error) {
+      if (this.flashHighlightAnimation) {
+        State.app.ticker.remove(this.flashHighlightAnimation);
+      }
+
+      console.error(error);
+    }
   }
 
   static render() {
