@@ -86,7 +86,7 @@ canvas {
   color: #fff;
   width: 800px;
   max-width: 90vw;
-  max-height: 90vh;
+  max-height: 95vh;
   padding: 32px;
   gap: 24px;
   border: 4px solid #3b2c4a;
@@ -111,15 +111,18 @@ canvas {
   text-shadow: 2px 2px 0px #495588;
   text-align: center;
   display: flex;
+  flex-direction: column;
+  gap: 8px;
   align-items: center;
-  justify-content: center;
+  padding-bottom: 12px;
+  overflow: auto;
 }
 
 #modal-close {
   all: unset;
   position: absolute;
-  top: -16px;
-  right: -16px;
+  top: 4px;
+  right: 4px;
   z-index: 2;
   cursor: pointer;
   padding: 10px;
@@ -132,6 +135,44 @@ canvas {
   background-color: #6272b6;
 }
 
+#modal a {
+  color: #a4dddb;
+  text-decoration: none;
+}
+
+#modal a:hover {
+  text-decoration: underline;
+}
+
+.artists {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.artist {
+  all: unset;
+  cursor: pointer;
+  font-size: 24px;
+  margin-left: -24px;
+}
+
+.artist::before {
+  content: ">>";
+  margin-right: 4px;
+  opacity: 0;
+}
+
+.artist:hover {
+  color: #a4dddb;
+}
+
+.artist:hover.artist::before {
+  opacity: 1;
+}
+
 @media only screen and (max-width: 700px) {
   #modal {
     padding: 16px 8px;
@@ -139,5 +180,10 @@ canvas {
 
   #modal-header {
     font-size: 28px;
+  }
+
+  #modal-close {
+    top: -16px;
+    right: -16px;
   }
 }

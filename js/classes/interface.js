@@ -1,6 +1,7 @@
 import { INTERFACE_SPRITES } from "../constants/sprites.js";
 import { FLOORS } from "../constants/floors.js";
 import { COLORS } from "../constants/colors.js";
+import { MODALS } from "../constants/modal.js";
 import { TEXT_STYLES, FONT_SIZES } from "../constants/text.js";
 import { isLargeSizedScreen, isMobileSizedScreen } from "../utils.js";
 import Building from "./building.js";
@@ -65,10 +66,7 @@ export default class Interface {
         return;
       }
 
-      Modal.show({
-        header: "About Artist Services",
-        body: "Helping artists capitalize on and invest in their careers without compromising creative vision.",
-      });
+      Modal.show(MODALS.about);
     };
 
     this.navBar.buttons.artists.callback = () => {
@@ -76,10 +74,7 @@ export default class Interface {
         return;
       }
 
-      Modal.show({
-        header: "Artists",
-        body: "",
-      });
+      Modal.show(MODALS.artists);
     };
 
     this.navBar.buttons.contact.callback = () => {
@@ -87,10 +82,7 @@ export default class Interface {
         return;
       }
 
-      Modal.show({
-        header: "Contact",
-        body: "",
-      });
+      Modal.show(MODALS.contact);
     };
 
     Object.entries(this.socialMediaLinks).forEach(([name, socialMediaLink]) => {

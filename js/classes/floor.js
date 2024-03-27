@@ -1,5 +1,5 @@
 import { SPRITES } from "../constants/sprites.js";
-import { CONTENT } from "../constants/content.js";
+import { GREETINGS } from "../constants/chat.js";
 import { FLOORS } from "../constants/floors.js";
 import { DEFAULT_FONT_SIZE, TEXT_STYLES } from "../constants/text.js";
 import { getRandomElementFromArray } from "../utils.js";
@@ -124,7 +124,7 @@ export default class Floor {
 
     const person = this.personOnFloor();
     if (person) {
-      const randomMessage = getRandomElementFromArray(CONTENT.chat.all);
+      const randomMessage = getRandomElementFromArray(GREETINGS.all);
       person.chatBubble.show(randomMessage);
     }
 
@@ -132,7 +132,11 @@ export default class Floor {
   }
 
   toggleIndicator(visible) {
-    this.indicator.visible = visible;
+    if (!State.personWantsToGotoFloor) {
+      this.indicator.visible = false;
+    } else {
+      this.indicator.visible = visible;
+    }
   }
 
   renderSeparator() {
