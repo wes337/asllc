@@ -159,6 +159,7 @@ export default class Elevator {
       this.busy = false;
       State.personWantsToGotoFloor = null;
       this.controls.show = false;
+      this.gotoFloor(0);
     }
   }
 
@@ -186,7 +187,9 @@ export default class Elevator {
 
       const end = this.getFloorPosition(targetFloor);
 
-      if (this.moving || this.elevatorFloorNumber === floorNumber) {
+      if (this.moving) {
+        resolve();
+      } else if (this.elevatorFloorNumber === floorNumber) {
         this.shaft.position.y = end;
         resolve();
       } else {

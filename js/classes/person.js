@@ -17,6 +17,7 @@ export default class Person {
     this.character = new PIXI.AnimatedSprite(
       SPRITES[name].src.map((img) => PIXI.Texture.from(img))
     );
+    this.highlight = false;
 
     this.destination = null;
     this.walkRandomly = true;
@@ -257,9 +258,10 @@ export default class Person {
     State.app.stage.addChild(this.character);
 
     const highlight =
-      !this.extra &&
-      State.activeFloorNumber &&
-      this.floorNumber === State.activeFloorNumber;
+      this.highlight ||
+      (!this.extra &&
+        State.activeFloorNumber &&
+        this.floorNumber === State.activeFloorNumber);
 
     const highlightSize = isLargeSizedScreen() ? 3 : 2;
     this.character.filters = highlight
