@@ -38,7 +38,7 @@ export default class Interface {
     height: () =>
       isMobileSizedScreen() ? 400 * State.scale() : 350 * State.scale(),
     show: false,
-    margin: 16,
+    margin: () => (isMobileSizedScreen() ? 12 : 16),
     text: new PIXI.Text("", {
       ...TEXT_STYLES.default,
       fill: COLORS.yellow,
@@ -66,9 +66,8 @@ export default class Interface {
       }
 
       Modal.show({
-        headerText: "About Artist Services",
-        bodyText:
-          "Helping artists capitalize on and invest in their careers without compromising creative vision.",
+        header: "About Artist Services",
+        body: "Helping artists capitalize on and invest in their careers without compromising creative vision.",
       });
     };
 
@@ -78,12 +77,8 @@ export default class Interface {
       }
 
       Modal.show({
-        headerText: "Artists",
-        bodyText: "",
-        buttonText: "Okay",
-        callback: () => {
-          Modal.hide();
-        },
+        header: "Artists",
+        body: "",
       });
     };
 
@@ -93,12 +88,8 @@ export default class Interface {
       }
 
       Modal.show({
-        headerText: "Contact",
-        bodyText: "",
-        buttonText: "Okay",
-        callback: () => {
-          Modal.hide();
-        },
+        header: "Contact",
+        body: "",
       });
     };
 
@@ -279,14 +270,14 @@ export default class Interface {
     if (hasLongName) {
       this.artistInfo.text.style.letterSpacing = -2;
       this.artistInfo.text.style.fontSize = FONT_SIZES.xl;
-      this.artistInfo.text.position.x = this.artistInfo.margin / 2;
+      this.artistInfo.text.position.x = this.artistInfo.margin() / 2;
     } else {
       this.artistInfo.text.style.letterSpacing = 0;
       this.artistInfo.text.style.fontSize = isMobileSizedScreen()
         ? FONT_SIZES.xxl
         : FONT_SIZES.xxxl;
       this.artistInfo.text.position.x = isMobileSizedScreen()
-        ? this.artistInfo.margin
+        ? this.artistInfo.margin()
         : positionX - this.artistInfo.text.width / 2;
     }
 
@@ -329,7 +320,7 @@ export default class Interface {
 
     Object.keys(links).forEach((icon, i) => {
       this.socialMediaLinks[icon].position.x =
-        positionX - linkWidth * i - this.artistInfo.margin * (i + 1);
+        positionX - linkWidth * i - this.artistInfo.margin() * (i + 1);
       this.socialMediaLinks[icon].position.y = positionY;
       this.socialMediaLinks[icon].scale.x = scale;
       this.socialMediaLinks[icon].scale.y = scale;
@@ -526,7 +517,6 @@ export default class Interface {
     this.renderBottomBar();
     this.renderNotification();
 
-    Modal.render();
     Elevator.renderControls();
   }
 }
