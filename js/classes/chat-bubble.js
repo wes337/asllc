@@ -10,7 +10,6 @@ export default class ChatBubble {
     align: "center",
   });
   visible = false;
-  duration = 3 * 1000;
   timeout = null;
 
   width = 400;
@@ -20,7 +19,7 @@ export default class ChatBubble {
     this.target = target;
   }
 
-  show(text) {
+  show(text, duration = 3 * 1000) {
     this.visible = true;
 
     this.text.text = text;
@@ -29,9 +28,11 @@ export default class ChatBubble {
       clearTimeout(this.timeout);
     }
 
-    this.timeout = setTimeout(() => {
-      this.hide();
-    }, this.duration);
+    if (duration > 0) {
+      this.timeout = setTimeout(() => {
+        this.hide();
+      }, duration);
+    }
 
     this.render();
   }
