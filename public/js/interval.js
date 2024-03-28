@@ -5,5 +5,5 @@ const ONE_MINUTE = 1000 * 60;
 export default function interval() {
   setInterval(() => {
     lobbyScene();
-  }, 1000);
+  }, ONE_MINUTE / 2);
 }

@@ -453,7 +453,8 @@ export default class Interface {
         person.originalFloorNumber < 0
           ? person.originalFloorNumber
           : person.originalFloorNumber + 1
-      }`
+      }`,
+      0
     );
 
     Building.allFloors.forEach((floor) => {
