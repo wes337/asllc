@@ -20,20 +20,25 @@ export default class Floor {
     const sprites = SPRITES[id]?.floor || SPRITES[id]?.src || SPRITES.floor.src;
     const animated = Array.isArray(sprites);
     this.animated = animated;
-    this.room = animated
-      ? new PIXI.AnimatedSprite(sprites.map((img) => PIXI.Texture.from(img)))
-      : PIXI.Sprite.from(sprites);
 
-    this.leftWall = PIXI.Sprite.from(SPRITES["left-wall"].src);
+    this.room = animated
+      ? new PIXI.AnimatedSprite(
+          sprites.map((_, i) => {
+            return PIXI.Texture.from(`${id}-floor-${i + 1}.png`);
+          })
+        )
+      : PIXI.Sprite.from(`${id}-floor.png`);
+
+    this.leftWall = PIXI.Sprite.from("left-wall.png");
     this.rightWall = basement
-      ? PIXI.Sprite.from(SPRITES["underground-wall"].src)
-      : PIXI.Sprite.from(SPRITES["right-wall"].src);
-    this.separator = PIXI.Sprite.from(SPRITES.separator.src);
+      ? PIXI.Sprite.from("underground-wall.png")
+      : PIXI.Sprite.from("right-wall.png");
+    this.separator = PIXI.Sprite.from("separator.png");
     this.numberText = new PIXI.Text("", {
       ...TEXT_STYLES.default,
     });
 
-    this.indicator = PIXI.Sprite.from(SPRITES.indicator.src);
+    this.indicator = PIXI.Sprite.from("indicator.png");
 
     this.container.eventMode = "static";
     this.container.cursor = "pointer";

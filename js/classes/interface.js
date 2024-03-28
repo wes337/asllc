@@ -11,12 +11,12 @@ import Button from "./button.js";
 import State from "./state.js";
 
 export default class Interface {
-  static title = PIXI.Sprite.from(INTERFACE_SPRITES.logo.src);
+  static title = null;
 
   static socialMediaLinks = {
     apple: PIXI.Sprite.from(INTERFACE_SPRITES.apple.src),
     spotify: PIXI.Sprite.from(INTERFACE_SPRITES.spotify.src),
-    ig: PIXI.Sprite.from(INTERFACE_SPRITES.soundcloud.src),
+    ig: PIXI.Sprite.from(INTERFACE_SPRITES.ig.src),
   };
 
   static navBar = {
@@ -110,6 +110,8 @@ export default class Interface {
   }
 
   static renderTitle() {
+    this.title = this.title ? this.title : PIXI.Sprite.from("logo.gif");
+
     const margin = 8;
     const minWidth = 360;
 

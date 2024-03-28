@@ -14,9 +14,11 @@ export default class Person {
     this.floorNumber = null;
     this.originalFloorNumber = 0;
     this.inElevator = false;
-    this.character = new PIXI.AnimatedSprite(
-      SPRITES[name].src.map((img) => PIXI.Texture.from(img))
-    );
+
+    const sprites =
+      State.spritesheets.characters.animations[name] ||
+      State.spritesheets.extras.animations[name];
+    this.character = new PIXI.AnimatedSprite(sprites);
     this.highlight = false;
 
     this.destination = null;

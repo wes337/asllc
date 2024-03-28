@@ -7,17 +7,12 @@ import Interface from "./interface.js";
 import State from "./state.js";
 
 export default class Elevator {
-  static shaft = new PIXI.AnimatedSprite(
-    SPRITES["elevator-shaft"].src.map((img) => PIXI.Texture.from(img))
-  );
+  static shaft = null;
+  static wheel = null;
 
-  static wheel = new PIXI.AnimatedSprite(
-    SPRITES["elevator-wheel"].src.map((img) => PIXI.Texture.from(img))
-  );
-
-  static bricks = PIXI.Sprite.from(SPRITES["elevator-bricks"].src);
-  static connector = PIXI.Sprite.from(SPRITES["underground-connector"].src);
-  static generator = PIXI.Sprite.from(SPRITES["elevator-generator"].src);
+  static bricks = null;
+  static connector = null;
+  static generator = null;
   static rope = [];
   static elevatorFloorNumber = 0;
   static busy = false;
@@ -228,6 +223,12 @@ export default class Elevator {
   }
 
   static renderWheel() {
+    this.wheel = this.wheel
+      ? this.wheel
+      : new PIXI.AnimatedSprite(
+          State.spritesheets.elevator.animations["elevator-wheel"]
+        );
+
     const scaledWidth = SPRITES["elevator-wheel"].width * State.scale();
     const scaledHeight = SPRITES["elevator-wheel"].height * State.scale();
 
@@ -267,7 +268,7 @@ export default class Elevator {
         return;
       }
 
-      let rope = this.rope[i] || PIXI.Sprite.from(SPRITES["elevator-rope"].src);
+      let rope = this.rope[i] || PIXI.Sprite.from("elevator-rope.png");
 
       const positionX =
         floor.position.x() - floor.width() / 2 + scaledWidth / 2 + offsetX;
@@ -286,6 +287,10 @@ export default class Elevator {
   }
 
   static renderGenerator() {
+    this.generator = this.generator
+      ? this.generator
+      : PIXI.Sprite.from("elevator-generator.png");
+
     const scale = State.scale();
 
     const scaledWidth = SPRITES["elevator-generator"].width * scale;
@@ -315,6 +320,12 @@ export default class Elevator {
   }
 
   static renderShaft() {
+    this.shaft = this.shaft
+      ? this.shaft
+      : new PIXI.AnimatedSprite(
+          State.spritesheets.elevator.animations["elevator-shaft"]
+        );
+
     const scale = State.scale();
 
     const scaledWidth = SPRITES["elevator-shaft"].width * scale;
@@ -340,6 +351,10 @@ export default class Elevator {
   }
 
   static renderBricks() {
+    this.bricks = this.bricks
+      ? this.bricks
+      : PIXI.Sprite.from("elevator-bricks.png");
+
     const scale = State.scale();
 
     const scaledWidth = SPRITES["elevator-bricks"].width * scale;
@@ -364,6 +379,10 @@ export default class Elevator {
   }
 
   static renderConnector() {
+    this.connector = this.connector
+      ? this.connector
+      : PIXI.Sprite.from("underground-connector.png");
+
     const scale = State.scale();
 
     const scaledWidth = SPRITES["underground-connector"].width * scale;

@@ -1,6 +1,6 @@
-import { ALL_SPRITE_IMAGES } from "./constants/sprites.js";
 import { COLORS } from "./constants/colors.js";
 import { FONT_FAMILY, HEADER_FONT_FAMILY } from "./constants/text.js";
+import loadSpritesheets from "./spritesheets/index.js";
 import State from "./classes/state.js";
 import render from "./render.js";
 import animate from "./animate.js";
@@ -22,9 +22,7 @@ async function loadAssets() {
 
   message.innerHTML = "Loading sprites...";
 
-  await PIXI.Assets.load(ALL_SPRITE_IMAGES, (progress) => {
-    message.innerHTML = `Loading sprites... ${Math.round(progress * 100)}%`;
-  });
+  await loadSpritesheets();
 
   loading.remove();
 }

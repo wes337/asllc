@@ -3,15 +3,9 @@ import Floor from "./floor.js";
 import State from "./state.js";
 
 export default class Building {
-  static roof = PIXI.Sprite.from(SPRITES.roof.src);
-  static foundation = new PIXI.TilingSprite(
-    PIXI.Texture.from(SPRITES.cement.src),
-    window.innerWidth,
-    SPRITES.cement.height
-  );
-  static undergroundFoundation = PIXI.Sprite.from(
-    SPRITES["underground-foundation"].src
-  );
+  static roof = null;
+  static foundation = null;
+  static undergroundFoundation = null;
   static floors = [];
   static basement = [];
 
@@ -50,6 +44,14 @@ export default class Building {
   static renderFoundation() {
     const scale = State.scale();
 
+    this.foundation = this.foundation
+      ? this.foundation
+      : new PIXI.TilingSprite(
+          PIXI.Texture.from("cement.png"),
+          window.innerWidth,
+          SPRITES.cement.height
+        );
+
     this.foundation.width = State.app.screen.width;
     this.foundation.height = SPRITES.cement.height * scale;
 
@@ -87,6 +89,8 @@ export default class Building {
   static renderRoof() {
     const scale = State.scale();
 
+    this.roof = this.roof ? this.roof : PIXI.Sprite.from("roof.png");
+
     this.roof.position.set(
       this.topFloor.position.x(),
       this.topFloor.position.y() - this.topFloor.height() / 2 - 20 * scale
@@ -101,6 +105,10 @@ export default class Building {
 
   static renderUndergroundFoundation() {
     const scale = State.scale();
+
+    this.undergroundFoundation = this.undergroundFoundation
+      ? this.undergroundFoundation
+      : PIXI.Sprite.from("underground-foundation.png");
 
     this.undergroundFoundation.position.set(
       this.bottomFloor.position.x() - 5 * scale,
