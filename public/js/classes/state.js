@@ -33,7 +33,10 @@ export default class State {
       new PIXI.filters.OutlineFilter(size || 2, color || COLORS.red),
     opacity: (alpha) => new PIXI.filters.AlphaFilter(alpha || 0.5),
   };
-
+  static spritesheets = {};
+  static getSpritesheet = (spritesheet) => {
+    return this.spritesheets[spritesheet];
+  };
   static camera = {
     currentAnimation: null,
     start: () => {

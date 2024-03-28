@@ -7,16 +7,13 @@ import State from "./state.js";
 
 export default class Background {
   static sky = new PIXI.Graphics();
-  static sun = PIXI.Sprite.from(SPRITES.sun.src);
+
+  static sun = null;
   static clouds = [];
   static buildings = [];
   static ground = new PIXI.Graphics();
-  static dirt = new PIXI.TilingSprite(
-    PIXI.Texture.from(SPRITES.dirt.src),
-    SPRITES.dirt.width,
-    SPRITES.dirt.height
-  );
-  static fossil = PIXI.Sprite.from(SPRITES.fossil.src);
+  static dirt = null;
+  static fossil = null;
 
   static pivot() {
     this.sky.position.y = this.sky.initialPosition.y + State.app.stage.pivot.y;
@@ -57,6 +54,8 @@ export default class Background {
   }
 
   static renderSun() {
+    this.sun = this.sun ? this.sun : PIXI.Sprite.from("sun.png");
+
     const scale = State.scale();
 
     const marginX = 16;
@@ -95,7 +94,23 @@ export default class Background {
           cloud = this.clouds[i][j];
         } else {
           const size = ROW_SIZES[i];
-          cloud = PIXI.Sprite.from(SPRITES[`cloud-${size}`].src);
+          const cloudSprite = (size) => {
+            switch (size) {
+              case "xs":
+                return 1;
+              case "sm":
+                return 2;
+              case "md":
+                return 3;
+              case "lg":
+                return 4;
+              case "xl":
+                return 5;
+              default:
+                return 1;
+            }
+          };
+          cloud = PIXI.Sprite.from(`cloud-${cloudSprite(size)}.png`);
           cloud.reverse = false;
           this.clouds[i][j] = cloud;
         }
@@ -192,6 +207,14 @@ export default class Background {
 
     State.app.stage.addChild(this.ground);
 
+    this.dirt = this.dirt
+      ? this.dirt
+      : new PIXI.TilingSprite(
+          PIXI.Texture.from("dirt.png"),
+          SPRITES.dirt.width,
+          SPRITES.dirt.height
+        );
+
     this.dirt.width = State.app.screen.width;
     this.dirt.height = SPRITES.dirt.height * scale;
 
@@ -204,6 +227,8 @@ export default class Background {
   }
 
   static renderFossil() {
+    this.fossil = this.fossil ? this.fossil : PIXI.Sprite.from("fossil.png");
+
     const scale = State.scale();
 
     const marginX = 16;
