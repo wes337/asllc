@@ -7,7 +7,6 @@ import { isLargeSizedScreen, isMobileSizedScreen } from "../utils.js";
 import Building from "./building.js";
 import Elevator from "./elevator.js";
 import Modal from "./modal.js";
-import Button from "./button.js";
 import State from "./state.js";
 
 export default class Interface {
@@ -26,9 +25,10 @@ export default class Interface {
     background: new PIXI.Graphics(),
     show: false,
     buttons: {
-      about: new Button("about", "About"),
-      artists: new Button("artists", "Artists"),
-      contact: new Button("contact", "Contact"),
+      about: null,
+      artists: null,
+      contact: null,
+      initialized: false,
     },
   };
 
@@ -53,6 +53,44 @@ export default class Interface {
     button: PIXI.Sprite.from(INTERFACE_SPRITES.notification.src),
   };
 
+  static setupNavbarEventListeners() {
+    if (this.navBar.buttons.initialized) {
+      return;
+    }
+
+    this.navBar.buttons.about.eventMode = "static";
+    this.navBar.buttons.about.cursor = "pointer";
+    this.navBar.buttons.about.addListener("pointerdown", () => {
+      if (Modal.visible) {
+        return;
+      }
+
+      Modal.show(MODALS.about);
+    });
+
+    this.navBar.buttons.artists.eventMode = "static";
+    this.navBar.buttons.artists.cursor = "pointer";
+    this.navBar.buttons.artists.addListener("pointerdown", () => {
+      if (Modal.visible) {
+        return;
+      }
+
+      Modal.show(MODALS.artists);
+    });
+
+    this.navBar.buttons.contact.eventMode = "static";
+    this.navBar.buttons.contact.cursor = "pointer";
+    this.navBar.buttons.contact.addListener("pointerdown", () => {
+      if (Modal.visible) {
+        return;
+      }
+
+      Modal.show(MODALS.contact);
+    });
+
+    this.navBar.buttons.initialized = true;
+  }
+
   static {
     this.notification.button.eventMode = "static";
     this.notification.button.cursor = "pointer";
@@ -60,30 +98,6 @@ export default class Interface {
       "pointertap",
       this.onNotificationClick.bind(this)
     );
-
-    this.navBar.buttons.about.callback = () => {
-      if (Modal.visible) {
-        return;
-      }
-
-      Modal.show(MODALS.about);
-    };
-
-    this.navBar.buttons.artists.callback = () => {
-      if (Modal.visible) {
-        return;
-      }
-
-      Modal.show(MODALS.artists);
-    };
-
-    this.navBar.buttons.contact.callback = () => {
-      if (Modal.visible) {
-        return;
-      }
-
-      Modal.show(MODALS.contact);
-    };
 
     Object.entries(this.socialMediaLinks).forEach(([name, socialMediaLink]) => {
       socialMediaLink.eventMode = "static";
@@ -215,7 +229,7 @@ export default class Interface {
       0,
       positionY - this.artistInfo.height() / 2,
       width,
-      this.artistInfo.height()
+      this.artistInfo.height() * 2
     );
 
     this.artistInfo.background.endFill();
@@ -237,7 +251,7 @@ export default class Interface {
         positionX - State.app.screen.width / 4,
         positionY - this.artistInfo.height() / 2,
         borderSize,
-        this.artistInfo.height()
+        this.artistInfo.height() * 2
       );
 
       // Right border
@@ -245,7 +259,7 @@ export default class Interface {
         positionX + State.app.screen.width / 4,
         positionY - this.artistInfo.height() / 2,
         borderSize,
-        this.artistInfo.height()
+        this.artistInfo.height() * 2
       );
     }
 
@@ -325,106 +339,56 @@ export default class Interface {
   }
 
   static renderBottomBar() {
-    const backgroundColor = COLORS.darkGray;
-    const borderColor = COLORS.purple;
-    const borderSize = 4;
-
-    const width = isMobileSizedScreen()
-      ? State.app.screen.width
-      : State.app.screen.width / 2;
-
-    const positionX = isMobileSizedScreen() ? 0 : State.app.screen.width / 4;
+    const scale = State.scale();
 
     const positionY =
       State.app.screen.height -
       this.navBar.height() / 2 +
       State.app.stage.pivot.y;
 
-    // Background
-    this.navBar.background.clear();
-    this.navBar.background.beginFill(backgroundColor);
-    this.navBar.background.drawRect(
-      0,
-      positionY - this.navBar.height() / 2,
-      width,
-      this.navBar.height()
-    );
-
-    // Top border
-    this.navBar.background.beginFill(borderColor);
-    this.navBar.background.drawRect(
-      0,
-      positionY - this.navBar.height() / 2 - borderSize,
-      width + borderSize,
-      borderSize
-    );
-
-    if (!isMobileSizedScreen()) {
-      // Left border
-      this.navBar.background.drawRect(
-        positionX - State.app.screen.width / 4,
-        positionY - this.navBar.height() / 2,
-        borderSize,
-        this.navBar.height()
-      );
-
-      // Right border
-      this.navBar.background.drawRect(
-        positionX + State.app.screen.width / 4,
-        positionY - this.navBar.height() / 2,
-        borderSize,
-        this.navBar.height()
-      );
-    }
-
-    this.navBar.background.endFill();
-    this.navBar.container.addChild(this.navBar.background);
-    this.navBar.container.position.x = positionX;
-
-    // Nav Buttons
-    const { about, artists, contact } = this.navBar.buttons;
-
-    this.navBar.container.addChild(about.button);
-    this.navBar.container.addChild(artists.button);
-    this.navBar.container.addChild(contact.button);
-
-    const buttonMargin = 8;
-    const buttonWidth = this.navBar.background.width / 3 - buttonMargin;
-    const buttonHeight = this.navBar.height() - borderSize - buttonMargin;
-    const buttonPositionY = positionY - buttonHeight / 2 - borderSize / 4;
-
     // About
-    about.width = buttonWidth;
-    about.height = buttonHeight;
-    about.position.y = buttonPositionY;
-    about.position.x = isMobileSizedScreen()
-      ? borderSize + buttonMargin * 0.2
-      : borderSize + buttonMargin * 0.5;
-    about.render();
+    this.navBar.buttons.about =
+      this.navBar.buttons.about || PIXI.Sprite.from("about.png");
+    this.navBar.buttons.about.scale.x = scale;
+    this.navBar.buttons.about.scale.y = scale;
+    this.navBar.buttons.about.position.y =
+      positionY - this.navBar.buttons.about.height / 2;
+    this.navBar.buttons.about.position.x = isMobileSizedScreen()
+      ? this.navBar.buttons.about.width / 4
+      : State.app.screen.width / 2 - this.navBar.buttons.about.width * 1.5;
+    this.navBar.container.addChild(this.navBar.buttons.about);
 
     // Artists
-    artists.width = buttonWidth;
-    artists.height = buttonHeight;
-    artists.position.y = buttonPositionY;
-    artists.position.x = isMobileSizedScreen()
-      ? buttonWidth + buttonMargin * 1.3
-      : buttonWidth + buttonMargin * 1.5;
-    artists.render();
+    this.navBar.buttons.artists =
+      this.navBar.buttons.artists || PIXI.Sprite.from("artists.png");
+    this.navBar.buttons.artists.scale.x = scale;
+    this.navBar.buttons.artists.scale.y = scale;
+    this.navBar.buttons.artists.position.y =
+      positionY - this.navBar.buttons.artists.height / 2;
+    this.navBar.buttons.artists.position.x = isMobileSizedScreen()
+      ? State.app.screen.width / 2 - this.navBar.buttons.artists.width / 2
+      : State.app.screen.width / 2 - this.navBar.buttons.artists.width / 2;
+    this.navBar.container.addChild(this.navBar.buttons.artists);
 
     // Contact
-    contact.width = buttonWidth;
-    contact.height = buttonHeight;
-    contact.position.y = buttonPositionY;
-    contact.position.x = isMobileSizedScreen()
-      ? buttonWidth * 2 + buttonMargin * 2.4 - borderSize
-      : buttonWidth * 2 + buttonMargin * 2.5 - borderSize;
-    contact.render();
+    this.navBar.buttons.contact =
+      this.navBar.buttons.contact || PIXI.Sprite.from("contact.png");
+    this.navBar.buttons.contact.scale.x = scale;
+    this.navBar.buttons.contact.scale.y = scale;
+    this.navBar.buttons.contact.position.y =
+      positionY - this.navBar.buttons.contact.height / 2;
+    this.navBar.buttons.contact.position.x = isMobileSizedScreen()
+      ? State.app.screen.width - this.navBar.buttons.contact.width * 1.25
+      : State.app.screen.width / 2 + this.navBar.buttons.contact.width / 2;
+    this.navBar.container.addChild(this.navBar.buttons.contact);
 
     State.app.stage.addChild(this.navBar.container);
 
     if (!this.navBar.show) {
       this.navBar.container.pivot.y = this.navBar.height() * -1;
     }
+
+    this.setupNavbarEventListeners();
   }
 
   static async onNotificationClick(event) {
