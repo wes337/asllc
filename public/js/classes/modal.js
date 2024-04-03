@@ -1,3 +1,4 @@
+import { MODALS } from "../constants/modal.js";
 import Building from "./building.js";
 
 export default class Modal {
@@ -7,13 +8,14 @@ export default class Modal {
   static modal = document.getElementById("modal-container");
   static header = document.getElementById("modal-header");
   static body = document.getElementById("modal-body");
+  static footer = document.getElementById("modal-footer");
 
   static {
     const closeButton = document.getElementById("modal-close");
     closeButton.onclick = this.hide.bind(this);
   }
 
-  static show({ id, header, body }) {
+  static show({ id, header, body, footer }) {
     this.modal = document.getElementById("modal-container");
 
     this.modal.classList.add("show");
@@ -24,6 +26,15 @@ export default class Modal {
     this.visible = true;
 
     this.id = id || "modal";
+
+    if (footer) {
+      this.footer.innerHTML = footer;
+      this.footer.classList.add("show");
+      this.setupFooterButtons();
+    } else {
+      this.footer.innerHTML = "";
+      this.footer.classList.remove("show");
+    }
 
     if (this.id === "artists") {
       this.setupArtistButtons();
@@ -57,5 +68,17 @@ export default class Modal {
         }
       };
     });
+  }
+
+  static setupFooterButtons() {
+    if (!this.footer) {
+      return;
+    }
+
+    const footerButton = this.footer.querySelector("button");
+    footerButton.onclick = (event) => {
+      event.stopPropagation();
+      this.show(this.id === "artists" ? MODALS.other : MODALS.artists);
+    };
   }
 }

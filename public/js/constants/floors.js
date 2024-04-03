@@ -200,6 +200,19 @@ export const FLOORS = {
 
 export const ALL_FLOOR_IDS = Object.keys(FLOORS);
 
+export const OTHER_IDS = [
+  "gregory-diamond",
+  "jake-zimmerman",
+  "plague-blvd",
+  "sorbet",
+  "steel",
+  "wud",
+];
+
+export const ALL_ARTIST_IDS = ALL_FLOOR_IDS.filter(
+  (id) => !OTHER_IDS.includes(id)
+);
+
 export const ABOVE_GROUND_FLOOR_IDS = ALL_FLOOR_IDS.filter(
   (id) => !FLOORS[id].basement
 );

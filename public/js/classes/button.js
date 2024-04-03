@@ -53,27 +53,34 @@ export default class Button {
     this.button.position.x = this.position.x;
     this.button.position.y = this.position.y;
 
-    const width = this.width || this.label.width;
-    const height = this.height || this.label.height;
+    this.button.background = PIXI.Sprite.from(`about.png`);
 
-    this.background.clear();
-    this.background.beginFill(this.backgroundColor);
-    this.background.drawRect(0, 0, width, height);
-    this.background.endFill();
+    this.button.background.position.set(this.position.x, this.position.y);
+    this.button.background.scale.y = 1;
+    this.button.background.scale.x = 1;
+    this.button.background.anchor.set(0.5);
 
-    this.label.position.y = height / 2 - this.label.height / 2;
-    this.label.position.x = width / 2 - this.label.width / 2;
-    this.label.style.fill = this.textColor;
+    // const width = this.width || this.label.width;
+    // const height = this.height || this.label.height;
 
-    this.label.style.fontSize = isMobileSizedScreen()
-      ? FONT_SIZES.lg
-      : FONT_SIZES.xl;
+    // this.background.clear();
+    // this.background.beginFill(this.backgroundColor);
+    // this.background.drawRect(0, 0, width, height);
+    // this.background.endFill();
 
-    this.label.style.lineHeight = isMobileSizedScreen()
-      ? FONT_SIZES.lg
-      : FONT_SIZES.xl;
+    // this.label.position.y = height / 2 - this.label.height / 2;
+    // this.label.position.x = width / 2 - this.label.width / 2;
+    // this.label.style.fill = this.textColor;
+
+    // this.label.style.fontSize = isMobileSizedScreen()
+    //   ? FONT_SIZES.lg
+    //   : FONT_SIZES.xl;
+
+    // this.label.style.lineHeight = isMobileSizedScreen()
+    //   ? FONT_SIZES.lg
+    //   : FONT_SIZES.xl;
 
     this.button.addChild(this.background);
-    this.button.addChild(this.label);
+    // this.button.addChild(this.label);
   }
 }
