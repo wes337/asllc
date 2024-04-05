@@ -168,28 +168,28 @@ export default {
       spriteSourceSize: { x: 0, y: 0, w: 160, h: 220 },
       sourceSize: { w: 160, h: 220 },
     },
-    "gregory-diamond-1.png": {
+    "greg-1.png": {
       frame: { x: 600, y: 820, w: 160, h: 220 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 160, h: 220 },
       sourceSize: { w: 160, h: 220 },
     },
-    "gregory-diamond-2.png": {
+    "greg-2.png": {
       frame: { x: 760, y: 820, w: 160, h: 220 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 160, h: 220 },
       sourceSize: { w: 160, h: 220 },
     },
-    "jake-zimmerman-1.png": {
+    "jake-1.png": {
       frame: { x: 320, y: 200, w: 140, h: 200 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 140, h: 200 },
       sourceSize: { w: 140, h: 200 },
     },
-    "jake-zimmerman-2.png": {
+    "jake-2.png": {
       frame: { x: 460, y: 200, w: 140, h: 200 },
       rotated: false,
       trimmed: false,
@@ -322,8 +322,8 @@ export default {
     cxrpse: ["cxrpse-1.png", "cxrpse-2.png"],
     deerdeath: ["deerdeath-1.png", "deerdeath-2.png"],
     dirtybutt: ["dirtybutt-1.png", "dirtybutt-2.png"],
-    "gregory-diamond": ["gregory-diamond-1.png", "gregory-diamond-2.png"],
-    "jake-zimmerman": ["jake-zimmerman-1.png", "jake-zimmerman-2.png"],
+    greg: ["greg-1.png", "greg-2.png"],
+    jake: ["jake-1.png", "jake-2.png"],
     kamaara: ["kamaara-1.png", "kamaara-2.png"],
     mkultra: ["mkultra-1.png", "mkultra-2.png"],
     "plague-blvd": ["plague-blvd-1.png", "plague-blvd-2.png"],

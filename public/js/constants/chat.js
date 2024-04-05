@@ -41,8 +41,8 @@ export const GREETINGS = {
   bvdlvd: [],
   skotskr: [],
   mkultra: [],
-  "gregory-diamond": [],
-  "jake-zimmerman": [],
+  greg: [],
+  jake: [],
   sorbet: [],
   steel: [],
 };

@@ -1,4 +1,4 @@
-import { ALL_ARTIST_IDS, OTHER_IDS } from "./floors.js";
+import { ALL_ARTIST_IDS, OTHER_IDS, FLOORS } from "./floors.js";
 
 export const MODALS = {
   about: {
@@ -32,10 +32,7 @@ export const MODALS = {
         ${[...OTHER_IDS]
           .sort((a, b) => a.localeCompare(b))
           .map((artistId) => {
-            return `<button id="${artistId}-button" class="artist">${artistId.replace(
-              "-",
-              " "
-            )}</button>`;
+            return `<button id="${artistId}-button" class="artist">${FLOORS[artistId].name}</button>`;
           })
           .join(" ")
           .trim()}
