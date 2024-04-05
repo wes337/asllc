@@ -20,8 +20,7 @@ export default class Interface {
 
   static navBar = {
     container: new PIXI.Container(),
-    height: () =>
-      isLargeSizedScreen() ? 200 * State.scale() : 300 * State.scale(),
+    height: () => 300 * State.scale(),
     background: new PIXI.Graphics(),
     show: false,
     buttons: {
@@ -29,6 +28,7 @@ export default class Interface {
       artists: null,
       contact: null,
       initialized: false,
+      hover: null,
     },
   };
 
@@ -58,34 +58,33 @@ export default class Interface {
       return;
     }
 
-    this.navBar.buttons.about.eventMode = "static";
-    this.navBar.buttons.about.cursor = "pointer";
-    this.navBar.buttons.about.addListener("pointerdown", () => {
-      if (Modal.visible) {
-        return;
-      }
+    ["about", "artists", "contact"].forEach((button) => {
+      this.navBar.buttons[button].eventMode = "static";
+      this.navBar.buttons[button].cursor = "pointer";
+      this.navBar.buttons[button].addListener("pointerdown", () => {
+        if (Modal.visible) {
+          return;
+        }
 
-      Modal.show(MODALS.about);
-    });
+        Modal.show(MODALS[button]);
+        this.navBar.buttons.hover = null;
+      });
 
-    this.navBar.buttons.artists.eventMode = "static";
-    this.navBar.buttons.artists.cursor = "pointer";
-    this.navBar.buttons.artists.addListener("pointerdown", () => {
-      if (Modal.visible) {
-        return;
-      }
+      this.navBar.buttons[button].addListener("pointerenter", () => {
+        if (Modal.visible) {
+          return;
+        }
 
-      Modal.show(MODALS.artists);
-    });
+        this.navBar.buttons.hover = button;
+      });
 
-    this.navBar.buttons.contact.eventMode = "static";
-    this.navBar.buttons.contact.cursor = "pointer";
-    this.navBar.buttons.contact.addListener("pointerdown", () => {
-      if (Modal.visible) {
-        return;
-      }
+      this.navBar.buttons[button].addListener("pointerleave", () => {
+        if (Modal.visible) {
+          return;
+        }
 
-      Modal.show(MODALS.contact);
+        this.navBar.buttons.hover = null;
+      });
     });
 
     this.navBar.buttons.initialized = true;
@@ -207,14 +206,16 @@ export default class Interface {
 
   static renderArtistInfo() {
     const backgroundColor = COLORS.darkGray;
-    const borderColor = COLORS.purple;
+    const borderColor = COLORS.darkSlateBlue;
     const borderSize = 4;
 
-    const width = isMobileSizedScreen()
-      ? State.app.screen.width
-      : State.app.screen.width / 2;
+    const scale = State.scale();
 
-    const positionX = isMobileSizedScreen() ? 0 : State.app.screen.width / 4;
+    const width = isMobileSizedScreen() ? State.app.screen.width : 1800 * scale;
+
+    const positionX = isMobileSizedScreen()
+      ? 0
+      : State.app.screen.width / 2 - width / 2;
 
     const positionY =
       State.app.screen.height -
@@ -227,9 +228,14 @@ export default class Interface {
     this.artistInfo.background.beginFill(backgroundColor);
     this.artistInfo.background.drawRect(
       0,
-      positionY - this.artistInfo.height() / 2,
+      positionY -
+        (isMobileSizedScreen()
+          ? this.artistInfo.height() / 3
+          : this.artistInfo.height()),
       width,
-      this.artistInfo.height() * 2
+      isMobileSizedScreen()
+        ? this.artistInfo.height() * 2
+        : this.artistInfo.height() * 4
     );
 
     this.artistInfo.background.endFill();
@@ -240,7 +246,11 @@ export default class Interface {
     this.artistInfo.background.beginFill(borderColor);
     this.artistInfo.background.drawRect(
       0,
-      positionY - this.artistInfo.height() / 2 - borderSize,
+      positionY -
+        (isMobileSizedScreen()
+          ? this.artistInfo.height() / 3
+          : this.artistInfo.height()) -
+        borderSize,
       width + borderSize,
       borderSize
     );
@@ -248,45 +258,53 @@ export default class Interface {
     if (!isMobileSizedScreen()) {
       // Left border
       this.artistInfo.background.drawRect(
-        positionX - State.app.screen.width / 4,
-        positionY - this.artistInfo.height() / 2,
+        0,
+        positionY - this.artistInfo.height(),
         borderSize,
-        this.artistInfo.height() * 2
+        this.artistInfo.height() * 4
       );
 
       // Right border
       this.artistInfo.background.drawRect(
-        positionX + State.app.screen.width / 4,
-        positionY - this.artistInfo.height() / 2,
+        1800 * scale,
+        positionY - this.artistInfo.height(),
         borderSize,
-        this.artistInfo.height() * 2
+        this.artistInfo.height() * 4
       );
     }
 
     // Text
-    this.artistInfo.text.position.y =
-      positionY - this.artistInfo.text.height / 2;
 
     this.artistInfo.text.style.wordWrapWidth = width;
 
     const hasSocialMediaLinks = this.artistId && FLOORS[this.artistId]?.links;
-    const hasLongName =
-      isMobileSizedScreen() &&
-      hasSocialMediaLinks &&
-      this.artistInfo.text.text.length >= 8;
 
-    if (hasLongName) {
-      this.artistInfo.text.style.letterSpacing = -2;
-      this.artistInfo.text.style.fontSize = FONT_SIZES.xl;
-      this.artistInfo.text.position.x = this.artistInfo.margin() / 2;
+    if (isMobileSizedScreen()) {
+      this.artistInfo.text.position.y =
+        positionY - this.artistInfo.text.height / 3;
+    } else if (hasSocialMediaLinks) {
+      this.artistInfo.text.position.y =
+        positionY - this.artistInfo.text.height * 2 + 20 * scale;
     } else {
-      this.artistInfo.text.style.letterSpacing = 0;
-      this.artistInfo.text.style.fontSize = isMobileSizedScreen()
-        ? FONT_SIZES.xxl
-        : FONT_SIZES.xxxl;
-      this.artistInfo.text.position.x = isMobileSizedScreen()
-        ? this.artistInfo.margin()
-        : positionX - this.artistInfo.text.width / 2;
+      this.artistInfo.text.position.y = positionY - this.artistInfo.text.height;
+    }
+
+    this.artistInfo.text.style.letterSpacing = isLargeSizedScreen() ? 0 : -2;
+    this.artistInfo.text.style.fontSize = isMobileSizedScreen()
+      ? FONT_SIZES.xl
+      : FONT_SIZES.xxl;
+
+    if (isLargeSizedScreen()) {
+      this.artistInfo.text.style.fontSize = FONT_SIZES.xxxl;
+    }
+
+    this.artistInfo.text.position.x = isMobileSizedScreen()
+      ? this.artistInfo.margin()
+      : 900 * scale - this.artistInfo.text.width / 2;
+
+    if (!hasSocialMediaLinks && isMobileSizedScreen()) {
+      this.artistInfo.text.position.x =
+        State.app.screen.width / 2 - this.artistInfo.text.width / 2;
     }
 
     this.artistInfo.container.addChild(this.artistInfo.text);
@@ -317,7 +335,9 @@ export default class Interface {
 
     const positionX = isMobileSizedScreen()
       ? State.app.screen.width - linkWidth / 2
-      : State.app.screen.width / 2 - linkWidth / 2;
+      : (1800 * scale) / 2 +
+        (linkWidth * Object.keys(links).length - 1) / 2 -
+        100 * scale;
 
     const positionY =
       State.app.screen.height -
@@ -328,8 +348,10 @@ export default class Interface {
 
     Object.keys(links).forEach((icon, i) => {
       this.socialMediaLinks[icon].position.x =
-        positionX - linkWidth * i - this.artistInfo.margin() * (i + 1);
-      this.socialMediaLinks[icon].position.y = positionY;
+        positionX - linkWidth * i - (this.artistInfo.margin() / 2) * (i + 1);
+      this.socialMediaLinks[icon].position.y = isMobileSizedScreen()
+        ? positionY + 40 * scale
+        : positionY;
       this.socialMediaLinks[icon].scale.x = scale;
       this.socialMediaLinks[icon].scale.y = scale;
       this.socialMediaLinks[icon].anchor.set(0.5);
@@ -381,6 +403,12 @@ export default class Interface {
       ? State.app.screen.width - this.navBar.buttons.contact.width * 1.25
       : State.app.screen.width / 2 + this.navBar.buttons.contact.width / 2;
     this.navBar.container.addChild(this.navBar.buttons.contact);
+
+    const hover = this.navBar.buttons.hover;
+    if (hover) {
+      this.navBar.buttons[hover].position.y -=
+        this.navBar.buttons.about.height / 8;
+    }
 
     State.app.stage.addChild(this.navBar.container);
 
@@ -442,11 +470,11 @@ export default class Interface {
     const scaledWidth = INTERFACE_SPRITES.notification.width * scale;
     const scaledHeight = INTERFACE_SPRITES.notification.height * scale;
 
-    const margin = isMobileSizedScreen() ? 10 * scale : 50 * scale;
+    const margin = 50 * scale;
 
     const positionX = isMobileSizedScreen()
-      ? scaledWidth / 2 + margin
-      : State.app.screen.width / 4 + scaledWidth / 2;
+      ? scaledWidth / 2 + margin * 2
+      : State.app.screen.width / 2 - 800 * scale;
 
     const positionY =
       State.app.screen.height -

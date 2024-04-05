@@ -36,7 +36,7 @@ export default class Modal {
       this.footer.classList.remove("show");
     }
 
-    if (this.id === "artists") {
+    if (["artists", "other"].includes(this.id)) {
       this.setupArtistButtons();
     }
   }
