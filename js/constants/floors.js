@@ -168,11 +168,11 @@ export const FLOORS = {
         "https://open.spotify.com/artist/62q4VhTETdekmQYoyws6Dl?si=gb6j7SEARKi9LGGVKdZgXQ",
     },
   },
-  "gregory-diamond": {
+  greg: {
     name: "Greg",
     basement: true,
   },
-  "jake-zimmerman": {
+  jake: {
     name: "Jake",
     basement: true,
   },
@@ -201,8 +201,8 @@ export const FLOORS = {
 export const ALL_FLOOR_IDS = Object.keys(FLOORS);
 
 export const OTHER_IDS = [
-  "gregory-diamond",
-  "jake-zimmerman",
+  "greg",
+  "jake",
   "plague-blvd",
   "sorbet",
   "steel",

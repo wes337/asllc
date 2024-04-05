@@ -14,14 +14,14 @@ export default {
       spriteSourceSize: { x: 0, y: 0, w: 1280, h: 550 },
       sourceSize: { w: 1280, h: 550 },
     },
-    "gregory-diamond-floor.png": {
+    "greg-floor.png": {
       frame: { x: 1, y: 553, w: 1280, h: 550 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 1280, h: 550 },
       sourceSize: { w: 1280, h: 550 },
     },
-    "jake-zimmerman-floor.png": {
+    "jake-floor.png": {
       frame: { x: 1, y: 1105, w: 1280, h: 550 },
       rotated: false,
       trimmed: false,

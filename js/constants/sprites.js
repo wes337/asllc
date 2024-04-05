@@ -253,23 +253,23 @@ export const SPRITES = {
     height: 220,
     floor: "./img/sprites/floors/dirtybutt-floor.png",
   },
-  "gregory-diamond": {
+  greg: {
     src: [
-      "./img/sprites/characters/gregory-diamond-1.png",
-      "./img/sprites/characters/gregory-diamond-2.png",
+      "./img/sprites/characters/greg-1.png",
+      "./img/sprites/characters/greg-2.png",
     ],
     width: 160,
     height: 220,
-    floor: "./img/sprites/floors/gregory-diamond-floor.png",
+    floor: "./img/sprites/floors/greg-floor.png",
   },
-  "jake-zimmerman": {
+  jake: {
     src: [
-      "./img/sprites/characters/jake-zimmerman-1.png",
-      "./img/sprites/characters/jake-zimmerman-2.png",
+      "./img/sprites/characters/jake-1.png",
+      "./img/sprites/characters/jake-2.png",
     ],
     width: 140,
     height: 200,
-    floor: "./img/sprites/floors/jake-zimmerman-floor.png",
+    floor: "./img/sprites/floors/jake-floor.png",
   },
   kamaara: {
     src: [
