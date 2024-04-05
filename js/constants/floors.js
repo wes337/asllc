@@ -3,7 +3,7 @@ export const FLOORS = {
     name: "Artist Services",
   },
   "plague-blvd": {
-    name: "Plague BLVD",
+    name: "Plague BLVD.",
   },
   wendigo: {
     name: "Wendigo",
