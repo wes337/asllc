@@ -196,7 +196,6 @@ export default class Person {
       this.character.scale.y = scale;
       this.character.scale.x = scale;
       this.character.position.x = Elevator.shaft.position.x;
-      this.character.position.y = Elevator.shaft.position.y + 90 * scale;
       this.destination = null;
       State.app.stage.addChild(this.character);
       return;
