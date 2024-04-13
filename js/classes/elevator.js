@@ -146,21 +146,22 @@ export default class Elevator {
     await this.gotoFloor(closestFloor.number);
     await this.elevatorFloor.moveCameraToFloor();
 
-    console.log("HERE");
-
     if (
       this.personInside &&
       State.personWantsToGotoFloor &&
       State.personWantsToGotoFloor === this.elevatorFloorNumber
     ) {
+      this.controls.show = false;
+
+      await this.animateDoor();
+      await this.personInside.enterRoom(this.elevatorFloorNumber);
+
       this.elevatorFloor.toggleIndicator(false);
       const thanks = getRandomElementFromArray(THANKS);
       this.personInside.chatBubble.show(thanks);
-      await this.animateDoor();
-      await this.personInside.enterRoom(this.elevatorFloorNumber);
-      this.busy = false;
+
       State.personWantsToGotoFloor = null;
-      this.controls.show = false;
+
       this.gotoFloor(0);
     }
   }
