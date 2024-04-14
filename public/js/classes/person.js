@@ -123,7 +123,7 @@ export default class Person {
       setTimeout(() => {
         this.walkRandomly = true;
         resolve();
-      }, 200);
+      }, 500);
     });
   }
 
