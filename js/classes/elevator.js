@@ -153,8 +153,8 @@ export default class Elevator {
     ) {
       this.controls.show = false;
 
-      await this.animateDoor();
-      await this.personInside.enterRoom(this.elevatorFloorNumber);
+      this.animateDoor();
+      this.personInside.enterRoom(this.elevatorFloorNumber);
 
       this.elevatorFloor.toggleIndicator(false);
       const thanks = getRandomElementFromArray(THANKS);
@@ -162,7 +162,8 @@ export default class Elevator {
 
       State.personWantsToGotoFloor = null;
 
-      this.gotoFloor(0);
+      await this.gotoFloor(0);
+      this.busy = false;
     }
   }
 
