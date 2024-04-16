@@ -152,18 +152,16 @@ export default class Elevator {
       State.personWantsToGotoFloor === this.elevatorFloorNumber
     ) {
       this.controls.show = false;
-
-      this.animateDoor();
-      this.personInside.enterRoom(this.elevatorFloorNumber);
-
       this.elevatorFloor.toggleIndicator(false);
       const thanks = getRandomElementFromArray(THANKS);
       this.personInside.chatBubble.show(thanks);
+      await this.animateDoor();
+      await this.personInside.enterRoom(this.elevatorFloorNumber);
 
+      this.busy = false;
       State.personWantsToGotoFloor = null;
 
       await this.gotoFloor(0);
-      this.busy = false;
     }
   }
 
