@@ -1,4 +1,3 @@
-import { SPRITES } from "../constants/sprites.js";
 import { GREETINGS } from "../constants/chat.js";
 import { FLOORS } from "../constants/floors.js";
 import { DEFAULT_FONT_SIZE, TEXT_STYLES } from "../constants/text.js";
@@ -9,6 +8,22 @@ import Interface from "./interface.js";
 import Modal from "./modal.js";
 import State from "./state.js";
 
+const getAnimationFrames = (id) => {
+  const animationFrames = FLOORS[id]?.animationFrames;
+
+  if (!animationFrames) {
+    return [];
+  }
+
+  const textures = [];
+
+  for (let i = 0; i < animationFrames; i++) {
+    textures.push(`${id}-floor-${i + 1}.png`);
+  }
+
+  return textures;
+};
+
 export default class Floor {
   constructor(index, id, basement) {
     this.id = id;
@@ -17,17 +32,18 @@ export default class Floor {
     this.basement = basement;
     this.container = new PIXI.Container();
 
-    const sprites = SPRITES[id]?.floor || SPRITES[id]?.src || SPRITES.floor.src;
-    const animated = Array.isArray(sprites);
-    this.animated = animated;
+    const animationFrames = getAnimationFrames(id);
 
-    this.room = animated
-      ? new PIXI.AnimatedSprite(
-          sprites.map((_, i) => {
-            return PIXI.Texture.from(`${id}-floor-${i + 1}.png`);
-          })
-        )
-      : PIXI.Sprite.from(`${id}-floor.png`);
+    this.room =
+      animationFrames.length > 0
+        ? new PIXI.AnimatedSprite(
+            animationFrames.map((texture) => {
+              return PIXI.Texture.from(texture);
+            })
+          )
+        : PIXI.Sprite.from(`${id}-floor.png`);
+
+    this.animated = animationFrames.length > 0;
 
     this.leftWall = PIXI.Sprite.from("left-wall.png");
     this.rightWall = basement
@@ -74,7 +90,7 @@ export default class Floor {
         return (
           State.app.screen.height -
           this.height() / 2 -
-          (SPRITES.separator.height / 2) * State.scale() -
+          (60 * State.scale()) / 2 -
           this.height() * this.number -
           Interface.navBar.height()
         );
@@ -94,9 +110,7 @@ export default class Floor {
 
     if (this.basement) {
       const offset = Math.floor(32 * scale);
-      positionY = positionY + SPRITES.cement.height * scale + offset;
-    } else {
-      // positionY = positionY + (SPRITES.cement.height / 2) * scale;
+      positionY = positionY + 160 * scale + offset;
     }
 
     return positionY;
@@ -136,16 +150,6 @@ export default class Floor {
     }
 
     Interface.setArtistInfo(this.id);
-  }
-
-  toggleIndicator(visible) {
-    if (!State.personWantsToGotoFloor) {
-      this.indicator.visible = false;
-      this.indicator.filters = [State.filters.adjustment({ opacity: 0 })];
-    } else {
-      this.indicator.visible = visible;
-      this.indicator.filters = [];
-    }
   }
 
   renderSeparator() {
@@ -240,7 +244,7 @@ export default class Floor {
     this.indicator.scale.y = scale;
     this.indicator.scale.x = scale;
     this.indicator.anchor.set(0.5);
-    this.indicator.visible = this.isActive;
+    this.indicator.visible = false;
 
     this.container.addChild(this.indicator);
 

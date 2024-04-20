@@ -195,6 +195,18 @@ export const FLOORS = {
   steel: {
     name: "SteelSoldier",
     basement: true,
+    animationFrames: 6,
+  },
+  darkie: {
+    name: "Lil Darkie",
+  },
+  hxstage: {
+    name: "HXSTAGE",
+  },
+  wes: {
+    name: "Wes",
+    basement: true,
+    animationFrames: 3,
   },
 };
 

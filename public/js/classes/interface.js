@@ -482,14 +482,6 @@ export default class Interface {
       }`,
       0
     );
-
-    Building.allFloors.forEach((floor) => {
-      if (typeof floor.toggleIndicator !== "function") {
-        return;
-      }
-
-      floor.toggleIndicator(floor.number === person.originalFloorNumber);
-    });
   }
 
   static renderNotification() {

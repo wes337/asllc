@@ -4,7 +4,6 @@ import {
   isSmallMobileSizedScreen,
 } from "../utils.js";
 import { COLORS } from "../constants/colors.js";
-import { SPRITES } from "../constants/sprites.js";
 import Cache from "./cache.js";
 import Building from "./building.js";
 import Interface from "./interface.js";
@@ -56,7 +55,7 @@ export default class State {
     min: () =>
       Building.basement.length === 0
         ? 0
-        : SPRITES.floor.height * Building.basement.length * this.scale() +
+        : 550 * Building.basement.length * this.scale() +
           Interface.navBar.height() +
           350 * this.scale(),
   };

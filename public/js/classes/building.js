@@ -1,4 +1,3 @@
-import { SPRITES } from "../constants/sprites.js";
 import Floor from "./floor.js";
 import State from "./state.js";
 
@@ -49,11 +48,11 @@ export default class Building {
       : new PIXI.TilingSprite(
           PIXI.Texture.from("cement.png"),
           window.innerWidth,
-          SPRITES.cement.height
+          160 * scale
         );
 
     this.foundation.width = State.app.screen.width;
-    this.foundation.height = SPRITES.cement.height * scale;
+    this.foundation.height = 160 * scale;
 
     this.foundation.tileScale.x = scale;
     this.foundation.tileScale.y = scale;

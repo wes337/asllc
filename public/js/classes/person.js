@@ -1,10 +1,14 @@
-import { SPRITES } from "../constants/sprites.js";
+import { SPRITE_METADATA } from "../constants/sprites.js";
 import { isLargeSizedScreen, randomNumberBetween } from "../utils.js";
 import Interface from "./interface.js";
 import Building from "./building.js";
 import Elevator from "./elevator.js";
 import ChatBubble from "./chat-bubble.js";
 import State from "./state.js";
+
+const getMetadata = (name) => {
+  return SPRITE_METADATA[name] || null;
+};
 
 export default class Person {
   offsetY = 0;
@@ -23,7 +27,7 @@ export default class Person {
 
     this.destination = null;
     this.walkRandomly = true;
-    this.metadata = SPRITES[name].metadata;
+    this.metadata = getMetadata(name);
     this.extra = this.metadata && this.metadata.extra;
     this.direction = this.extra
       ? "left"
@@ -48,11 +52,11 @@ export default class Person {
   }
 
   get width() {
-    return () => SPRITES[this.name].width * State.scale();
+    return () => this.character.width;
   }
 
   get height() {
-    return () => SPRITES[this.name].height * State.scale();
+    return () => this.character.height;
   }
 
   get position() {
