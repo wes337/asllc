@@ -1,7 +1,5 @@
 import { COLORS } from "../constants/colors.js";
-import { SPRITES } from "../constants/sprites.js";
 import { randomNumberBetween, isMobileSizedScreen } from "../utils.js";
-import Building from "./building.js";
 import Interface from "./interface.js";
 import State from "./state.js";
 
@@ -58,18 +56,17 @@ export default class Background {
 
     const scale = State.scale();
 
-    const marginX = 16;
-    const marginY = 8;
-    const positionX =
-      State.app.screen.width - (SPRITES.sun.width * scale) / 2 - marginX;
-    const positionY = (SPRITES.sun.height * scale) / 2 + marginY;
-
-    this.sun.initialPosition = { x: positionX, y: positionY };
-
-    this.sun.position.set(positionX, positionY);
     this.sun.scale.y = scale;
     this.sun.scale.x = scale;
     this.sun.anchor.set(0.5);
+
+    const marginX = 16;
+    const marginY = 8;
+    const positionX = State.app.screen.width - this.sun.width / 2 - marginX;
+    const positionY = this.sun.height / 2 + marginY;
+
+    this.sun.position.set(positionX, positionY);
+    this.sun.initialPosition = { x: positionX, y: positionY };
 
     State.app.stage.addChild(this.sun);
   }
@@ -120,7 +117,7 @@ export default class Background {
         const marginX = 48 - ROW_OFFSET_X[i];
         const marginY = 32 - ROW_OFFSET_Y[i];
         const positionX =
-          SPRITES["cloud-xs"].width +
+          cloud.width +
           (State.app.screen.width / numberOfClouds) * j +
           1 -
           marginX;
@@ -144,47 +141,39 @@ export default class Background {
     const NUMBER_OF_BUILDINGS = 2;
 
     for (let i = 0; i < NUMBER_OF_BUILDINGS; i++) {
-      const image =
-        i === 0 ? SPRITES["building-green"] : SPRITES["building-red"];
+      const color = i === 0 ? "green" : "red";
 
-      const building = this.buildings[i] || PIXI.Sprite.from(image.src);
+      const building =
+        this.buildings[i] || PIXI.Sprite.from(`${color}-building.png`);
 
-      const scaledWidth = image.width * scale;
-      const scaledHeight = image.height * scale;
+      building.scale.y = scale;
+      building.scale.x = scale;
+      building.anchor.set(0.5);
+
       const margin = 24;
       const breakpointX =
-        State.app.screen.width <= scaledWidth * NUMBER_OF_BUILDINGS + margin;
-      const breakpointY = State.app.screen.height < scaledHeight + margin;
+        State.app.screen.width <= building.width * NUMBER_OF_BUILDINGS + margin;
 
       let positionX = 0;
 
       if (i === 0) {
         // Green building
         positionX = breakpointX
-          ? (positionX = scaledWidth / 4 - margin * 10)
-          : scaledWidth / 2 - margin;
+          ? (positionX = building.width / 4 - margin * 10)
+          : building.width / 2 - margin;
       } else if (i === 1) {
         // Red building
         positionX = breakpointX
-          ? State.app.screen.width - scaledWidth / 4 + margin * 10
-          : State.app.screen.width - scaledWidth / 2 + margin;
+          ? State.app.screen.width - building.width / 4 + margin * 10
+          : State.app.screen.width - building.width / 2 + margin;
       }
 
-      let positionY =
-        State.app.screen.height -
-        (image.height / 2) * scale -
-        Interface.navBar.height();
-
-      if (breakpointY) {
-        positionY = State.app.screen.height + margin;
-      }
+      const positionY =
+        State.app.screen.height - building.height / 2 - 300 * scale;
 
       building.initialPosition = { x: positionX, y: positionY };
 
       building.position.set(positionX, positionY);
-      building.scale.y = scale;
-      building.scale.x = scale;
-      building.anchor.set(0.5);
 
       State.app.stage.addChild(building);
 
@@ -211,41 +200,42 @@ export default class Background {
       ? this.dirt
       : new PIXI.TilingSprite(
           PIXI.Texture.from("dirt.png"),
-          SPRITES.dirt.width,
-          SPRITES.dirt.height
+          State.app.screen.width,
+          160 * scale
         );
 
     this.dirt.width = State.app.screen.width;
-    this.dirt.height = SPRITES.dirt.height * scale;
+    this.dirt.height = 160 * scale;
 
     this.dirt.tileScale.x = scale;
     this.dirt.tileScale.y = scale;
 
-    this.dirt.position.set(0, positionY + SPRITES.dirt.height * scale);
+    this.dirt.position.set(0, positionY + this.dirt.height);
 
     State.app.stage.addChild(this.dirt);
   }
 
   static renderFossil() {
-    this.fossil = this.fossil ? this.fossil : PIXI.Sprite.from("fossil.png");
+    this.fossil = this.fossil ? this.fossil : PIXI.Sprite.from("distrokid.png");
 
     const scale = State.scale();
+
+    this.fossil.scale.y = scale;
+    this.fossil.scale.x = scale;
+    this.fossil.anchor.set(0.5);
 
     const marginX = 16;
     const marginY = 16;
     const positionX = isMobileSizedScreen()
-      ? (SPRITES.fossil.width * scale) / 2 + marginX
-      : SPRITES.fossil.width * scale * 2;
+      ? this.fossil.width / 2 + marginX
+      : this.fossil.width * 2;
 
     const positionY =
-      State.app.screen.height * 2 - SPRITES.fossil.height * 4 * scale + marginY;
+      State.app.screen.height * 2 - this.fossil.height * 4 + marginY;
 
     this.fossil.initialPosition = { x: positionX, y: positionY };
 
     this.fossil.position.set(positionX, positionY);
-    this.fossil.scale.y = scale;
-    this.fossil.scale.x = scale;
-    this.fossil.anchor.set(0.5);
 
     State.app.stage.addChild(this.fossil);
   }

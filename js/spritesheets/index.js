@@ -10,9 +10,14 @@ import rooms5 from "./rooms-5.js";
 import rooms6 from "./rooms-6.js";
 import rooms7 from "./rooms-7.js";
 import rooms8 from "./rooms-8.js";
+import rooms9 from "./rooms-9.js";
+import rooms10 from "./rooms-10.js";
+import underground from "./underground.js";
 import elevator from "./elevator.js";
 import ui from "./ui.js";
 import ui2 from "./ui-2.js";
+import greenBuilding from "./green-building.js";
+import redBuilding from "./red-building.js";
 
 export default async function loadSpritesheets() {
   const spritesheets = [
@@ -27,9 +32,14 @@ export default async function loadSpritesheets() {
     { key: "rooms-6", value: rooms6 },
     { key: "rooms-7", value: rooms7 },
     { key: "rooms-8", value: rooms8 },
+    { key: "rooms-9", value: rooms9 },
+    { key: "rooms-10", value: rooms10 },
+    { key: "underground", value: underground },
     { key: "elevator", value: elevator },
     { key: "ui", value: ui },
     { key: "ui-2", value: ui2 },
+    { key: "green-building", value: greenBuilding },
+    { key: "red-building", value: redBuilding },
   ];
 
   await Promise.all(

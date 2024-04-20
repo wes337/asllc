@@ -1,4 +1,4 @@
-import { INTERFACE_SPRITES, SPRITES } from "../constants/sprites.js";
+import { INTERFACE_SPRITES } from "../constants/sprites.js";
 import { THANKS } from "../constants/chat.js";
 import { getRandomElementFromArray, isMobileSizedScreen } from "../utils.js";
 import Background from "./background.js";
@@ -153,17 +153,15 @@ export default class Elevator {
       State.personWantsToGotoFloor === this.elevatorFloorNumber
     ) {
       this.controls.show = false;
-      this.elevatorFloor.toggleIndicator(false);
       const thanks = getRandomElementFromArray(THANKS);
       this.personInside.chatBubble.show(thanks);
       SoundPlayer.play("character-delivered.wav", true);
       await this.animateDoor();
       await this.personInside.enterRoom(this.elevatorFloorNumber);
 
+      await this.gotoFloor(0);
       this.busy = false;
       State.personWantsToGotoFloor = null;
-
-      await this.gotoFloor(0);
     }
   }
 
@@ -174,7 +172,7 @@ export default class Elevator {
       const offsetY = floor.basement ? 60 * scale : 30 * scale;
 
       return floor.basement
-        ? floor.position.y() + SPRITES.cement.height * scale + offsetY
+        ? floor.position.y() + 160 * scale + offsetY
         : floor.position.y() + offsetY;
     } catch {
       // Do nothing
@@ -255,8 +253,13 @@ export default class Elevator {
           State.spritesheets.elevator.animations["elevator-wheel"]
         );
 
-    const scaledWidth = SPRITES["elevator-wheel"].width * State.scale();
-    const scaledHeight = SPRITES["elevator-wheel"].height * State.scale();
+    this.wheel.scale.y = State.scale();
+    this.wheel.scale.x = State.scale();
+    this.wheel.anchor.set(0.5);
+    this.wheel.animationSpeed = 0.5;
+
+    const scaledWidth = this.wheel.width;
+    const scaledHeight = this.wheel.height;
 
     const offsetX = 100 * State.scale();
     const offsetY = 110 * State.scale();
@@ -274,18 +277,12 @@ export default class Elevator {
       offsetY;
 
     this.wheel.position.set(positionX, positionY);
-    this.wheel.scale.y = State.scale();
-    this.wheel.scale.x = State.scale();
-    this.wheel.anchor.set(0.5);
-    this.wheel.animationSpeed = 0.5;
 
     State.app.stage.addChild(this.wheel);
   }
 
   static renderRope() {
     const scale = State.scale();
-
-    const scaledWidth = SPRITES["elevator-rope"].width * scale;
 
     const offsetX = 70 * scale;
 
@@ -296,15 +293,16 @@ export default class Elevator {
 
       let rope = this.rope[i] || PIXI.Sprite.from("elevator-rope.png");
 
-      const positionX =
-        floor.position.x() - floor.width() / 2 + scaledWidth / 2 + offsetX;
-
-      let positionY = floor.position.y() + SPRITES.cement.height * scale;
-
-      rope.position.set(positionX, positionY);
       rope.scale.y = scale;
       rope.scale.x = scale;
       rope.anchor.set(0.5);
+
+      const positionX =
+        floor.position.x() - floor.width() / 2 + rope.width / 2 + offsetX;
+
+      let positionY = floor.position.y() + 160 * scale;
+
+      rope.position.set(positionX, positionY);
 
       State.app.stage.addChild(rope);
 
@@ -319,8 +317,12 @@ export default class Elevator {
 
     const scale = State.scale();
 
-    const scaledWidth = SPRITES["elevator-generator"].width * scale;
-    const scaledHeight = SPRITES["elevator-generator"].height * scale;
+    this.generator.scale.y = scale;
+    this.generator.scale.x = scale;
+    this.generator.anchor.set(0.5);
+
+    const scaledWidth = this.generator.width;
+    const scaledHeight = this.generator.height;
 
     const offsetX = 30 * scale;
     const offsetY = 0;
@@ -338,9 +340,6 @@ export default class Elevator {
       offsetY;
 
     this.generator.position.set(positionX, positionY);
-    this.generator.scale.y = scale;
-    this.generator.scale.x = scale;
-    this.generator.anchor.set(0.5);
 
     State.app.stage.addChild(this.generator);
   }
@@ -354,7 +353,11 @@ export default class Elevator {
 
     const scale = State.scale();
 
-    const scaledWidth = SPRITES["elevator-shaft"].width * scale;
+    this.shaft.scale.y = scale;
+    this.shaft.scale.x = scale;
+    this.shaft.anchor.set(0.5);
+
+    const scaledWidth = this.shaft.width;
 
     const offsetX = 30 * scale;
 
@@ -367,9 +370,7 @@ export default class Elevator {
     const positionY = this.getFloorPosition(this.elevatorFloor);
 
     this.shaft.position.set(positionX, positionY);
-    this.shaft.scale.y = scale;
-    this.shaft.scale.x = scale;
-    this.shaft.anchor.set(0.5);
+
     this.shaft.animationSpeed = 0.2;
     this.shaft.loop = false;
 
@@ -383,8 +384,12 @@ export default class Elevator {
 
     const scale = State.scale();
 
-    const scaledWidth = SPRITES["elevator-bricks"].width * scale;
-    const scaledHeight = SPRITES["elevator-bricks"].height * scale;
+    this.bricks.scale.y = scale;
+    this.bricks.scale.x = scale;
+    this.bricks.anchor.set(0.5);
+
+    const scaledWidth = this.bricks.width;
+    const scaledHeight = this.bricks.height;
 
     const offsetX = 10 * scale;
 
@@ -397,9 +402,6 @@ export default class Elevator {
     const positionY = Building.foundation.position.y + scaledHeight / 2;
 
     this.bricks.position.set(positionX, positionY);
-    this.bricks.scale.y = scale;
-    this.bricks.scale.x = scale;
-    this.bricks.anchor.set(0.5);
 
     State.app.stage.addChild(this.bricks);
   }
@@ -411,8 +413,12 @@ export default class Elevator {
 
     const scale = State.scale();
 
-    const scaledWidth = SPRITES["underground-connector"].width * scale;
-    const scaledHeight = SPRITES["underground-connector"].height * scale;
+    this.connector.scale.y = scale;
+    this.connector.scale.x = scale;
+    this.connector.anchor.set(0.5);
+
+    const scaledWidth = this.connector.width;
+    const scaledHeight = this.connector.height;
 
     const positionX =
       Building.topFloor.position.x() +
@@ -422,11 +428,6 @@ export default class Elevator {
     const positionY = Building.foundation.position.y + scaledHeight / 2 + 1;
 
     this.connector.position.set(positionX, positionY);
-    this.connector.scale.y = scale;
-    this.connector.scale.x = scale;
-    this.connector.anchor.set(0.5);
-
-    this.connector.height = scaledHeight + 2;
 
     State.app.stage.addChild(this.connector);
   }
@@ -441,8 +442,8 @@ export default class Elevator {
 
     const scale = isMobileSizedScreen() ? State.scale() * 1.5 : State.scale();
 
-    const scaledWidth = INTERFACE_SPRITES["down-button"].width * scale;
-    const scaledHeight = INTERFACE_SPRITES["up-button"].height * scale;
+    const scaledWidth = 300 * scale;
+    const scaledHeight = 343 * scale;
 
     const margin = isMobileSizedScreen() ? 100 * scale : 50 * scale;
 
