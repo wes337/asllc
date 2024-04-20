@@ -2,6 +2,7 @@ import { getRandomElementFromArray } from "../utils.js";
 import Elevator from "../classes/elevator.js";
 import State from "../classes/state.js";
 import Interface from "../classes/interface.js";
+import SoundPlayer from "../classes/sound.js";
 
 export default async function lobbyScene() {
   if (!State.introFinished || Elevator.busy) {
@@ -42,6 +43,7 @@ async function returnToRoomScene(person) {
   await Elevator.animateDoor();
 
   Interface.notification.show = true;
+  SoundPlayer.play("elevator-ready.wav", true);
   State.personWantsToGotoFloor = person.originalFloorNumber;
   Interface.startHighlight(Interface.notification.button, 9999);
 }

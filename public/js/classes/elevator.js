@@ -5,6 +5,7 @@ import Background from "./background.js";
 import Building from "./building.js";
 import Interface from "./interface.js";
 import State from "./state.js";
+import SoundPlayer from "./sound.js";
 
 export default class Elevator {
   static shaft = null;
@@ -155,6 +156,7 @@ export default class Elevator {
       this.elevatorFloor.toggleIndicator(false);
       const thanks = getRandomElementFromArray(THANKS);
       this.personInside.chatBubble.show(thanks);
+      SoundPlayer.play("character-delivered.wav", true);
       await this.animateDoor();
       await this.personInside.enterRoom(this.elevatorFloorNumber);
 
@@ -169,7 +171,7 @@ export default class Elevator {
     try {
       const scale = State.scale();
 
-      const offsetY = floor.basement ? 20 * scale : 60 * scale;
+      const offsetY = floor.basement ? 60 * scale : 30 * scale;
 
       return floor.basement
         ? floor.position.y() + SPRITES.cement.height * scale + offsetY
@@ -321,7 +323,7 @@ export default class Elevator {
     const scaledHeight = SPRITES["elevator-generator"].height * scale;
 
     const offsetX = 30 * scale;
-    const offsetY = 40 * scale;
+    const offsetY = 0;
 
     const positionX =
       Building.topFloor.position.x() -

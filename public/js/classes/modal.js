@@ -1,5 +1,6 @@
 import { MODALS } from "../constants/modal.js";
 import Building from "./building.js";
+import SoundPlayer from "./sound.js";
 
 export default class Modal {
   static visible = false;
@@ -47,6 +48,7 @@ export default class Modal {
     this.body.innerHTML = "";
     this.visible = false;
     this.id = null;
+    SoundPlayer.play("close.wav");
   }
 
   static setupArtistButtons() {

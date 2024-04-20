@@ -32,6 +32,7 @@ export default class State {
     highlight: (size, color) =>
       new PIXI.filters.OutlineFilter(size || 2, color || COLORS.red),
     opacity: (alpha) => new PIXI.filters.AlphaFilter(alpha || 0.5),
+    adjustment: (options) => new PIXI.filters.AdjustmentFilter(options),
   };
   static spritesheets = {};
   static getSpritesheet = (spritesheet) => {

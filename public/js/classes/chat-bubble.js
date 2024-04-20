@@ -1,6 +1,7 @@
 import { COLORS } from "../constants/colors.js";
 import { TEXT_STYLES, FONT_SIZES } from "../constants/text.js";
 import { isLargeSizedScreen } from "../utils.js";
+import SoundPlayer from "./sound.js";
 import State from "./state.js";
 
 export default class ChatBubble {
@@ -35,6 +36,7 @@ export default class ChatBubble {
     }
 
     this.render();
+    SoundPlayer.play("speech-bubble.mp3", true);
   }
 
   hide() {
