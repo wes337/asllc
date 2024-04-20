@@ -169,7 +169,7 @@ export default class Elevator {
     try {
       const scale = State.scale();
 
-      const offsetY = floor.basement ? 60 * scale : 30 * scale;
+      const offsetY = floor.basement ? 20 * scale : 60 * scale;
 
       return floor.basement
         ? floor.position.y() + SPRITES.cement.height * scale + offsetY
@@ -321,7 +321,7 @@ export default class Elevator {
     const scaledHeight = SPRITES["elevator-generator"].height * scale;
 
     const offsetX = 30 * scale;
-    const offsetY = 0;
+    const offsetY = 40 * scale;
 
     const positionX =
       Building.topFloor.position.x() -
