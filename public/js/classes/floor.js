@@ -95,6 +95,8 @@ export default class Floor {
     if (this.basement) {
       const offset = Math.floor(32 * scale);
       positionY = positionY + SPRITES.cement.height * scale + offset;
+    } else {
+      positionY = positionY + (SPRITES.cement.height / 2) * scale;
     }
 
     return positionY;
@@ -147,7 +149,7 @@ export default class Floor {
   renderSeparator() {
     const scale = State.scale();
 
-    let positionY = this.positionYOffset;
+    let positionY = this.positionYOffset - 56.25 * scale;
 
     this.separator.position.set(
       this.position.x() - 5 * scale,

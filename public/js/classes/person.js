@@ -230,8 +230,7 @@ export default class Person {
     let positionY =
       this.currentFloor.separator.position.y -
       this.currentFloor.separator.height / 2 -
-      this.height() / 2 -
-      10 * scale;
+      this.height() / 2;
 
     if (this.offsetY) {
       positionY = positionY - this.offsetY;
