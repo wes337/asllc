@@ -3,7 +3,15 @@ import { ALL_ARTIST_IDS, OTHER_IDS, FLOORS } from "./floors.js";
 export const MODALS = {
   about: {
     header: "About Artist Services",
-    body: "Helping artists capitalize on and invest in their careers without compromising creative vision.",
+    body: `
+      <hr />
+      <div class="info">Helping artists capitalize on and invest in their careers without compromising creative vision.</div>
+      <hr />
+      <div>Jay M.</div>
+      <div>Brooklyn, New York</div>
+      <div><a href="mailto:jay@artistservic.es">Jay [at] artistservic.es</a></div>
+      <div><a href="mailto:wud@artistservic.es">Wud [at] artistservic.es</a></div>
+    `,
   },
   artists: {
     id: "artists",
@@ -39,14 +47,5 @@ export const MODALS = {
       </div>
     `,
     footer: `<button>Artists</button>`,
-  },
-  contact: {
-    header: "Contact",
-    body: `
-      <div>Jay M.</div>
-      <div>Brooklyn, New York</div>
-      <div><a href="mailto:jay@artistservic.es">Jay [at] artistservic.es</a></div>
-      <div><a href="mailto:wud@artistservic.es">Wud [at] artistservic.es</a></div>
-    `,
   },
 };

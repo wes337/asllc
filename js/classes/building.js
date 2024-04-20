@@ -93,7 +93,7 @@ export default class Building {
 
     this.roof.position.set(
       this.topFloor.position.x(),
-      this.topFloor.position.y() - this.topFloor.height() / 2 + 30 * scale
+      this.topFloor.position.y() - this.topFloor.height() / 2 - 20 * scale
     );
 
     this.roof.scale.y = scale;

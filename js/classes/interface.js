@@ -8,6 +8,8 @@ import Building from "./building.js";
 import Elevator from "./elevator.js";
 import Modal from "./modal.js";
 import State from "./state.js";
+import SoundPlayer from "./sound.js";
+import MusicPlayer from "./music.js";
 
 export default class Interface {
   static title = null;
@@ -26,7 +28,7 @@ export default class Interface {
     buttons: {
       about: null,
       artists: null,
-      contact: null,
+      music: null,
       initialized: false,
       hover: null,
     },
@@ -53,12 +55,24 @@ export default class Interface {
     button: PIXI.Sprite.from(INTERFACE_SPRITES.notification.src),
   };
 
+  static musicPlayer = {
+    playing: false,
+  };
+
+  static onToggleMusicPlayer() {
+    MusicPlayer.toggle();
+    this.musicPlayer.playing = !this.musicPlayer.playing;
+    this.navBar.buttons.music.filters = this.musicPlayer.playing
+      ? [State.filters.adjustment({ brightness: 1.5 })]
+      : [];
+  }
+
   static setupNavbarEventListeners() {
     if (this.navBar.buttons.initialized) {
       return;
     }
 
-    ["about", "artists", "contact"].forEach((button) => {
+    ["about", "artists", "music"].forEach((button) => {
       this.navBar.buttons[button].eventMode = "static";
       this.navBar.buttons[button].cursor = "pointer";
       this.navBar.buttons[button].addListener("pointerdown", () => {
@@ -66,8 +80,15 @@ export default class Interface {
           return;
         }
 
-        Modal.show(MODALS[button]);
+        if (MODALS[button]) {
+          Modal.show(MODALS[button]);
+        } else if (button === "music") {
+          // Find a better way to do this
+          this.onToggleMusicPlayer();
+        }
+
         this.navBar.buttons.hover = null;
+        SoundPlayer.play("click.wav");
       });
 
       this.navBar.buttons[button].addListener("pointerenter", () => {
@@ -370,44 +391,57 @@ export default class Interface {
 
     // About
     this.navBar.buttons.about =
-      this.navBar.buttons.about || PIXI.Sprite.from("about.png");
-    this.navBar.buttons.about.scale.x = scale;
-    this.navBar.buttons.about.scale.y = scale;
+      this.navBar.buttons.about || PIXI.Sprite.from("settings.png");
+    this.navBar.buttons.about.scale.x = isMobileSizedScreen()
+      ? scale * 1.2
+      : scale;
+    this.navBar.buttons.about.scale.y = isMobileSizedScreen()
+      ? scale * 1.2
+      : scale;
     this.navBar.buttons.about.position.y =
       positionY - this.navBar.buttons.about.height / 2;
     this.navBar.buttons.about.position.x = isMobileSizedScreen()
-      ? this.navBar.buttons.about.width / 4
-      : State.app.screen.width / 2 - this.navBar.buttons.about.width * 1.5;
+      ? this.navBar.buttons.about.width
+      : State.app.screen.width / 2 - this.navBar.buttons.about.width;
     this.navBar.container.addChild(this.navBar.buttons.about);
 
     // Artists
     this.navBar.buttons.artists =
-      this.navBar.buttons.artists || PIXI.Sprite.from("artists.png");
-    this.navBar.buttons.artists.scale.x = scale;
-    this.navBar.buttons.artists.scale.y = scale;
+      this.navBar.buttons.artists || PIXI.Sprite.from("music.png");
+    this.navBar.buttons.artists.scale.x = isMobileSizedScreen()
+      ? scale * 1.2
+      : scale;
+    this.navBar.buttons.artists.scale.y = isMobileSizedScreen()
+      ? scale * 1.2
+      : scale;
     this.navBar.buttons.artists.position.y =
       positionY - this.navBar.buttons.artists.height / 2;
     this.navBar.buttons.artists.position.x = isMobileSizedScreen()
-      ? State.app.screen.width / 2 - this.navBar.buttons.artists.width / 2
-      : State.app.screen.width / 2 - this.navBar.buttons.artists.width / 2;
+      ? State.app.screen.width / 2
+      : State.app.screen.width / 2;
     this.navBar.container.addChild(this.navBar.buttons.artists);
 
-    // Contact
-    this.navBar.buttons.contact =
-      this.navBar.buttons.contact || PIXI.Sprite.from("contact.png");
-    this.navBar.buttons.contact.scale.x = scale;
-    this.navBar.buttons.contact.scale.y = scale;
-    this.navBar.buttons.contact.position.y =
-      positionY - this.navBar.buttons.contact.height / 2;
-    this.navBar.buttons.contact.position.x = isMobileSizedScreen()
-      ? State.app.screen.width - this.navBar.buttons.contact.width * 1.25
-      : State.app.screen.width / 2 + this.navBar.buttons.contact.width / 2;
-    this.navBar.container.addChild(this.navBar.buttons.contact);
+    // Music
+    this.navBar.buttons.music =
+      this.navBar.buttons.music || PIXI.Sprite.from("music-gray.png");
+    this.navBar.buttons.music.scale.x = isMobileSizedScreen()
+      ? scale * 0.8
+      : scale;
+    this.navBar.buttons.music.scale.y = isMobileSizedScreen()
+      ? scale * 0.8
+      : scale;
+    this.navBar.buttons.music.position.y = isMobileSizedScreen()
+      ? positionY - this.navBar.buttons.music.height * 0.6
+      : positionY - this.navBar.buttons.music.height;
+    this.navBar.buttons.music.position.x = isMobileSizedScreen()
+      ? this.navBar.buttons.music.width / 8
+      : this.navBar.buttons.music.width / 2;
+    this.navBar.container.addChild(this.navBar.buttons.music);
 
     const hover = this.navBar.buttons.hover;
     if (hover) {
       this.navBar.buttons[hover].position.y -=
-        this.navBar.buttons.about.height / 8;
+        this.navBar.buttons[hover].height / 8;
     }
 
     State.app.stage.addChild(this.navBar.container);

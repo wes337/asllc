@@ -96,7 +96,7 @@ export default class Floor {
       const offset = Math.floor(32 * scale);
       positionY = positionY + SPRITES.cement.height * scale + offset;
     } else {
-      positionY = positionY + (SPRITES.cement.height / 2) * scale;
+      // positionY = positionY + (SPRITES.cement.height / 2) * scale;
     }
 
     return positionY;
@@ -141,15 +141,17 @@ export default class Floor {
   toggleIndicator(visible) {
     if (!State.personWantsToGotoFloor) {
       this.indicator.visible = false;
+      this.indicator.filters = [State.filters.adjustment({ opacity: 0 })];
     } else {
       this.indicator.visible = visible;
+      this.indicator.filters = [];
     }
   }
 
   renderSeparator() {
     const scale = State.scale();
 
-    let positionY = this.positionYOffset - 56.25 * scale;
+    let positionY = this.positionYOffset;
 
     this.separator.position.set(
       this.position.x() - 5 * scale,
