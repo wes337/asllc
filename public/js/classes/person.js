@@ -1,5 +1,5 @@
 import { SPRITE_METADATA } from "../constants/sprites.js";
-import { isLargeSizedScreen, randomNumberBetween } from "../utils.js";
+import { randomNumberBetween } from "../utils.js";
 import Interface from "./interface.js";
 import Building from "./building.js";
 import Elevator from "./elevator.js";

@@ -224,6 +224,8 @@ export default class Interface {
     } else if (artistId && !this.artistInfo.show) {
       this.showBar("artistInfo");
     }
+
+    this.renderSocialMediaLinks();
   }
 
   static renderArtistInfo() {
@@ -271,7 +273,8 @@ export default class Interface {
 
     // Text
     const marginX = 40 * scale;
-    this.artistInfo.text.style.fontSize = FONT_SIZES.xxl;
+    this.artistInfo.text.style.fontSize =
+      this.artistInfo.text.text.length < 10 ? FONT_SIZES.xxl : FONT_SIZES.xl;
 
     if (floor.basement) {
       const offset = isMobileSizedScreen() ? 170 : 135;
@@ -325,6 +328,8 @@ export default class Interface {
     this.artistInfo.container.addChild(this.artistInfo.background);
     this.artistInfo.container.addChild(this.artistInfo.text);
 
+    this.renderSocialMediaLinks();
+
     State.app.stage.addChild(this.artistInfo.container);
   }
 
@@ -343,28 +348,29 @@ export default class Interface {
 
     const linkWidth = INTERFACE_SPRITES.spotify.width * scale;
 
-    const positionX = isMobileSizedScreen()
-      ? State.app.screen.width - linkWidth / 2
-      : (1800 * scale) / 2 +
-        (linkWidth * Object.keys(links).length - 1) / 2 -
-        100 * scale;
+    const numberOfLinks = Object.keys(links).length;
+    const positionX = State.app.screen.width / 2 + numberOfLinks * 300 * scale;
 
     const positionY =
-      State.app.screen.height -
-      this.artistInfo.height() / 2 -
-      this.navBar.height() -
-      2 +
-      State.app.stage.pivot.y;
+      this.artistInfo.text.position.y +
+      this.artistInfo.text.height * 1 +
+      (isMobileSizedScreen() ? 40 : 80) * scale;
 
     Object.keys(links).forEach((icon, i) => {
       this.socialMediaLinks[icon].position.x =
-        positionX - linkWidth * i - (this.artistInfo.margin() / 2) * (i + 1);
+        positionX - linkWidth * i - (this.artistInfo.margin() / 3) * (i + 1);
+
       this.socialMediaLinks[icon].position.y = isMobileSizedScreen()
         ? positionY + 40 * scale
         : positionY;
-      this.socialMediaLinks[icon].scale.x = scale;
-      this.socialMediaLinks[icon].scale.y = scale;
+
+      this.socialMediaLinks[icon].scale.x = scale / 1.2;
+      this.socialMediaLinks[icon].scale.y = scale / 1.2;
       this.socialMediaLinks[icon].anchor.set(0.5);
+
+      this.socialMediaLinks[icon].filters = [
+        State.filters.highlight(isLargeSizedScreen() ? 6 : 4, COLORS.black),
+      ];
 
       this.artistInfo.container.addChild(this.socialMediaLinks[icon]);
     });
@@ -386,7 +392,7 @@ export default class Interface {
     this.navBar.buttons.about.position.y =
       positionY - this.navBar.buttons.about.height / 2;
     this.navBar.buttons.about.position.x = isMobileSizedScreen()
-      ? this.navBar.buttons.about.width - this.navBar.buttons.about.width / 4
+      ? this.navBar.buttons.about.width / 1.25
       : State.app.screen.width / 2 - this.navBar.buttons.about.width;
     this.navBar.buttons.about.filters = [];
     this.navBar.container.addChild(this.navBar.buttons.about);
