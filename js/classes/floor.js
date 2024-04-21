@@ -155,7 +155,10 @@ export default class Floor {
 
       const person = this.personOnFloor();
       if (person) {
-        const randomMessage = getRandomElementFromArray(GREETINGS.all);
+        const greetings = GREETINGS[this.id] || [];
+        const randomMessage = getRandomElementFromArray(
+          greetings.length > 0 ? greetings : GREETINGS.all
+        );
         person.chatBubble.show(randomMessage);
       }
 
