@@ -6,6 +6,7 @@ import lobbyScene from "./scenes/lobby.js";
 
 export default async function animate() {
   Background.animateClouds();
+  Background.animatePlane();
 
   State.people.forEach((person) => person.animate());
 
