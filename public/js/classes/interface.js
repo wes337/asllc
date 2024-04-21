@@ -44,9 +44,9 @@ export default class Interface {
     margin: () => (isMobileSizedScreen() ? 12 : 16),
     text: new PIXI.Text("", {
       ...TEXT_STYLES.default,
-      fill: COLORS.yellow,
-      wordWrap: true,
-      align: "center",
+      fill: COLORS.white,
+      dropShadowColor: COLORS.black,
+      wordWrap: false,
     }),
   };
 
@@ -219,6 +219,7 @@ export default class Interface {
     this.artistInfo.text.text = artistName || "";
 
     if (!artistName || ["Lobby", "Artist Services"].includes(artistName)) {
+      this.artistInfo.text.text = "";
       this.hideBar("artistInfo");
     } else if (artistId && !this.artistInfo.show) {
       this.showBar("artistInfo");
@@ -226,117 +227,101 @@ export default class Interface {
   }
 
   static renderArtistInfo() {
-    const backgroundColor = COLORS.darkGray;
-    const borderColor = COLORS.darkSlateBlue;
-    const borderSize = 4;
+    State.people.forEach((person) => {
+      person.filters = [];
+    });
+
+    Building.allFloors.forEach((floor) => {
+      if (floor.room) {
+        floor.room.filters = [];
+      }
+    });
+
+    if (!this.artistId || !this.artistInfo.show) {
+      this.artistInfo.background.clear();
+      this.artistInfo.container.pivot.y = this.artistInfo.height() * -2;
+      return;
+    }
 
     const scale = State.scale();
 
-    const width = isMobileSizedScreen() ? State.app.screen.width : 1800 * scale;
+    const floor = Building.allFloors.find(
+      (floor) => floor.id === this.artistId
+    );
 
-    const positionX = isMobileSizedScreen()
-      ? 0
-      : State.app.screen.width / 2 - width / 2;
+    Building.allFloors.forEach((floor) => {
+      if (floor.id !== this.artistId && floor.room) {
+        floor.room.filters = [State.filters.adjustment({ brightness: 0.5 })];
+      }
+    });
 
-    const positionY =
-      State.app.screen.height -
-      this.artistInfo.height() / 2 -
-      this.navBar.height() +
-      State.app.stage.pivot.y;
+    State.people.forEach((person) => {
+      if (person.inElevator) {
+        person.filters = [];
+      } else if (person.name !== this.artistId) {
+        person.filters = [State.filters.adjustment({ brightness: 0.5 })];
+      }
+    });
+
+    floor.room.filters = [State.filters.adjustment({ brightness: 1 })];
+
+    // Text
+    const marginX = 40 * scale;
+    this.artistInfo.text.style.fontSize = FONT_SIZES.xxl;
+
+    if (floor.basement) {
+      const offset = isMobileSizedScreen() ? 170 : 135;
+
+      this.artistInfo.text.position.y =
+        floor.position.y() +
+        floor.height() +
+        this.artistInfo.text.height * -1 +
+        offset * scale;
+    } else {
+      const offset = isMobileSizedScreen() ? 90 : 135;
+      this.artistInfo.text.position.y =
+        floor.position.y() + this.artistInfo.text.height + offset * scale;
+    }
+
+    this.artistInfo.text.position.x =
+      floor.position.x() - floor.width() / 2 + Elevator.shaft.width + marginX;
 
     // Background
     this.artistInfo.background.clear();
-    this.artistInfo.background.beginFill(backgroundColor);
-    this.artistInfo.background.drawRect(
-      0,
-      positionY -
-        (isMobileSizedScreen()
-          ? this.artistInfo.height() / 3
-          : this.artistInfo.height()),
-      width,
-      isMobileSizedScreen()
-        ? this.artistInfo.height() * 2
-        : this.artistInfo.height() * 4
-    );
 
+    // Border
+    this.artistInfo.background.beginFill(COLORS.black);
+    this.artistInfo.background.drawRect(
+      this.artistInfo.text.position.x - 20 * scale,
+      this.artistInfo.text.position.y - 20 * scale,
+      floor.width() - Elevator.shaft.width,
+      this.artistInfo.text.height
+    );
     this.artistInfo.background.endFill();
-    this.artistInfo.container.addChild(this.artistInfo.background);
-    this.artistInfo.container.position.x = positionX;
 
-    // Top border
-    this.artistInfo.background.beginFill(borderColor);
+    this.artistInfo.background.beginFill(COLORS.black);
     this.artistInfo.background.drawRect(
-      0,
-      positionY -
-        (isMobileSizedScreen()
-          ? this.artistInfo.height() / 3
-          : this.artistInfo.height()) -
-        borderSize,
-      width + borderSize,
-      borderSize
+      this.artistInfo.text.position.x - 60 * scale,
+      this.artistInfo.text.position.y - 20 * scale,
+      floor.width() - Elevator.shaft.width + 40 * scale,
+      this.artistInfo.text.height + 40 * scale
     );
+    this.artistInfo.background.endFill();
 
-    if (!isMobileSizedScreen()) {
-      // Left border
-      this.artistInfo.background.drawRect(
-        0,
-        positionY - this.artistInfo.height(),
-        borderSize,
-        this.artistInfo.height() * 4
-      );
+    // Main background
+    this.artistInfo.background.beginFill(COLORS.slateBlue);
+    this.artistInfo.background.drawRect(
+      this.artistInfo.text.position.x - marginX,
+      this.artistInfo.text.position.y,
+      floor.width() - Elevator.shaft.width,
+      this.artistInfo.text.height
+    );
+    this.artistInfo.background.endFill();
 
-      // Right border
-      this.artistInfo.background.drawRect(
-        1800 * scale,
-        positionY - this.artistInfo.height(),
-        borderSize,
-        this.artistInfo.height() * 4
-      );
-    }
-
-    // Text
-
-    this.artistInfo.text.style.wordWrapWidth = width;
-
-    const hasSocialMediaLinks = this.artistId && FLOORS[this.artistId]?.links;
-
-    if (isMobileSizedScreen()) {
-      this.artistInfo.text.position.y =
-        positionY - this.artistInfo.text.height / 3;
-    } else if (hasSocialMediaLinks) {
-      this.artistInfo.text.position.y =
-        positionY - this.artistInfo.text.height * 2 + 20 * scale;
-    } else {
-      this.artistInfo.text.position.y = positionY - this.artistInfo.text.height;
-    }
-
-    this.artistInfo.text.style.letterSpacing = isLargeSizedScreen() ? 0 : -2;
-    this.artistInfo.text.style.fontSize = isMobileSizedScreen()
-      ? FONT_SIZES.xl
-      : FONT_SIZES.xxl;
-
-    if (isLargeSizedScreen()) {
-      this.artistInfo.text.style.fontSize = FONT_SIZES.xxxl;
-    }
-
-    this.artistInfo.text.position.x = isMobileSizedScreen()
-      ? this.artistInfo.margin()
-      : 900 * scale - this.artistInfo.text.width / 2;
-
-    if (!hasSocialMediaLinks && isMobileSizedScreen()) {
-      this.artistInfo.text.position.x =
-        State.app.screen.width / 2 - this.artistInfo.text.width / 2;
-    }
-
+    this.artistInfo.container.addChild(this.artistInfo.background);
     this.artistInfo.container.addChild(this.artistInfo.text);
 
-    this.renderSocialMediaLinks();
-
     State.app.stage.addChild(this.artistInfo.container);
-
-    if (!this.artistInfo.show) {
-      this.artistInfo.container.pivot.y = this.artistInfo.height() * -2;
-    }
   }
 
   static renderSocialMediaLinks() {
