@@ -273,8 +273,7 @@ export default class Interface {
 
     // Text
     const marginX = 40 * scale;
-    this.artistInfo.text.style.fontSize =
-      this.artistInfo.text.text.length < 10 ? FONT_SIZES.xxl : FONT_SIZES.xl;
+    this.artistInfo.text.style.fontSize = FONT_SIZES.xl;
 
     if (floor.basement) {
       const offset = isMobileSizedScreen() ? 170 : 135;
