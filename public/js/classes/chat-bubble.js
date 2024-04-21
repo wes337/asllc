@@ -74,6 +74,7 @@ export default class ChatBubble {
     const height = this.text.height + margin / 2;
     const targetHeight = this.target.height();
     const targetPosition = this.target.position();
+    const targetWidth = this.target.width();
     const arrowSize = 20 * scale;
     const offsetX = this.text.width / 8;
 
@@ -85,6 +86,11 @@ export default class ChatBubble {
       this.target.metadata && this.target.metadata.upsideDown;
     if (isUpsideDown) {
       positionY = targetPosition.y + targetHeight / 2 + arrowSize * 4;
+    }
+
+    if (this.target.inElevator) {
+      positionY = positionY + targetHeight / 2;
+      positionX = positionX + targetWidth / 2;
     }
 
     const backgroundColor = COLORS.lightGray;
@@ -110,6 +116,11 @@ export default class ChatBubble {
 
     if (isUpsideDown) {
       arrowPositionY = targetPosition.y + targetHeight / 2 + arrowSize * 2;
+    }
+
+    if (this.target.inElevator) {
+      arrowPositionY = arrowPositionY + targetHeight / 2;
+      arrowPositionX = arrowPositionX + targetWidth / 2;
     }
 
     this.background.drawRect(

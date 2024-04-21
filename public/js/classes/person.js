@@ -144,12 +144,7 @@ export default class Person {
         if (
           Math.floor(doorPosition) !== Math.floor(this.character.position.x)
         ) {
-          const min = this.boundaries.min();
-          let positionX = Math.max(this.character.position.x, min);
           this.updateDirection();
-          const speed = randomNumberBetween(4, 5) / 10;
-          const amount = this.direction === "right" ? speed : speed * -1;
-          positionX += amount * delta;
           this.character.play();
         } else {
           this.destination = null;
@@ -199,7 +194,23 @@ export default class Person {
     if (this.inElevator) {
       this.character.scale.y = scale;
       this.character.scale.x = scale;
-      this.character.position.x = Elevator.shaft.position.x;
+      this.character.anchor.set(0);
+      this.character.position.x =
+        Elevator.shaft.position.x - this.character.width / 2;
+
+      let offset = 0;
+      const characterHeight = this.character.texture.height;
+      if (characterHeight === 260) {
+        offset = 55 * scale;
+      } else if (characterHeight === 240) {
+        offset = 35 * scale;
+      } else if (characterHeight === 220) {
+        offset = 15 * scale;
+      } else if (characterHeight === 200) {
+        offset = -5 * scale;
+      }
+
+      this.character.position.y = Elevator.shaft.position.y - offset;
       this.destination = null;
       State.app.stage.addChild(this.character);
       return;

@@ -88,8 +88,7 @@ export default class Elevator {
       this.shaft.position.y += amount;
 
       if (this.personInside) {
-        this.personInside.character.position.y =
-          this.shaft.position.y + this.personInside.character.height / 2;
+        this.personInside.render();
       }
 
       const topFloorPosition = this.getFloorPosition(Building.topFloor);
@@ -193,12 +192,6 @@ export default class Elevator {
         resolve();
       } else if (this.elevatorFloorNumber === floorNumber) {
         this.shaft.position.y = end;
-
-        if (this.personInside) {
-          this.personInside.character.position.y =
-            end + this.personInside.character.height / 2;
-        }
-
         resolve();
       } else {
         this.moving = true;
@@ -215,11 +208,6 @@ export default class Elevator {
 
           this.shaft.position.y += amount * delta;
 
-          if (this.personInside) {
-            this.personInside.character.position.y =
-              this.shaft.position.y + this.personInside.character.height / 2;
-          }
-
           const finished = goingDown
             ? this.shaft.position.y >= end
             : this.shaft.position.y <= end;
@@ -231,11 +219,6 @@ export default class Elevator {
             this.wheel.gotoAndPlay(0);
             this.moving = false;
             this.shaft.position.y = end;
-
-            if (this.personInside) {
-              this.personInside.character.position.y =
-                end + this.personInside.character.height / 2;
-            }
 
             resolve();
           }
