@@ -135,7 +135,12 @@ export default class Floor {
   }
 
   async onClick() {
-    if (State.busy || !State.introFinished || Modal.visible) {
+    if (
+      State.busy ||
+      !State.introFinished ||
+      Modal.visible ||
+      Elevator.controls.show
+    ) {
       return;
     }
 
