@@ -6,7 +6,7 @@ export default class MusicPlayer {
   static get currentTrack() {
     const trackFileName = this.tracks[this.currentTrackNumber];
 
-    return trackFileName ? `/sounds/${trackFileName}` : null;
+    return trackFileName ? `./sounds/${trackFileName}` : null;
   }
 
   static get isPlaying() {

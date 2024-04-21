@@ -7,7 +7,7 @@ export default class SoundPlayer {
         this.audio.remove();
       }
 
-      const audio = new Audio(`/sounds/${soundEffect}`);
+      const audio = new Audio(`./sounds/${soundEffect}`);
       this.audio = audio;
       audio.volume = quiet ? 0.1 : 0.3;
 
