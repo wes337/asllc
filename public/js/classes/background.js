@@ -12,10 +12,15 @@ export default class Background {
   static ground = new PIXI.Graphics();
   static dirt = null;
   static fossil = null;
+  static plane = null;
+
+  static planeFlying = false;
 
   static pivot() {
     this.sky.position.y = this.sky.initialPosition.y + State.app.stage.pivot.y;
     this.sun.position.y = this.sun.initialPosition.y + State.app.stage.pivot.y;
+    this.plane.position.y =
+      this.plane.initialPosition.y + State.app.stage.pivot.y;
 
     [...this.clouds].flat().forEach((cloud) => {
       cloud.position.y = cloud.initialPosition.y + State.app.stage.pivot.y;
@@ -262,13 +267,56 @@ export default class Background {
     });
   }
 
+  static renderPlane() {
+    this.plane = this.plane
+      ? this.plane
+      : new PIXI.AnimatedSprite(State.spritesheets.plane.animations["plane"]);
+
+    this.plane.loop = true;
+    this.plane.animationSpeed = 0.2;
+    this.plane.play();
+
+    const scale = State.scale();
+
+    this.plane.scale.y = scale * 2;
+    this.plane.scale.x = scale * 2;
+    this.plane.anchor.set(0.5);
+
+    const positionX = State.app.screen.width + this.plane.width;
+    const positionY = this.plane.height;
+
+    this.plane.position.set(positionX, positionY);
+    this.plane.initialPosition = { x: positionX, y: positionY };
+
+    State.app.stage.addChild(this.plane);
+  }
+
+  static animatePlane() {
+    this.planeFlying = true;
+    this.plane.position.x = State.app.screen.width + this.plane.width;
+
+    const animation = (delta) => {
+      this.plane.position.x -= 1 * delta;
+
+      if (this.plane.position.x <= 0 - this.plane.width) {
+        this.planeFlying = false;
+        this.plane.position.x = State.app.screen.width + this.plane.width;
+        State.app.ticker.remove(animation);
+      }
+    };
+
+    State.app.ticker.add(animation);
+  }
+
   static render() {
     this.renderSky();
     this.renderSun();
     this.renderClouds();
+    this.renderPlane();
     this.renderBuildings();
     this.renderGround();
     this.renderFossil();
+
     this.pivot();
   }
 }
