@@ -251,7 +251,9 @@ export default class Interface {
 
     Building.allFloors.forEach((floor) => {
       if (floor.id !== this.artistId && floor.room) {
-        floor.room.filters = [State.filters.adjustment({ brightness: 0.5 })];
+        if (floor.room.filters && floor.room.filters.length === 0) {
+          floor.room.filters = [State.filters.adjustment({ brightness: 0.5 })];
+        }
       }
     });
 
@@ -259,7 +261,9 @@ export default class Interface {
       if (person.inElevator) {
         person.filters = [];
       } else if (person.name !== this.artistId) {
-        person.filters = [State.filters.adjustment({ brightness: 0.5 })];
+        if (person.filters && person.filters.length === 0) {
+          person.filters = [State.filters.adjustment({ brightness: 0.5 })];
+        }
       }
     });
 
