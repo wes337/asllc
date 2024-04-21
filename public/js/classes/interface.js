@@ -254,7 +254,9 @@ export default class Interface {
     Building.allFloors.forEach((floor) => {
       if (floor.id !== this.artistId && floor.room) {
         if (floor.room.filters && floor.room.filters.length === 0) {
-          floor.room.filters = [State.filters.adjustment({ brightness: 0.5 })];
+          floor.room.filters = isMobileSizedScreen()
+            ? [State.filters.adjustment({ saturation: 0.1 })]
+            : [State.filters.adjustment({ brightness: 0.5 })];
         }
       }
     });
@@ -264,12 +266,16 @@ export default class Interface {
         person.filters = [];
       } else if (person.name !== this.artistId) {
         if (person.filters && person.filters.length === 0) {
-          person.filters = [State.filters.adjustment({ brightness: 0.5 })];
+          person.filters = isMobileSizedScreen()
+            ? [State.filters.adjustment({ saturation: 0.1 })]
+            : [State.filters.adjustment({ brightness: 0.5 })];
         }
       }
     });
 
-    floor.room.filters = [State.filters.adjustment({ brightness: 1 })];
+    floor.room.filters = isMobileSizedScreen()
+      ? [State.filters.adjustment({ brightness: 1.1 })]
+      : [State.filters.adjustment({ brightness: 1 })];
 
     // Text
     const marginX = 40 * scale;
