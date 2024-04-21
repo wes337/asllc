@@ -8,7 +8,7 @@ export default function interval() {
     lobbyScene();
 
     const random = Math.random() < 0.5;
-    if (random && !Background.planeFlying) {
+    if (random && !Background.plane.flying) {
       Background.animatePlane();
     }
   }, ONE_MINUTE / 3);

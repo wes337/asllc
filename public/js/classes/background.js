@@ -13,8 +13,8 @@ export default class Background {
   static dirt = null;
   static fossil = null;
   static plane = null;
-
-  static planeFlying = false;
+  static car = null;
+  static dinosaur = null;
 
   static pivot() {
     this.sky.position.y = this.sky.initialPosition.y + State.app.stage.pivot.y;
@@ -245,6 +245,51 @@ export default class Background {
     State.app.stage.addChild(this.fossil);
   }
 
+  static renderCar() {
+    this.car = this.car ? this.car : PIXI.Sprite.from("wrecked-car.png");
+
+    const scale = State.scale();
+
+    this.car.scale.y = scale;
+    this.car.scale.x = scale;
+    this.car.anchor.set(0.5);
+
+    const marginY = -32;
+    const positionX = isMobileSizedScreen()
+      ? State.app.screen.width - this.car.width / 2
+      : State.app.screen.width - this.car.width * 2;
+
+    const positionY =
+      State.app.screen.height * 2 - this.car.height * 8 + marginY;
+
+    this.car.initialPosition = { x: positionX, y: positionY };
+
+    this.car.position.set(positionX, positionY);
+
+    State.app.stage.addChild(this.car);
+  }
+
+  static renderDinosaur() {
+    this.dinosaur = this.dinosaur
+      ? this.dinosaur
+      : PIXI.Sprite.from("dinosaur.png");
+
+    const scale = State.scale();
+
+    this.dinosaur.scale.y = scale;
+    this.dinosaur.scale.x = scale;
+    this.dinosaur.anchor.set(0.5);
+
+    const positionX = State.app.screen.width / 2;
+    const positionY = State.app.screen.height * 2 - this.dinosaur.height;
+
+    this.dinosaur.initialPosition = { x: positionX, y: positionY };
+
+    this.dinosaur.position.set(positionX, positionY);
+
+    State.app.stage.addChild(this.dinosaur);
+  }
+
   static animateClouds() {
     const clouds = this.clouds.flat();
 
@@ -292,14 +337,14 @@ export default class Background {
   }
 
   static animatePlane() {
-    this.planeFlying = true;
+    this.plane.flying = true;
     this.plane.position.x = State.app.screen.width + this.plane.width;
 
     const animation = (delta) => {
       this.plane.position.x -= 1 * delta;
 
       if (this.plane.position.x <= 0 - this.plane.width) {
-        this.planeFlying = false;
+        this.plane.flying = false;
         this.plane.position.x = State.app.screen.width + this.plane.width;
         State.app.ticker.remove(animation);
       }
@@ -316,6 +361,8 @@ export default class Background {
     this.renderBuildings();
     this.renderGround();
     this.renderFossil();
+    this.renderCar();
+    this.renderDinosaur();
 
     this.pivot();
   }
