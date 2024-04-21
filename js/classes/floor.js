@@ -4,6 +4,7 @@ import { DEFAULT_FONT_SIZE, TEXT_STYLES } from "../constants/text.js";
 import { getRandomElementFromArray } from "../utils.js";
 import { animateCamera } from "../animate.js";
 import Elevator from "./elevator.js";
+import Building from "./building.js";
 import Interface from "./interface.js";
 import Modal from "./modal.js";
 import State from "./state.js";
@@ -159,6 +160,22 @@ export default class Floor {
       }
 
       Interface.setArtistInfo(this.id);
+
+      Building.allFloors.forEach((floor) => {
+        if (floor.room && floor.id !== this.id) {
+          floor.room.filters = [State.filters.adjustment({ brightness: 0.3 })];
+        } else if (floor.id === this.id) {
+          floor.room.filters = [];
+        }
+      });
+
+      State.people.forEach((person) => {
+        if (person.inElevator || person.name === this.id) {
+          person.filters = [];
+        } else if (person.name !== this.id) {
+          person.filters = [State.filters.adjustment({ brightness: 0.3 })];
+        }
+      });
     }
   }
 
