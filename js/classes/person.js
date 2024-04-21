@@ -212,6 +212,7 @@ export default class Person {
 
       this.character.position.y = Elevator.shaft.position.y - offset;
       this.destination = null;
+      this.character.filters = this.filters || [];
       State.app.stage.addChild(this.character);
       return;
     }
@@ -275,15 +276,6 @@ export default class Person {
 
     State.app.stage.addChild(this.character);
 
-    const highlight =
-      this.highlight ||
-      (!this.extra &&
-        State.activeFloorNumber &&
-        this.floorNumber === State.activeFloorNumber);
-
-    const highlightSize = isLargeSizedScreen() ? 3 : 2;
-    this.character.filters = highlight
-      ? [State.filters.highlight(highlightSize)]
-      : [];
+    this.character.filters = this.filters || [];
   }
 }

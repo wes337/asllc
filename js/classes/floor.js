@@ -141,15 +141,20 @@ export default class Floor {
 
     await this.moveCameraToFloor();
 
-    State.activeFloorNumber = this.number;
+    if (State.activeFloorNumber === this.number) {
+      State.activeFloorNumber = null;
+      Interface.setArtistInfo(null);
+    } else {
+      State.activeFloorNumber = this.number;
 
-    const person = this.personOnFloor();
-    if (person) {
-      const randomMessage = getRandomElementFromArray(GREETINGS.all);
-      person.chatBubble.show(randomMessage);
+      const person = this.personOnFloor();
+      if (person) {
+        const randomMessage = getRandomElementFromArray(GREETINGS.all);
+        person.chatBubble.show(randomMessage);
+      }
+
+      Interface.setArtistInfo(this.id);
     }
-
-    Interface.setArtistInfo(this.id);
   }
 
   renderSeparator() {

@@ -219,6 +219,7 @@ export const OTHER_IDS = [
   "sorbet",
   "steel",
   "wud",
+  "wes",
 ];
 
 export const ALL_ARTIST_IDS = ALL_FLOOR_IDS.filter(
