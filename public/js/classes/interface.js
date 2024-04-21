@@ -229,19 +229,20 @@ export default class Interface {
   }
 
   static renderArtistInfo() {
-    State.people.forEach((person) => {
-      person.filters = [];
-    });
-
-    Building.allFloors.forEach((floor) => {
-      if (floor.room) {
-        floor.room.filters = [];
-      }
-    });
-
     if (!this.artistId || !this.artistInfo.show) {
       this.artistInfo.background.clear();
       this.artistInfo.container.pivot.y = this.artistInfo.height() * -2;
+
+      Building.allFloors.forEach((floor) => {
+        if (floor?.room?.filters) {
+          floor.room.filters = [];
+        }
+      });
+
+      State.people.forEach((person) => {
+        person.filters = [];
+      });
+
       return;
     }
 
@@ -250,26 +251,6 @@ export default class Interface {
     const floor = Building.allFloors.find(
       (floor) => floor.id === this.artistId
     );
-
-    Building.allFloors.forEach((floor) => {
-      if (floor.id !== this.artistId && floor.room) {
-        if (floor.room.filters && floor.room.filters.length === 0) {
-          floor.room.filters = [State.filters.adjustment({ brightness: 0.5 })];
-        }
-      }
-    });
-
-    State.people.forEach((person) => {
-      if (person.inElevator) {
-        person.filters = [];
-      } else if (person.name !== this.artistId) {
-        if (person.filters && person.filters.length === 0) {
-          person.filters = [State.filters.adjustment({ brightness: 0.5 })];
-        }
-      }
-    });
-
-    floor.room.filters = [];
 
     // Text
     const marginX = 40 * scale;
