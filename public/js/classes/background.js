@@ -11,10 +11,12 @@ export default class Background {
   static buildings = [];
   static ground = new PIXI.Graphics();
   static dirt = null;
+  static moreDirt = null;
   static fossil = null;
   static plane = null;
   static car = null;
   static dinosaur = null;
+  static blimp = null;
 
   static pivot() {
     this.sky.position.y = this.sky.initialPosition.y + State.app.stage.pivot.y;
@@ -204,18 +206,18 @@ export default class Background {
     this.dirt = this.dirt
       ? this.dirt
       : new PIXI.TilingSprite(
-          PIXI.Texture.from("dirt.png"),
+          PIXI.Texture.from("dirt-1.png"),
           State.app.screen.width,
-          160 * scale
+          320 * scale
         );
 
     this.dirt.width = State.app.screen.width;
-    this.dirt.height = 160 * scale;
+    this.dirt.height = 320 * scale;
 
-    this.dirt.tileScale.x = scale;
-    this.dirt.tileScale.y = scale;
+    this.dirt.tileScale.x = scale * 2;
+    this.dirt.tileScale.y = scale * 2;
 
-    this.dirt.position.set(0, positionY + this.dirt.height);
+    this.dirt.position.set(0, positionY + this.dirt.height / 2);
 
     State.app.stage.addChild(this.dirt);
   }
@@ -353,11 +355,53 @@ export default class Background {
     State.app.ticker.add(animation);
   }
 
+  static renderBlimp() {
+    this.blimp = this.blimp
+      ? this.blimp
+      : new PIXI.AnimatedSprite(State.spritesheets.blimp.animations["blimp"]);
+
+    this.blimp.loop = true;
+    this.blimp.animationSpeed = 0.2;
+    this.blimp.play();
+
+    const scale = State.scale();
+
+    this.blimp.scale.y = scale * 2;
+    this.blimp.scale.x = scale * 2;
+    this.blimp.anchor.set(0.5);
+
+    const positionX = 0 - this.blimp.width;
+    const positionY = this.blimp.height;
+
+    this.blimp.position.set(positionX, positionY);
+    this.blimp.initialPosition = { x: positionX, y: positionY };
+
+    State.app.stage.addChild(this.blimp);
+  }
+
+  static animateBlimp() {
+    this.blimp.flying = true;
+    this.blimp.position.x = 0 - this.blimp.width;
+
+    const animation = (delta) => {
+      this.blimp.position.x += 0.25 * delta;
+
+      if (this.blimp.position.x >= State.app.screen.width + this.blimp.width) {
+        this.blimp.flying = false;
+        this.blimp.position.x = State.app.screen.width + this.blimp.width;
+        State.app.ticker.remove(animation);
+      }
+    };
+
+    State.app.ticker.add(animation);
+  }
+
   static render() {
     this.renderSky();
     this.renderSun();
     this.renderClouds();
     this.renderPlane();
+    this.renderBlimp();
     this.renderBuildings();
     this.renderGround();
     this.renderFossil();

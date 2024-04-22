@@ -23,8 +23,14 @@ export default class Elevator {
 
   static controls = {
     show: false,
-    downButton: PIXI.Sprite.from(INTERFACE_SPRITES["down-button"].src),
-    upButton: PIXI.Sprite.from(INTERFACE_SPRITES["up-button"].src),
+    upButton: new PIXI.AnimatedSprite([
+      PIXI.Sprite.from(INTERFACE_SPRITES["up"].src),
+      PIXI.Sprite.from(INTERFACE_SPRITES["up-pressed"].src),
+    ]),
+    downButton: new PIXI.AnimatedSprite([
+      PIXI.Sprite.from(INTERFACE_SPRITES["down"].src),
+      PIXI.Sprite.from(INTERFACE_SPRITES["down-pressed"].src),
+    ]),
   };
 
   static {
@@ -78,12 +84,19 @@ export default class Elevator {
       return;
     }
 
+    const goingUp = event.target.id === "up";
+
+    if (goingUp) {
+      this.controls.upButton.gotoAndStop(1);
+    } else {
+      this.controls.downButton.gotoAndStop(1);
+    }
+
     this.moving = true;
     this.wheel.loop = true;
     this.wheel.play();
 
     const animation = (delta) => {
-      const goingUp = event.target.id === "up";
       const amount = (goingUp ? -10 : 10) * delta;
       this.shaft.position.y += amount;
 
@@ -114,6 +127,12 @@ export default class Elevator {
   static async stopMoving(event) {
     event.stopPropagation();
     const goingDown = event.target.id === "down";
+
+    if (goingDown) {
+      this.controls.downButton.gotoAndStop(0);
+    } else {
+      this.controls.upButton.gotoAndStop(0);
+    }
 
     this.moving = false;
     this.wheel.loop = false;
@@ -154,6 +173,8 @@ export default class Elevator {
       this.controls.show = false;
       const thanks = getRandomElementFromArray(THANKS);
       this.personInside.chatBubble.show(thanks);
+      this.personInside.floor.showIndicator(false);
+
       SoundPlayer.play("character-delivered.wav", true);
       await this.animateDoor();
       await this.personInside.enterRoom(this.elevatorFloorNumber);

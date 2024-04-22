@@ -1,7 +1,7 @@
 import { GREETINGS } from "../constants/chat.js";
 import { FLOORS } from "../constants/floors.js";
 import { DEFAULT_FONT_SIZE, TEXT_STYLES } from "../constants/text.js";
-import { getRandomElementFromArray } from "../utils.js";
+import { getRandomElementFromArray, isMobileSizedScreen } from "../utils.js";
 import { animateCamera } from "../animate.js";
 import Elevator from "./elevator.js";
 import Building from "./building.js";
@@ -198,6 +198,22 @@ export default class Floor {
     this.container.addChild(this.separator);
   }
 
+  showIndicator(show) {
+    const scale = State.scale();
+
+    const positionX =
+      this.room.position.x - this.room.width / 2 - Elevator.width - 35 * scale;
+    const positionY = this.room.position.y + this.indicator.height / 2;
+
+    this.indicator.position.set(positionX, positionY);
+    this.indicator.scale.y = scale;
+    this.indicator.scale.x = scale;
+    this.indicator.anchor.set(0.5);
+    this.indicator.visible = show || false;
+
+    this.container.addChild(this.indicator);
+  }
+
   render() {
     const scale = State.scale();
 
@@ -247,36 +263,23 @@ export default class Floor {
       this.position.x() - this.width() / 2 + Elevator.width;
 
     if (floorNumber < 10 && floorNumber >= 0) {
-      const amount = 20;
+      const amount = 15;
       floorNumberPositionX = floorNumberPositionX + amount * scale;
     } else if (floorNumber < 0) {
       const amount = -10;
       floorNumberPositionX = floorNumberPositionX + amount * scale;
+    } else {
+      if (isMobileSizedScreen()) {
+        const amount = -15;
+        floorNumberPositionX = floorNumberPositionX + amount * scale;
+      }
     }
 
     const floorNumberPositionY = positionY + 85 * scale;
     this.numberText.position.set(floorNumberPositionX, floorNumberPositionY);
     this.container.addChild(this.numberText);
 
-    // Indicator
-    let indicatorPositionY = this.positionYOffset + 85 * scale - 30 * scale;
-    let indicatorPositionX = floorNumberPositionX + 30 * scale;
-
-    if (floorNumber < 10 && floorNumber >= 0) {
-      const amount = -20;
-      indicatorPositionX = indicatorPositionX + amount * scale;
-    } else if (floorNumber < 0) {
-      const amount = 10;
-      indicatorPositionX = indicatorPositionX + amount * scale;
-    }
-
-    this.indicator.position.set(indicatorPositionX, indicatorPositionY);
-    this.indicator.scale.y = scale;
-    this.indicator.scale.x = scale;
-    this.indicator.anchor.set(0.5);
-    this.indicator.visible = false;
-
-    this.container.addChild(this.indicator);
+    this.showIndicator();
 
     State.app.stage.addChild(this.container);
 

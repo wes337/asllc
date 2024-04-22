@@ -3,6 +3,7 @@ import Elevator from "../classes/elevator.js";
 import State from "../classes/state.js";
 import Interface from "../classes/interface.js";
 import SoundPlayer from "../classes/sound.js";
+import Building from "../classes/building.js";
 
 export default async function lobbyScene() {
   if (!State.introFinished || Elevator.busy) {
@@ -46,6 +47,7 @@ async function returnToRoomScene(person) {
   SoundPlayer.play("elevator-ready.wav", true);
   State.personWantsToGotoFloor = person.originalFloorNumber;
   Interface.startHighlight(Interface.notification.button, 9999);
+  person.floor.showIndicator(true);
 }
 
 async function sendToLobbyScene(person) {

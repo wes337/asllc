@@ -68,6 +68,10 @@ export default class Person {
     );
   }
 
+  get floor() {
+    return Building.allFloors.find((floor) => floor && floor.id === this.name);
+  }
+
   get currentFloor() {
     if (!this.floorNumber) {
       return Building.lobby;

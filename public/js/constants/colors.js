@@ -9,7 +9,7 @@ export const COLORS = {
   gray: "#c7cfcc",
   lightGray: "#ebede9",
   darkGray: "#10141f",
-  brown: "#3b221c",
+  brown: "#371e1b",
   purple: "#495588",
   lightPurple: "#6272b6",
   darkPurple: "#3b2c4a",
