@@ -7,9 +7,14 @@ export default function interval() {
   setInterval(() => {
     lobbyScene();
 
-    const random = Math.random() < 0.5;
-    if (random && !Background.plane.flying) {
+    const flyPlane = Math.random() < 0.5;
+    if (flyPlane && !Background.plane.flying) {
       Background.animatePlane();
+    }
+
+    const flyBlimp = Math.random() < 0.25;
+    if (flyBlimp && !Background.blimp.flying) {
+      Background.animateBlimp();
     }
   }, ONE_MINUTE / 3);
 }

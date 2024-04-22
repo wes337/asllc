@@ -9,15 +9,25 @@ export const INTERFACE_SPRITES = {
     width: 230,
     height: 200,
   },
-  "down-button": {
-    src: "./img/sprites/down-button.png",
+  down: {
+    src: "./img/sprites/down.png",
     width: 300,
-    height: 343,
+    height: 340,
   },
-  "up-button": {
-    src: "./img/sprites/up-button.png",
+  "down-pressed": {
+    src: "./img/sprites/down-pressed.png",
     width: 300,
-    height: 343,
+    height: 340,
+  },
+  up: {
+    src: "./img/sprites/up.png",
+    width: 300,
+    height: 340,
+  },
+  "up-pressed": {
+    src: "./img/sprites/up-pressed.png",
+    width: 300,
+    height: 340,
   },
   apple: {
     src: "./img/icons/apple.png",
@@ -44,6 +54,12 @@ export const INTERFACE_SPRITES = {
 export const SPRITE_METADATA = {
   bruhmanegod: {
     upsideDown: true,
+  },
+  roach: {
+    extra: true,
+    loop: true,
+    moves: true,
+    positionX: 800,
   },
   fishmonger: {
     extra: true,

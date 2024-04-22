@@ -10,6 +10,8 @@ import ui2 from "./ui-2.js";
 import greenBuilding from "./green-building.js";
 import redBuilding from "./red-building.js";
 import plane from "./plane.js";
+import dirt from "./dirt.js";
+import blimp from "./blimp.js";
 
 export default async function loadSpritesheets() {
   const spritesheets = [
@@ -24,6 +26,8 @@ export default async function loadSpritesheets() {
     { key: "plane", value: plane },
     { key: "floors-1", value: floors1 },
     { key: "floors-2", value: floors2 },
+    { key: "dirt", value: dirt },
+    { key: "blimp", value: blimp },
   ];
 
   await Promise.all(
