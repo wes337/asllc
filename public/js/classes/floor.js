@@ -208,8 +208,8 @@ export default class Floor {
       this.position.x() + Elevator.width - 10 * scale,
       positionY - 30 * scale
     );
-    this.room.scale.y = scale;
-    this.room.scale.x = scale;
+    this.room.scale.y = scale * 2;
+    this.room.scale.x = scale * 2;
     this.room.anchor.set(0.5);
     this.container.addChild(this.room);
 
