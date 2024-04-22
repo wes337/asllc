@@ -371,7 +371,7 @@ export default class Background {
     this.blimp.anchor.set(0.5);
 
     const positionX = 0 - this.blimp.width;
-    const positionY = this.blimp.height;
+    const positionY = this.blimp.height / 2;
 
     this.blimp.position.set(positionX, positionY);
     this.blimp.initialPosition = { x: positionX, y: positionY };
