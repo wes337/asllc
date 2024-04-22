@@ -1,6 +1,5 @@
 import State from "../classes/state.js";
-import characters from "./characters.js";
-import extras from "./extras.js";
+import people from "./people.js";
 import misc from "./misc.js";
 import floors1 from "./floors-1.js";
 import floors2 from "./floors-2.js";
@@ -14,8 +13,7 @@ import plane from "./plane.js";
 
 export default async function loadSpritesheets() {
   const spritesheets = [
-    { key: "characters", value: characters },
-    { key: "extras", value: extras },
+    { key: "people", value: people },
     { key: "misc", value: misc },
     { key: "underground", value: underground },
     { key: "elevator", value: elevator },
