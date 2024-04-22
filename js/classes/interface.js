@@ -393,18 +393,17 @@ export default class Interface {
     // Music
     this.navBar.buttons.music =
       this.navBar.buttons.music || PIXI.Sprite.from("music-gray.png");
-    this.navBar.buttons.music.scale.x = isMobileSizedScreen()
-      ? scale * 0.8
-      : scale;
-    this.navBar.buttons.music.scale.y = isMobileSizedScreen()
-      ? scale * 0.8
-      : scale;
+    this.navBar.buttons.music.scale.x = scale;
+    this.navBar.buttons.music.scale.y = scale;
     this.navBar.buttons.music.position.y = isMobileSizedScreen()
-      ? positionY - this.navBar.buttons.music.height * 0.6
+      ? positionY - this.navBar.buttons.music.height / 2 - 100 * scale
       : positionY - this.navBar.buttons.music.height;
     this.navBar.buttons.music.position.x = isMobileSizedScreen()
       ? this.navBar.buttons.music.width / 8
       : this.navBar.buttons.music.width / 2;
+    this.navBar.buttons.music.filters = !this.musicPlayer.playing
+      ? [State.filters.adjustment({ brightness: 1.5 })]
+      : [];
 
     this.navBar.container.addChild(this.navBar.buttons.music);
 

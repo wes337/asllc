@@ -6,25 +6,37 @@ import render from "./render.js";
 import animate from "./animate.js";
 import events from "./events.js";
 import interval from "./interval.js";
+import MusicPlayer from "./classes/music.js";
 
 async function loadAssets() {
-  const loading = document.getElementById("loading");
-  const message = loading.querySelector("h1");
+  return new Promise(async (resolve) => {
+    const loading = document.getElementById("loading");
+    const message = loading.querySelector("h1");
+    const enterButton = document.getElementById("enter-button");
 
-  message.innerHTML = "Loading fonts...";
+    enterButton.style.display = "none";
+    message.innerHTML = "Loading fonts...";
 
-  PIXI.Assets.addBundle("fonts", [
-    { alias: FONT_FAMILY.name, src: FONT_FAMILY.src },
-    { alias: HEADER_FONT_FAMILY.name, src: HEADER_FONT_FAMILY.src },
-  ]);
+    PIXI.Assets.addBundle("fonts", [
+      { alias: FONT_FAMILY.name, src: FONT_FAMILY.src },
+      { alias: HEADER_FONT_FAMILY.name, src: HEADER_FONT_FAMILY.src },
+    ]);
 
-  await PIXI.Assets.loadBundle("fonts");
+    await PIXI.Assets.loadBundle("fonts");
 
-  message.innerHTML = "Loading sprites...";
+    message.innerHTML = "Loading sprites...";
 
-  await loadSpritesheets();
+    await loadSpritesheets();
 
-  loading.remove();
+    message.remove();
+    enterButton.style.display = "flex";
+
+    enterButton.addEventListener("click", () => {
+      loading.remove();
+      MusicPlayer.toggle();
+      resolve();
+    });
+  });
 }
 
 async function main() {
