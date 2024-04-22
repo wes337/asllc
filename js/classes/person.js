@@ -19,9 +19,7 @@ export default class Person {
     this.originalFloorNumber = 0;
     this.inElevator = false;
 
-    const sprites =
-      State.spritesheets.characters.animations[name] ||
-      State.spritesheets.extras.animations[name];
+    const sprites = State.spritesheets.people.animations[name];
     this.character = new PIXI.AnimatedSprite(sprites);
     this.highlight = false;
 
@@ -192,14 +190,14 @@ export default class Person {
     const scale = State.scale();
 
     if (this.inElevator) {
-      this.character.scale.y = scale;
-      this.character.scale.x = scale;
+      this.character.scale.y = scale * 2;
+      this.character.scale.x = scale * 2;
       this.character.anchor.set(0);
       this.character.position.x =
         Elevator.shaft.position.x - this.character.width / 2;
 
       let offset = 0;
-      const characterHeight = this.character.texture.height;
+      const characterHeight = this.character.texture.height * 2;
       if (characterHeight === 260) {
         offset = 55 * scale;
       } else if (characterHeight === 240) {
@@ -268,8 +266,9 @@ export default class Person {
 
     this.character.position.set(positionX, positionY);
 
-    this.character.scale.y = scale;
-    this.character.scale.x = this.direction === "left" ? scale : scale * -1;
+    this.character.scale.y = scale * 2;
+    this.character.scale.x =
+      (this.direction === "left" ? scale : scale * -1) * 2;
     this.character.anchor.set(this.extra && !this.walkRandomly ? 0 : 0.5);
     this.character.animationSpeed = 0.1;
     this.character.loop = true;
