@@ -1,6 +1,7 @@
 import { isMobileSizedScreen } from "./utils.js";
 import { animateCamera } from "./animate.js";
 import Building from "./classes/building.js";
+import Interface from "./classes/interface.js";
 import Modal from "./classes/modal.js";
 import State from "./classes/state.js";
 import render from "./render.js";
@@ -17,8 +18,9 @@ function handleResize() {
       render();
 
       // Reposition camera if there is an active floor
+
       if (Building.activeFloor) {
-        Building.activeFloor.onClick();
+        Building.activeFloor.onClick?.();
       }
     }, 25);
   });
@@ -37,6 +39,11 @@ function handleScroll() {
 
     const amount = State.app.stage.pivot.y - scrollAmount * velocity;
     animateCamera(Math.min(amount, State.camera.min()));
+
+    if (Building.activeFloor) {
+      State.activeFloorNumber = null;
+      Interface.setArtistInfo(null);
+    }
   };
 
   const scrollDown = (event) => {
@@ -57,6 +64,11 @@ function handleScroll() {
     }
 
     animateCamera(amount);
+
+    if (Building.activeFloor) {
+      State.activeFloorNumber = null;
+      Interface.setArtistInfo(null);
+    }
   };
 
   const scrollEnd = (event) => {
