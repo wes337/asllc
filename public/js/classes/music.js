@@ -21,6 +21,28 @@ export default class MusicPlayer {
     }
   }
 
+  static gotoNextTrack() {
+    const nextTrackNumber = this.currentTrackNumber + 1;
+    const nextTrack = this.tracks[nextTrackNumber];
+
+    if (nextTrack) {
+      this.currentTrackNumber = nextTrackNumber;
+    } else {
+      this.currentTrackNumber = 0;
+    }
+  }
+
+  static gotoPreviousTrack() {
+    const previousTrackNumber = this.currentTrackNumber - 1;
+    const previousTrack = this.tracks[previousTrackNumber];
+
+    if (previousTrack) {
+      this.currentTrackNumber = previousTrackNumber;
+    } else {
+      this.currentTrackNumber = this.tracks.length - 1;
+    }
+  }
+
   static play() {
     if (!this.currentTrack) {
       return;
@@ -28,7 +50,11 @@ export default class MusicPlayer {
 
     this.audio.src = this.currentTrack;
     this.audio.volume = 0.2;
-    this.audio.loop = true;
+
+    this.audio.onended = () => {
+      this.gotoNextTrack();
+      this.play();
+    };
 
     const playPromise = this.audio.play().catch(() => {
       // Do nothing

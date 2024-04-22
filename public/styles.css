@@ -203,6 +203,25 @@ hr {
   border: 2px solid gray;
 }
 
+#enter-button {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: "Nokia", monospace;
+  font-size: 64px;
+  text-shadow: 8px 8px 0px #696163;
+  color: #e6d7cc;
+  background-color: #5c7c94;
+  box-shadow: 0px 16px 0px #2e4c5e;
+}
+
+#enter-button:hover {
+  color: #fff;
+}
+
 @media only screen and (max-width: 700px) {
   #modal {
     padding: 16px 8px;
