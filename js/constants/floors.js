@@ -202,6 +202,13 @@ export const FLOORS = {
   },
   darkie: {
     name: "Lil Darkie",
+    extras: [
+      {
+        name: "roach",
+        moves: true,
+        positionX: 465,
+      },
+    ],
   },
   hxstage: {
     name: "HXSTAGE",
