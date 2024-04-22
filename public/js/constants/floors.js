@@ -4,6 +4,9 @@ export const FLOORS = {
   },
   "plague-blvd": {
     name: "Plague BLVD.",
+    links: {
+      web: "https://plagueblvd.com",
+    },
   },
   wendigo: {
     name: "Wendigo",
@@ -207,6 +210,9 @@ export const FLOORS = {
     name: "Wes",
     basement: true,
     animationFrames: 3,
+    links: {
+      web: "https://wesley.codes",
+    },
   },
 };
 

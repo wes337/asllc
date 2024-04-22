@@ -34,6 +34,11 @@ export const INTERFACE_SPRITES = {
     width: 240,
     height: 240,
   },
+  web: {
+    src: "./img/icons/web.png",
+    width: 240,
+    height: 240,
+  },
 };
 
 export const SPRITE_METADATA = {

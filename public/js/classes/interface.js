@@ -18,6 +18,7 @@ export default class Interface {
     apple: PIXI.Sprite.from(INTERFACE_SPRITES.apple.src),
     spotify: PIXI.Sprite.from(INTERFACE_SPRITES.spotify.src),
     ig: PIXI.Sprite.from(INTERFACE_SPRITES.ig.src),
+    web: PIXI.Sprite.from(INTERFACE_SPRITES.web.src),
   };
 
   static navBar = {
@@ -254,21 +255,37 @@ export default class Interface {
 
     // Text
     const marginX = 40 * scale;
-    this.artistInfo.text.style.fontSize = FONT_SIZES.xl;
+    this.artistInfo.text.style.fontSize = isLargeSizedScreen()
+      ? FONT_SIZES.xxl
+      : FONT_SIZES.xl;
+
+    if (this.artistInfo.text.text.length > 11) {
+      this.artistInfo.text.style.letterSpacing = -2;
+    }
+
+    let positionY;
 
     if (floor.basement) {
       const offset = isMobileSizedScreen() ? 170 : 135;
 
-      this.artistInfo.text.position.y =
+      positionY =
         floor.position.y() +
         floor.height() +
         this.artistInfo.text.height * -1 +
         offset * scale;
     } else {
       const offset = isMobileSizedScreen() ? 90 : 135;
-      this.artistInfo.text.position.y =
+
+      positionY =
         floor.position.y() + this.artistInfo.text.height + offset * scale;
+      this.artistInfo.text.position.y = positionY;
     }
+
+    if (isLargeSizedScreen()) {
+      positionY = positionY + 100 * scale;
+    }
+
+    this.artistInfo.text.position.y = positionY;
 
     this.artistInfo.text.position.x =
       floor.position.x() - floor.width() / 2 + Elevator.shaft.width + marginX;
@@ -329,7 +346,7 @@ export default class Interface {
     const linkWidth = INTERFACE_SPRITES.spotify.width * scale;
 
     const numberOfLinks = Object.keys(links).length;
-    const positionX = State.app.screen.width / 2 + numberOfLinks * 300 * scale;
+    const positionX = State.app.screen.width / 2 + numberOfLinks * 310 * scale;
 
     const positionY =
       this.artistInfo.text.position.y +
@@ -338,11 +355,17 @@ export default class Interface {
 
     Object.keys(links).forEach((icon, i) => {
       this.socialMediaLinks[icon].position.x =
-        positionX - linkWidth * i - (this.artistInfo.margin() / 3) * (i + 1);
+        numberOfLinks === 1
+          ? this.artistInfo.text.position.x +
+            this.artistInfo.background.width -
+            240 * scale
+          : positionX -
+            linkWidth * i -
+            (this.artistInfo.margin() / 3) * (i + 1);
 
       this.socialMediaLinks[icon].position.y = isMobileSizedScreen()
-        ? positionY + 40 * scale
-        : positionY;
+        ? positionY + 50 * scale
+        : positionY - 100 * scale;
 
       this.socialMediaLinks[icon].scale.x = scale / 1.2;
       this.socialMediaLinks[icon].scale.y = scale / 1.2;
