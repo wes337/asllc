@@ -218,6 +218,25 @@ hr {
   box-shadow: 0px 16px 0px #2e4c5e;
 }
 
+#bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  filter: brightness(0.75);
+}
+
+#footer {
+  position: fixed;
+  bottom: 16px;
+  left: 0;
+  width: 100%;
+  letter-spacing: -0.5px;
+}
+
 #enter-button:hover {
   color: #fff;
 }

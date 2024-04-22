@@ -1,3 +1,8 @@
+import {
+  isLargeSizedScreen,
+  isMobileSizedScreen,
+  isSmallMobileSizedScreen,
+} from "../utils.js";
 import Floor from "./floor.js";
 import State from "./state.js";
 
@@ -7,6 +12,7 @@ export default class Building {
   static undergroundFoundation = null;
   static floors = [];
   static basement = [];
+  static crane = null;
 
   static get allFloors() {
     return [...this.floors, ...this.basement];
@@ -100,6 +106,67 @@ export default class Building {
     this.roof.anchor.set(0.5);
 
     State.app.stage.addChild(this.roof);
+  }
+
+  static renderCrane() {
+    // Sorry for these magic numbers
+
+    const scale = (() => {
+      if (isSmallMobileSizedScreen()) {
+        return 0.462;
+      } else if (isMobileSizedScreen()) {
+        return 0.5;
+      } else if (isLargeSizedScreen()) {
+        return 1;
+      }
+
+      return 0.6;
+    })();
+
+    this.crane = this.crane ? this.crane : State.spritesheets.crane;
+
+    const offsetY = () => {
+      if (isSmallMobileSizedScreen()) {
+        return 105;
+      }
+
+      if (isMobileSizedScreen()) {
+        return 115;
+      }
+
+      if (isLargeSizedScreen()) {
+        return 230;
+      }
+
+      return 138;
+    };
+
+    const offsetX = () => {
+      if (isSmallMobileSizedScreen()) {
+        return 29;
+      }
+
+      if (isMobileSizedScreen()) {
+        return 35;
+      }
+
+      if (isLargeSizedScreen()) {
+        return 60;
+      }
+
+      return 32;
+    };
+
+    this.crane.position.set(
+      this.roof.position.x + offsetX(),
+      this.roof.position.y - offsetY()
+    );
+
+    this.crane.scale.y = scale;
+    this.crane.scale.x = scale;
+    this.crane.anchor.set(0.5);
+
+    State.app.stage.addChild(this.crane);
   }
 
   static renderUndergroundFoundation() {

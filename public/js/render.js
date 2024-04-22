@@ -88,6 +88,7 @@ export default function render() {
   }
 
   Building.renderRoof();
+  Building.renderCrane();
   Building.renderUndergroundFoundation();
 
   Elevator.render();
