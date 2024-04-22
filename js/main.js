@@ -2,11 +2,11 @@ import { COLORS } from "./constants/colors.js";
 import { FONT_FAMILY, HEADER_FONT_FAMILY } from "./constants/text.js";
 import loadSpritesheets from "./spritesheets/index.js";
 import State from "./classes/state.js";
+import MusicPlayer from "./classes/music.js";
 import render from "./render.js";
 import animate from "./animate.js";
 import events from "./events.js";
 import interval from "./interval.js";
-import MusicPlayer from "./classes/music.js";
 
 async function loadAssets() {
   return new Promise(async (resolve) => {

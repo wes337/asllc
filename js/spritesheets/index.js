@@ -59,4 +59,7 @@ export default async function loadSpritesheets() {
       };
     })
   );
+
+  const crane = await PIXI.Assets.load("./img/spritesheets/crane.gif");
+  State.spritesheets.crane = crane;
 }
