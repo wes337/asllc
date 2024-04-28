@@ -207,6 +207,7 @@ export const FLOORS = {
         name: "roach",
         moves: true,
         positionX: 465,
+        positionY: -30,
       },
     ],
   },

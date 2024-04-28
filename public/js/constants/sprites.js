@@ -60,6 +60,7 @@ export const SPRITE_METADATA = {
     loop: true,
     moves: true,
     positionX: 800,
+    positionY: -30,
   },
   fishmonger: {
     extra: true,

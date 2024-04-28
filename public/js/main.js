@@ -29,8 +29,8 @@ async function loadAssets() {
     await loadSpritesheets();
 
     message.remove();
-    enterButton.style.display = "flex";
 
+    enterButton.style.display = "flex";
     enterButton.addEventListener("click", () => {
       loading.remove();
       MusicPlayer.toggle();
