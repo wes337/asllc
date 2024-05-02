@@ -180,7 +180,7 @@ export default class Building {
 
     this.undergroundFoundation.position.set(
       this.bottomFloor.position.x() - 5 * scale,
-      this.bottomFloor.room.position.y + this.bottomFloor.height() + 150 * scale
+      this.bottomFloor.room.position.y + this.bottomFloor.height() + 170 * scale
     );
 
     this.undergroundFoundation.scale.y = scale;

@@ -298,7 +298,7 @@ export default class Elevator {
 
       let rope = this.rope[i] || PIXI.Sprite.from("elevator-rope.png");
 
-      rope.scale.y = scale * 1.15;
+      rope.scale.y = scale * 1.22;
       rope.scale.x = scale;
       rope.anchor.set(0.5);
 
