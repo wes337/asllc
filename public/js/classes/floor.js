@@ -62,6 +62,10 @@ export default class Floor {
     this.container.addListener("pointertap", this.onClick.bind(this));
   }
 
+  get hasNoSeparator() {
+    return this.index === 0;
+  }
+
   get number() {
     if (this.basement) {
       return this.index * -1;
@@ -81,7 +85,15 @@ export default class Floor {
   }
 
   get height() {
-    return () => 550 * State.scale();
+    const baseHeight = 550 * State.scale();
+
+    if (this.hasNoSeparator) {
+      return () => baseHeight;
+    }
+
+    const separatorHeight = 40 * State.scale();
+
+    return () => baseHeight + separatorHeight;
   }
 
   get position() {
@@ -91,7 +103,6 @@ export default class Floor {
         return (
           State.app.screen.height -
           this.height() / 2 -
-          (60 * State.scale()) / 2 -
           this.height() * this.number -
           Interface.navBar.height()
         );
@@ -110,8 +121,7 @@ export default class Floor {
     let positionY = this.position.y();
 
     if (this.basement) {
-      const offset = Math.floor(32 * scale);
-      positionY = positionY + 160 * scale + offset;
+      positionY = positionY + 140 * scale;
     }
 
     return positionY;
@@ -183,18 +193,23 @@ export default class Floor {
   }
 
   renderSeparator() {
+    if (this.hasNoSeparator) {
+      return;
+    }
+
     const scale = State.scale();
 
     let positionY = this.positionYOffset;
 
     this.separator.position.set(
       this.position.x() - 5 * scale,
-      positionY + this.height() / 2
+      positionY + 305 * scale
     );
 
     this.separator.scale.y = scale;
     this.separator.scale.x = scale;
     this.separator.anchor.set(0.5);
+
     this.container.addChild(this.separator);
   }
 
@@ -222,7 +237,7 @@ export default class Floor {
     // Room
     this.room.position.set(
       this.position.x() + Elevator.width - 10 * scale,
-      positionY - 30 * scale
+      positionY
     );
     this.room.scale.y = scale * 2;
     this.room.scale.x = scale * 2;
@@ -231,10 +246,7 @@ export default class Floor {
 
     // Left wall
     const leftWallOffset = 680 * scale;
-    this.leftWall.position.set(
-      this.position.x() - leftWallOffset,
-      positionY - 30 * scale
-    );
+    this.leftWall.position.set(this.position.x() - leftWallOffset, positionY);
     this.leftWall.scale.y = scale;
     this.leftWall.scale.x = scale;
     this.leftWall.anchor.set(0.5);
@@ -242,10 +254,7 @@ export default class Floor {
 
     // Right wall
     const rightWallOffset = 810 * scale;
-    this.rightWall.position.set(
-      this.position.x() + rightWallOffset,
-      positionY - 30 * scale
-    );
+    this.rightWall.position.set(this.position.x() + rightWallOffset, positionY);
     this.rightWall.scale.y = scale;
     this.rightWall.scale.x = scale;
     this.rightWall.anchor.set(0.5);
