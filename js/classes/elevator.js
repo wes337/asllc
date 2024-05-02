@@ -189,14 +189,15 @@ export default class Elevator {
     try {
       const scale = State.scale();
 
-      const offsetY = floor.basement ? 60 * scale : 30 * scale;
+      let floorPosition = floor.position.y() + 50 * scale;
 
-      return floor.basement
-        ? floor.position.y() + 160 * scale + offsetY
-        : floor.position.y() + offsetY;
+      if (floor.basement) {
+        floorPosition = floorPosition + 150 * scale;
+      }
+
+      return floorPosition;
     } catch {
       // Do nothing
-      return;
     }
   }
 
@@ -297,14 +298,14 @@ export default class Elevator {
 
       let rope = this.rope[i] || PIXI.Sprite.from("elevator-rope.png");
 
-      rope.scale.y = scale;
+      rope.scale.y = scale * 1.15;
       rope.scale.x = scale;
       rope.anchor.set(0.5);
 
       const positionX =
         floor.position.x() - floor.width() / 2 + rope.width / 2 + offsetX;
 
-      let positionY = floor.position.y() + 160 * scale;
+      let positionY = floor.position.y() + 140 * scale;
 
       rope.position.set(positionX, positionY);
 
@@ -329,7 +330,7 @@ export default class Elevator {
     const scaledHeight = this.generator.height;
 
     const offsetX = 30 * scale;
-    const offsetY = 0;
+    const offsetY = 10 * scale;
 
     const positionX =
       Building.topFloor.position.x() -

@@ -65,7 +65,7 @@ export default class Building {
 
     this.foundation.position.set(
       0,
-      this.lobby.position.y() + this.lobby.height() / 2 + 26 * scale
+      this.lobby.position.y() + this.lobby.height() / 2
     );
 
     this.basement[0] = this.foundation;
@@ -98,12 +98,14 @@ export default class Building {
 
     this.roof.position.set(
       this.topFloor.position.x(),
-      this.topFloor.position.y() - this.topFloor.height() / 2 - 20 * scale
+      this.topFloor.room.position.y - this.topFloor.height() / 2 - 20 * scale
     );
 
     this.roof.scale.y = scale;
     this.roof.scale.x = scale;
     this.roof.anchor.set(0.5);
+
+    this.roof.visible = false;
 
     State.app.stage.addChild(this.roof);
   }
@@ -120,25 +122,25 @@ export default class Building {
         return 1;
       }
 
-      return 0.6;
+      return 0.625;
     })();
 
     this.crane = this.crane ? this.crane : State.spritesheets.crane;
 
     const offsetY = () => {
       if (isSmallMobileSizedScreen()) {
-        return 105;
+        return 103;
       }
 
       if (isMobileSizedScreen()) {
-        return 115;
+        return 112;
       }
 
       if (isLargeSizedScreen()) {
-        return 230;
+        return 224;
       }
 
-      return 138;
+      return 140;
     };
 
     const offsetX = () => {
@@ -147,14 +149,14 @@ export default class Building {
       }
 
       if (isMobileSizedScreen()) {
-        return 35;
+        return 30;
       }
 
       if (isLargeSizedScreen()) {
         return 60;
       }
 
-      return 32;
+      return 38;
     };
 
     this.crane.position.set(
@@ -178,7 +180,7 @@ export default class Building {
 
     this.undergroundFoundation.position.set(
       this.bottomFloor.position.x() - 5 * scale,
-      this.bottomFloor.position.y() + this.bottomFloor.height() + 370 * scale
+      this.bottomFloor.room.position.y + this.bottomFloor.height() + 150 * scale
     );
 
     this.undergroundFoundation.scale.y = scale;

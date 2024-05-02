@@ -67,6 +67,7 @@ export const SPRITE_METADATA = {
     loop: true,
     moves: false,
     positionX: 465,
+    positionY: 0,
   },
   "flying-book": {
     extra: true,
@@ -80,6 +81,7 @@ export const SPRITE_METADATA = {
     loop: true,
     moves: false,
     positionX: 950,
+    positionY: 0,
   },
   cigar: {
     extra: true,
@@ -100,11 +102,13 @@ export const SPRITE_METADATA = {
     loop: true,
     moves: false,
     positionX: 5,
+    positionY: 0,
   },
   hand: {
     extra: true,
     loop: true,
     moves: false,
     positionX: 80,
+    positionY: 0,
   },
 };

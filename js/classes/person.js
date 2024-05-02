@@ -190,6 +190,26 @@ export default class Person {
     });
   }
 
+  getCharacterHeightOffset() {
+    const scale = State.scale();
+
+    let offset = 0;
+
+    const characterHeight = this.character.texture.height * 2;
+
+    if (characterHeight === 260) {
+      offset = 55 * scale;
+    } else if (characterHeight === 240) {
+      offset = 35 * scale;
+    } else if (characterHeight === 220) {
+      offset = 15 * scale;
+    } else if (characterHeight === 200) {
+      offset = -5 * scale;
+    }
+
+    return offset;
+  }
+
   render(delta) {
     const scale = State.scale();
 
@@ -200,17 +220,7 @@ export default class Person {
       this.character.position.x =
         Elevator.shaft.position.x - this.character.width / 2;
 
-      let offset = 0;
-      const characterHeight = this.character.texture.height * 2;
-      if (characterHeight === 260) {
-        offset = 55 * scale;
-      } else if (characterHeight === 240) {
-        offset = 35 * scale;
-      } else if (characterHeight === 220) {
-        offset = 15 * scale;
-      } else if (characterHeight === 200) {
-        offset = -5 * scale;
-      }
+      let offset = this.getCharacterHeightOffset();
 
       this.character.position.y = Elevator.shaft.position.y - offset;
       this.destination = null;
@@ -245,11 +255,13 @@ export default class Person {
 
     positionX = Math.min(positionX, max);
 
+    const groundHeight = 10 * scale;
+
     let positionY =
-      this.currentFloor.separator.position.y -
-      this.currentFloor.separator.height / 2 -
+      this.currentFloor.room.position.y +
+      this.currentFloor.room.height / 2 -
       this.height() / 2 -
-      10 * scale;
+      groundHeight;
 
     if (this.offsetY) {
       positionY = positionY - this.offsetY;
@@ -261,11 +273,7 @@ export default class Person {
 
     const isUpsideDown = this.metadata && this.metadata.upsideDown;
     if (isUpsideDown) {
-      positionY =
-        positionY -
-        this.height() -
-        this.currentFloor.separator.height +
-        16 * scale;
+      positionY = positionY - this.height() * 1.5 + groundHeight * 3;
     }
 
     this.character.position.set(positionX, positionY);
