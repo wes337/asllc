@@ -266,7 +266,7 @@ export default class Interface {
     let positionY;
 
     if (floor.basement) {
-      const offset = isMobileSizedScreen() ? 170 : 135;
+      const offset = isMobileSizedScreen() ? 20 : -20;
 
       positionY =
         floor.position.y() +
@@ -274,7 +274,7 @@ export default class Interface {
         this.artistInfo.text.height * -1 +
         offset * scale;
     } else {
-      const offset = isMobileSizedScreen() ? 90 : 135;
+      const offset = isMobileSizedScreen() ? 110 : 150;
 
       positionY =
         floor.position.y() + this.artistInfo.text.height + offset * scale;
@@ -282,7 +282,8 @@ export default class Interface {
     }
 
     if (isLargeSizedScreen()) {
-      positionY = positionY + 100 * scale;
+      const amount = floor.basement ? -20 : 30;
+      positionY = positionY + amount * scale;
     }
 
     this.artistInfo.text.position.y = positionY;
