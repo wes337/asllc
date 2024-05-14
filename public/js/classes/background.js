@@ -161,7 +161,7 @@ export default class Background {
     }
 
     const mobileBackground =
-      this.mobileBackground || PIXI.Sprite.from("./img/mobile.png");
+      this.mobileBackground || PIXI.Sprite.from("./img/mobile-bg.png");
 
     mobileBackground.scale.y = 1;
     mobileBackground.scale.x = 1;
@@ -170,10 +170,12 @@ export default class Background {
     mobileBackground.width = window.innerWidth;
 
     const positionX = State.app.screen.width - mobileBackground.width / 2;
-    const positionY = State.app.screen.height / 2;
+    const positionY =
+      State.app.screen.height -
+      1600 * State.scale() -
+      Interface.navBar.height();
 
     mobileBackground.initialPosition = { x: positionX, y: positionY };
-
     mobileBackground.position.set(positionX, positionY);
 
     this.mobileBackground = mobileBackground;
