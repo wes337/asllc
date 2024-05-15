@@ -56,16 +56,8 @@ export default class Interface {
     button: PIXI.Sprite.from(INTERFACE_SPRITES.notification.src),
   };
 
-  static musicPlayer = {
-    playing: false,
-  };
-
   static onToggleMusicPlayer() {
-    MusicPlayer.toggle();
-    this.musicPlayer.playing = !this.musicPlayer.playing;
-    this.navBar.buttons.music.filters = this.musicPlayer.playing
-      ? [State.filters.adjustment({ brightness: 1.5 })]
-      : [];
+    MusicPlayer.open();
   }
 
   static setupNavbarEventListeners() {
@@ -237,6 +229,7 @@ export default class Interface {
       Building.allFloors.forEach((floor) => {
         if (floor?.room?.filters) {
           floor.room.filters = [];
+          floor.nameText.style.fill = COLORS.green;
         }
       });
 
@@ -425,9 +418,6 @@ export default class Interface {
     this.navBar.buttons.music.position.x = isMobileSizedScreen()
       ? this.navBar.buttons.music.width / 8
       : this.navBar.buttons.music.width / 2;
-    this.navBar.buttons.music.filters = !this.musicPlayer.playing
-      ? [State.filters.adjustment({ brightness: 1.5 })]
-      : [];
 
     this.navBar.container.addChild(this.navBar.buttons.music);
 
@@ -435,12 +425,6 @@ export default class Interface {
     if (hover) {
       this.navBar.buttons[hover].position.y -=
         this.navBar.buttons[hover].height / 8;
-
-      if (hover !== "music") {
-        this.navBar.buttons[hover].filters = [
-          State.filters.adjustment({ brightness: 1.5 }),
-        ];
-      }
     }
 
     State.app.stage.addChild(this.navBar.container);

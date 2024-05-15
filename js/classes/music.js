@@ -1,79 +1,137 @@
+const TRACKS = [
+  { fileName: "track-1.mp3", title: "Peaceful Street - Brahman" },
+  { fileName: "track-2.mp3", title: "Header - Skotskr" },
+  { fileName: "track-3.mp3", title: "Lo_fi - Skotskr" },
+  { fileName: "track-4.mp3", title: "Very Lush and Swag Loop" },
+];
+
 export default class MusicPlayer {
   static audio = new Audio();
-  static tracks = ["track-1.mp3", "track-2.mp3", "track-3.mp3", "track-4.mp3"];
   static currentTrackNumber = 0;
+  static paused = false;
+  static elements = {
+    container: document.getElementById("music-player-container"),
+    trackInfo: document.getElementById("music-player-track-info"),
+    play: document.getElementById("music-player-play"),
+    nextTrack: document.getElementById("music-player-next-track"),
+    prevTrack: document.getElementById("music-player-prev-track"),
+    close: document.getElementById("music-player-close"),
+  };
 
-  static get currentTrack() {
-    const trackFileName = this.tracks[this.currentTrackNumber];
+  static {
+    MusicPlayer.elements.close.addEventListener("click", MusicPlayer.close);
+    MusicPlayer.elements.play.addEventListener("click", MusicPlayer.toggle);
+    MusicPlayer.elements.nextTrack.addEventListener("click", MusicPlayer.next);
+    MusicPlayer.elements.prevTrack.addEventListener("click", MusicPlayer.prev);
+  }
 
+  static get currentTrackTitle() {
+    const trackTitle = TRACKS[MusicPlayer.currentTrackNumber]?.title;
+    return trackTitle || "Unknown Track";
+  }
+
+  static get currentTrackFileName() {
+    const trackFileName = TRACKS[MusicPlayer.currentTrackNumber]?.fileName;
     return trackFileName ? `./sounds/${trackFileName}` : null;
   }
 
-  static get isPlaying() {
-    return !!(this.audio && this.audio.duration > 0 && !this.audio.paused);
+  static get playing() {
+    return !!(
+      MusicPlayer.audio &&
+      MusicPlayer.audio.duration > 0 &&
+      !MusicPlayer.audio.paused
+    );
+  }
+
+  static open() {
+    MusicPlayer.elements.container.classList.add("show");
+  }
+
+  static close() {
+    MusicPlayer.elements.container.classList.remove("show");
+  }
+
+  static updateTrackInfo() {
+    MusicPlayer.elements.trackInfo.innerHTML = MusicPlayer.currentTrackTitle;
   }
 
   static toggle() {
-    if (this.isPlaying) {
-      this.stop();
+    if (MusicPlayer.playing) {
+      MusicPlayer.stop();
     } else {
-      this.play();
+      MusicPlayer.play();
     }
+
+    MusicPlayer.updateTrackInfo();
   }
 
-  static gotoNextTrack() {
-    const nextTrackNumber = this.currentTrackNumber + 1;
-    const nextTrack = this.tracks[nextTrackNumber];
+  static next() {
+    const nextTrackNumber = MusicPlayer.currentTrackNumber + 1;
+    const nextTrack = TRACKS[nextTrackNumber];
 
     if (nextTrack) {
-      this.currentTrackNumber = nextTrackNumber;
+      MusicPlayer.currentTrackNumber = nextTrackNumber;
     } else {
-      this.currentTrackNumber = 0;
+      MusicPlayer.currentTrackNumber = 0;
+    }
+
+    MusicPlayer.updateTrackInfo();
+
+    if (!MusicPlayer.paused) {
+      MusicPlayer.play();
     }
   }
 
-  static gotoPreviousTrack() {
-    const previousTrackNumber = this.currentTrackNumber - 1;
-    const previousTrack = this.tracks[previousTrackNumber];
+  static prev() {
+    const previousTrackNumber = MusicPlayer.currentTrackNumber - 1;
+    const previousTrack = TRACKS[previousTrackNumber];
 
     if (previousTrack) {
-      this.currentTrackNumber = previousTrackNumber;
+      MusicPlayer.currentTrackNumber = previousTrackNumber;
     } else {
-      this.currentTrackNumber = this.tracks.length - 1;
+      MusicPlayer.currentTrackNumber = TRACKS.length - 1;
+    }
+
+    MusicPlayer.updateTrackInfo();
+
+    if (!MusicPlayer.paused) {
+      MusicPlayer.play();
     }
   }
 
   static play() {
-    if (!this.currentTrack) {
+    if (!MusicPlayer.currentTrackFileName) {
       return;
     }
 
-    this.audio.src = this.currentTrack;
-    this.audio.volume = 0.2;
+    MusicPlayer.paused = false;
+    MusicPlayer.elements.play.classList.remove("paused");
 
-    this.audio.onended = () => {
-      this.gotoNextTrack();
-      this.play();
+    MusicPlayer.audio.src = MusicPlayer.currentTrackFileName;
+    MusicPlayer.audio.volume = 0.2;
+    MusicPlayer.audio.onended = () => {
+      MusicPlayer.next();
     };
 
-    const playPromise = this.audio.play().catch(() => {
+    const playPromise = MusicPlayer.audio.play().catch(() => {
       // Do nothing
     });
 
     if (playPromise !== undefined) {
-      this.audio.play().catch(() => {
+      MusicPlayer.audio.play().catch(() => {
         // Do nothing
-        return;
       });
     }
   }
 
   static stop() {
-    if (!this.audio) {
+    if (!MusicPlayer.audio) {
       return;
     }
 
-    this.audio.pause();
-    this.audio.currentTime = 0;
+    MusicPlayer.audio.pause();
+    MusicPlayer.audio.currentTime = 0;
+    MusicPlayer.elements.play.classList.add("paused");
+    MusicPlayer.paused = true;
   }
 }
