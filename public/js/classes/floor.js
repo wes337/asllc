@@ -1,6 +1,7 @@
 import { GREETINGS } from "../constants/chat.js";
 import { FLOORS } from "../constants/floors.js";
 import { DEFAULT_FONT_SIZE, TEXT_STYLES } from "../constants/text.js";
+import { COLORS } from "../constants/colors.js";
 import { getRandomElementFromArray, isMobileSizedScreen } from "../utils.js";
 import { animateCamera } from "../animate.js";
 import Elevator from "./elevator.js";
@@ -50,9 +51,14 @@ export default class Floor {
     this.rightWall = basement
       ? PIXI.Sprite.from("underground-wall.png")
       : PIXI.Sprite.from("right-wall.png");
-    this.separator = PIXI.Sprite.from("separator.png");
+    this.separator = PIXI.Sprite.from("./img/sprites/separator-new.png");
     this.numberText = new PIXI.Text("", {
       ...TEXT_STYLES.default,
+    });
+
+    this.nameText = new PIXI.Text("", {
+      ...TEXT_STYLES.default,
+      fill: COLORS.green,
     });
 
     this.indicator = PIXI.Sprite.from("indicator.png");
@@ -177,8 +183,10 @@ export default class Floor {
       Building.allFloors.forEach((floor) => {
         if (floor.room && floor.id !== this.id) {
           floor.room.filters = [State.filters.adjustment({ brightness: 0.3 })];
+          floor.nameText.style.fill = COLORS.darkGray;
         } else if (floor.id === this.id) {
           floor.room.filters = [];
+          floor.nameText.style.fill = COLORS.green;
         }
       });
 
@@ -199,18 +207,24 @@ export default class Floor {
 
     const scale = State.scale();
 
-    let positionY = this.positionYOffset;
+    const positionX = this.position.x() + 10 * scale;
+    const positionY = this.positionYOffset + 305 * scale;
 
-    this.separator.position.set(
-      this.position.x() - 5 * scale,
-      positionY + 305 * scale
-    );
+    this.separator.position.set(positionX, positionY);
 
     this.separator.scale.y = scale;
     this.separator.scale.x = scale;
     this.separator.anchor.set(0.5);
 
     this.container.addChild(this.separator);
+
+    this.nameText.text = this.name;
+    this.nameText.style.fontSize = DEFAULT_FONT_SIZE();
+    this.nameText.position.set(
+      positionX - this.room.width / 2 + 150 * scale,
+      positionY - this.nameText.height / 2
+    );
+    this.container.addChild(this.nameText);
   }
 
   showIndicator(show) {

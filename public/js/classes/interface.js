@@ -229,6 +229,7 @@ export default class Interface {
       Building.allFloors.forEach((floor) => {
         if (floor?.room?.filters) {
           floor.room.filters = [];
+          floor.nameText.style.fill = COLORS.green;
         }
       });
 
