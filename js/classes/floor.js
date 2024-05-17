@@ -186,7 +186,7 @@ export default class Floor {
           floor.nameText.style.fill = COLORS.darkGray;
         } else if (floor.id === this.id) {
           floor.room.filters = [];
-          floor.nameText.style.fill = COLORS.green;
+          floor.nameText.style.fill = COLORS.darkGray;
         }
       });
 
