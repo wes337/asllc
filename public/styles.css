@@ -62,6 +62,7 @@ canvas {
 }
 
 #modal-container,
+#settings-container,
 #music-player-container {
   position: fixed;
   top: 0;
@@ -74,6 +75,7 @@ canvas {
 }
 
 #modal-container.show,
+#settings-container.show,
 #music-player-container.show {
   display: flex;
   align-items: center;
@@ -81,6 +83,7 @@ canvas {
 }
 
 #modal,
+#settings,
 #music-player {
   position: relative;
   display: flex;
@@ -96,11 +99,13 @@ canvas {
   z-index: 1;
 }
 
-#music-player {
+#music-player,
+#settings {
   width: 400px;
 }
 
-#modal-header {
+#modal-header,
+#settings-header {
   font-family: "Nokia", monospace;
   text-transform: uppercase;
   font-size: 40px;
@@ -112,7 +117,8 @@ canvas {
   justify-content: center;
 }
 
-#modal-body {
+#modal-body,
+#settings-body {
   font-size: 24px;
   font-family: "Tiny Tower", monospace;
   text-shadow: 2px 2px 0px #495588;
@@ -138,6 +144,7 @@ canvas {
 }
 
 #modal-close,
+#settings-close,
 #music-player-close {
   all: unset;
   position: absolute;
@@ -157,11 +164,13 @@ canvas {
 }
 
 #modal-close:hover,
+#settings-close:hover,
 #music-player-close:hover {
   background-color: #2e4c5e;
 }
 
-#modal a {
+#modal a,
+#settings a {
   color: #a4dddb;
   text-decoration: none;
 }
@@ -296,8 +305,51 @@ hr {
   color: #fff;
 }
 
+.settings-button {
+  all: unset;
+  cursor: pointer;
+  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Nokia", monospace;
+  font-size: 16px;
+  text-shadow: 2px 2px 0px #696163;
+  color: #e6d7cc;
+  background-color: #5c7c94;
+  box-shadow: 0px 4px 0px #2e4c5e;
+  width: 180px;
+  text-align: center;
+}
+
+.settings-button span {
+  margin-right: auto;
+}
+
+.checkbox {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+  background-color: #10141f25;
+  margin-right: auto;
+}
+
+.checkbox.on:before {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  content: "X";
+  color: #e8c170;
+  font-size: 12px;
+  text-shadow: 2px 2px 0px #be772b;
+}
+
 @media only screen and (max-width: 700px) {
   #modal,
+  #settings,
   #music-player {
     padding: 16px 8px;
     margin-top: -32px;

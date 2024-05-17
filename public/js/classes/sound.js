@@ -1,8 +1,14 @@
+import Settings from "./settings.js";
+
 export default class SoundPlayer {
   static audio;
 
   static play(soundEffect, quiet) {
     try {
+      if (!Settings.settings.sfx) {
+        return;
+      }
+
       if (this.audio && typeof this.audio.remove === "function") {
         this.audio.remove();
       }
