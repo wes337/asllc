@@ -1,4 +1,4 @@
-import { GREETINGS } from "../constants/chat.js";
+import { GREETINGS } from "../content/phrases.js";
 import { FLOORS } from "../constants/floors.js";
 import {
   DEFAULT_FONT_SIZE,

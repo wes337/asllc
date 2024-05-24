@@ -1,5 +1,5 @@
 import { INTERFACE_SPRITES } from "../constants/sprites.js";
-import { THANKS } from "../constants/chat.js";
+import { THANKS } from "../content/phrases.js";
 import { getRandomElementFromArray, isMobileSizedScreen } from "../utils.js";
 import Background from "./background.js";
 import Building from "./building.js";

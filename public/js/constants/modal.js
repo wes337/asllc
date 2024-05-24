@@ -1,16 +1,60 @@
 import { ALL_ARTIST_IDS, OTHER_IDS, FLOORS } from "./floors.js";
+import {
+  LEAD_TEXT as ABOUT_LEAD_TEXT,
+  FOOTER_TEXT,
+  EMAILS,
+} from "../content/about.js";
+import { LEAD_TEXT as TOURING_LEAD_TEXT, TOURS } from "../content/touring.js";
+import { LEAD_TEXT as MERCHANDISE_LEAD_TEXT } from "../content/merchandise.js";
 
 export const MODALS = {
   about: {
+    id: "about",
     header: "About Artist Services",
     body: `
+      <div class="modal-links">
+        <button id="touring-button" class="modal-button">Touring</button>
+        <button id="merchandise-button" class="modal-button">Merchandise</button>
+      </div>
       <hr />
-      <div class="info">Helping artists capitalize on and invest in their careers without compromising creative vision.</div>
+      <div class="lead">${ABOUT_LEAD_TEXT}</div>
       <hr />
-      <div>Jay M.</div>
-      <div>Brooklyn, New York</div>
-      <div><a href="mailto:jay@artistservic.es">Jay [at] artistservic.es</a></div>
-      <div><a href="mailto:wud@artistservic.es">Wud [at] artistservic.es</a></div>
+      ${FOOTER_TEXT.map((text) => `<div>${text}</div>`).join("\n")}
+      ${EMAILS.map(
+        (email) =>
+          `<div><a href="mailto:${email.value}">${email.label}</a></div>`
+      ).join("\n")}
+    `,
+  },
+  touring: {
+    id: "touring",
+    header: "Touring",
+    body: `
+      <div class="modal-links">
+        <button id="back-button" class="modal-button">Back</button>
+      </div>
+      <hr />
+      <div class="touring">
+        <div class="lead">${TOURING_LEAD_TEXT}</div>
+        <ul class="tours">
+         ${TOURS.map((tour) => {
+           return `<li><a class="tour" href="${tour.value}"} target="_blank">${tour.label}</a></li>`;
+         }).join("\n")}
+        </ul>
+      </div>
+    `,
+  },
+  merchandise: {
+    id: "merchandise",
+    header: "Merchandise",
+    body: `
+      <div class="modal-links">
+        <button id="back-button" class="modal-button">Back</button>
+      </div>
+      <hr />
+      <div class="merchandise">
+        <div class="lead">${MERCHANDISE_LEAD_TEXT}</div>
+      </div>
     `,
   },
   artists: {
@@ -26,8 +70,7 @@ export const MODALS = {
               " "
             )}</button>`;
           })
-          .join(" ")
-          .trim()}
+          .join("\n")}
       </div>
     `,
     footer: `<button>Other</button>`,
@@ -42,8 +85,7 @@ export const MODALS = {
           .map((artistId) => {
             return `<button id="${artistId}-button" class="artist">${FLOORS[artistId].name}</button>`;
           })
-          .join(" ")
-          .trim()}
+          .join("\n")}
       </div>
     `,
     footer: `<button>Artists</button>`,

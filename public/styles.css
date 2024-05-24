@@ -90,29 +90,26 @@ canvas {
   flex-direction: column;
   background-color: #10141f;
   color: #fff;
-  width: 800px;
+  width: 550px;
   max-width: 90vw;
   max-height: 80vh;
-  padding: 32px;
-  gap: 24px;
+  padding: 16px;
+  gap: 12px;
   border: 4px solid #5c7c94;
   z-index: 1;
 }
 
 #music-player,
 #settings {
+  padding: 32px;
   width: 400px;
-}
-
-#music-player {
-  gap: 12px;
 }
 
 #modal-header,
 #settings-header {
   font-family: "Nokia", monospace;
   text-transform: uppercase;
-  font-size: 32px;
+  font-size: 24px;
   text-align: center;
   color: #e8c170;
   text-shadow: 2px 2px 0px #be772b;
@@ -131,8 +128,11 @@ canvas {
   flex-direction: column;
   gap: 8px;
   align-items: center;
-  padding-bottom: 12px;
   overflow: auto;
+}
+
+#settings-body {
+  padding-bottom: 12px;
 }
 
 #modal-footer {
@@ -160,6 +160,8 @@ canvas {
   font-size: 24px;
   font-family: "Tiny Tower", monospace;
   background-color: #5c7c94;
+  line-height: 16px;
+  width: 16px;
 }
 
 #music-player-close {
@@ -190,6 +192,31 @@ canvas {
   font-size: 18px;
   font-family: "Tiny Tower", monospace;
   color: #a4dddb;
+}
+
+.modal-links {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.modal-button {
+  all: unset;
+  cursor: pointer;
+  font-size: 20px;
+  font-family: "Tiny Tower", monospace;
+  text-shadow: 2px 2px 0px #696163;
+  color: #e6d7cc;
+  background-color: #5c7c94;
+  box-shadow: 4px 4px 0px #2e4c5e;
+  padding: 4px;
+  width: 100%;
+}
+
+.modal-button:hover {
+  color: #fff;
 }
 
 #music-player img {
@@ -228,6 +255,7 @@ canvas {
   letter-spacing: -1px;
   overflow: hidden;
   width: 100%;
+  padding: 4px;
   background-color: #000;
 }
 
@@ -235,6 +263,8 @@ canvas {
   display: flex;
   justify-content: space-between;
   white-space: nowrap;
+  margin-top: 8px;
+  margin-bottom: -16px;
 }
 
 .artists {
@@ -266,8 +296,17 @@ canvas {
   opacity: 1;
 }
 
-.info {
+.lead {
   color: #fff;
+}
+
+.tours {
+  padding: 0;
+}
+
+.tours li {
+  list-style-type: none;
+  margin: 8px 0;
 }
 
 hr {
@@ -281,13 +320,14 @@ hr {
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 16px;
   font-family: "Nokia", monospace;
   font-size: 32px;
   text-shadow: 8px 8px 0px #696163;
   color: #e6d7cc;
   background-color: #5c7c94;
   box-shadow: 0px 16px 0px #2e4c5e;
+  width: 300px;
 }
 
 #bg {
@@ -369,6 +409,10 @@ hr {
 
 #seek {
   width: 100%;
+}
+
+#back-button {
+  width: 100px;
 }
 
 @media only screen and (max-width: 700px) {
