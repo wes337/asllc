@@ -414,7 +414,8 @@ export default class Interface {
 
     // Music
     this.navBar.buttons.music =
-      this.navBar.buttons.music || PIXI.Sprite.from("/img/gui/music_final.png");
+      this.navBar.buttons.music ||
+      PIXI.Sprite.from("./img/gui/music_final.png");
     this.navBar.buttons.music.scale.x = scale / 1.8;
     this.navBar.buttons.music.scale.y = scale / 1.8;
     this.navBar.buttons.music.position.y =
@@ -432,7 +433,7 @@ export default class Interface {
     // Settings
     this.navBar.buttons.settings =
       this.navBar.buttons.settings ||
-      PIXI.Sprite.from("/img/gui/settings_final.png");
+      PIXI.Sprite.from("./img/gui/settings_final.png");
     this.navBar.buttons.settings.scale.x = scale / 1.8;
     this.navBar.buttons.settings.scale.y = scale / 1.8;
     this.navBar.buttons.settings.position.y =
