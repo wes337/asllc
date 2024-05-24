@@ -33,6 +33,9 @@ export const MODALS = {
       <div class="modal-links">
         <button id="back-button" class="modal-button">Back</button>
       </div>
+      <div class="modal-art">
+        <img src="./img/misc/touring.gif" alt="" />
+      </div>
       <hr />
       <div class="touring">
         <div class="lead">${TOURING_LEAD_TEXT}</div>
@@ -51,6 +54,9 @@ export const MODALS = {
       <div class="modal-links">
         <button id="back-button" class="modal-button">Back</button>
       </div>
+      <div class="modal-art">
+      <img src="./img/misc/merch.gif" alt="" />
+    </div>
       <hr />
       <div class="merchandise">
         <div class="lead">${MERCHANDISE_LEAD_TEXT}</div>

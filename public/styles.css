@@ -309,6 +309,29 @@ canvas {
   margin: 8px 0;
 }
 
+.tours li a {
+  margin-left: -8px;
+}
+
+.tours li:hover::before {
+  opacity: 1;
+}
+
+.tours li::before {
+  content: ">>";
+  margin-right: 8px;
+  opacity: 0;
+}
+
+.modal-art {
+  width: 100%;
+}
+
+.modal-art img {
+  width: 100%;
+  height: auto;
+}
+
 hr {
   width: 100%;
   border: 2px solid gray;
