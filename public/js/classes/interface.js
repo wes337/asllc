@@ -232,7 +232,7 @@ export default class Interface {
       Building.allFloors.forEach((floor) => {
         if (floor?.room?.filters) {
           floor.room.filters = [];
-          floor.nameText.style.fill = COLORS.green;
+          floor.nameText.style.fill = COLORS.white;
         }
       });
 
@@ -390,7 +390,7 @@ export default class Interface {
     this.navBar.buttons.about.scale.x = scale;
     this.navBar.buttons.about.scale.y = scale;
     this.navBar.buttons.about.position.y =
-      positionY - this.navBar.buttons.about.height / 2;
+      positionY - this.navBar.buttons.about.height / 2 - 50 * scale;
     this.navBar.buttons.about.position.x = isSmallMobileSizedScreen()
       ? State.app.screen.width / 2 -
         this.navBar.buttons.about.width +
@@ -405,7 +405,7 @@ export default class Interface {
     this.navBar.buttons.artists.scale.x = scale;
     this.navBar.buttons.artists.scale.y = scale;
     this.navBar.buttons.artists.position.y =
-      positionY - this.navBar.buttons.artists.height / 2;
+      positionY - this.navBar.buttons.artists.height / 2 - 50 * scale;
     this.navBar.buttons.artists.position.x = isSmallMobileSizedScreen()
       ? State.app.screen.width / 2 - 20 * scale
       : State.app.screen.width / 2;
@@ -414,11 +414,11 @@ export default class Interface {
 
     // Music
     this.navBar.buttons.music =
-      this.navBar.buttons.music || PIXI.Sprite.from("music.png");
-    this.navBar.buttons.music.scale.x = scale;
-    this.navBar.buttons.music.scale.y = scale;
+      this.navBar.buttons.music || PIXI.Sprite.from("/img/gui/music_final.png");
+    this.navBar.buttons.music.scale.x = scale / 1.8;
+    this.navBar.buttons.music.scale.y = scale / 1.8;
     this.navBar.buttons.music.position.y =
-      positionY - this.navBar.buttons.music.height / 2 + 45 * scale;
+      positionY - this.navBar.buttons.music.height / 2;
     this.navBar.buttons.music.position.x = isSmallMobileSizedScreen()
       ? State.app.screen.width / 2 -
         this.navBar.buttons.music.width -
@@ -431,11 +431,12 @@ export default class Interface {
 
     // Settings
     this.navBar.buttons.settings =
-      this.navBar.buttons.settings || PIXI.Sprite.from("settings.png");
-    this.navBar.buttons.settings.scale.x = scale;
-    this.navBar.buttons.settings.scale.y = scale;
+      this.navBar.buttons.settings ||
+      PIXI.Sprite.from("/img/gui/settings_final.png");
+    this.navBar.buttons.settings.scale.x = scale / 1.8;
+    this.navBar.buttons.settings.scale.y = scale / 1.8;
     this.navBar.buttons.settings.position.y =
-      positionY - this.navBar.buttons.settings.height / 2 + 45 * scale;
+      positionY - this.navBar.buttons.settings.height / 2;
     this.navBar.buttons.settings.position.x = isSmallMobileSizedScreen()
       ? State.app.screen.width / 2 +
         this.navBar.buttons.artists.width -
@@ -589,7 +590,6 @@ export default class Interface {
       }
     });
 
-    this.renderTitle();
     this.renderArtistInfo();
     this.renderBottomBar();
     this.renderNotification();

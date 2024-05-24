@@ -104,14 +104,18 @@ canvas {
   width: 400px;
 }
 
+#music-player {
+  gap: 12px;
+}
+
 #modal-header,
 #settings-header {
   font-family: "Nokia", monospace;
   text-transform: uppercase;
-  font-size: 40px;
+  font-size: 32px;
   text-align: center;
   color: #e8c170;
-  text-shadow: 4px 4px 0px #be772b;
+  text-shadow: 2px 2px 0px #be772b;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -119,7 +123,7 @@ canvas {
 
 #modal-body,
 #settings-body {
-  font-size: 24px;
+  font-size: 16px;
   font-family: "Tiny Tower", monospace;
   text-shadow: 2px 2px 0px #495588;
   text-align: center;
@@ -134,7 +138,7 @@ canvas {
 #modal-footer {
   display: none;
   text-align: center;
-  font-size: 28px;
+  font-size: 18px;
   font-family: "Tiny Tower", monospace;
   text-shadow: 2px 2px 0px #2e4c5e;
 }
@@ -183,7 +187,7 @@ canvas {
 #modal-footer button {
   all: unset;
   cursor: pointer;
-  font-size: 28px;
+  font-size: 18px;
   font-family: "Tiny Tower", monospace;
   color: #a4dddb;
 }
@@ -212,15 +216,19 @@ canvas {
 #music-player-next-track img,
 #music-player-play img,
 #music-player-prev-track img {
-  height: 64px;
+  height: 32px;
   width: auto;
 }
 
 #music-player-track-info {
+  color: #e8c170;
   text-align: center;
   white-space: nowrap;
   font-size: 24px;
   letter-spacing: -1px;
+  overflow: hidden;
+  width: 100%;
+  background-color: #000;
 }
 
 #music-player-controls {
@@ -240,7 +248,7 @@ canvas {
 .artist {
   all: unset;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 16px;
   margin-left: -24px;
 }
 
@@ -275,7 +283,7 @@ hr {
   justify-content: center;
   padding: 24px;
   font-family: "Nokia", monospace;
-  font-size: 64px;
+  font-size: 32px;
   text-shadow: 8px 8px 0px #696163;
   color: #e6d7cc;
   background-color: #5c7c94;
@@ -347,20 +355,142 @@ hr {
   text-shadow: 2px 2px 0px #be772b;
 }
 
+#music-player-duration {
+  display: flex;
+  align-items: center;
+}
+
+#current,
+#total {
+  width: 40px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+#seek {
+  width: 100%;
+}
+
 @media only screen and (max-width: 700px) {
   #modal,
-  #settings,
-  #music-player {
+  #settings {
     padding: 16px 8px;
     margin-top: -32px;
   }
 
-  #modal-header {
-    font-size: 28px;
+  #modal-header,
+  #settings-header {
+    font-size: 18px;
   }
 
   #modal-close {
     top: -16px;
     right: -16px;
+  }
+}
+
+/* Music Player Slider */
+input[type="range"] {
+  position: relative;
+  appearance: none;
+  height: 2px;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  background-color: #ebede9;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  position: relative;
+  -webkit-appearance: none;
+  box-sizing: content-box;
+  border: 1px solid #5c7c94;
+  height: 14px;
+  width: 14px;
+  border-radius: 0;
+  background-color: #5c7c94;
+  cursor: pointer;
+  margin: 0;
+}
+
+input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+  background: #5c7c94;
+}
+
+input[type="range"]::-moz-focus-outer {
+  border: 0;
+}
+
+input[type="range"]::-moz-range-thumb {
+  box-sizing: content-box;
+  border: 1px solid #5c7c94;
+  height: 14px;
+  width: 14px;
+  border-radius: 0;
+  background-color: #5c7c94;
+  cursor: pointer;
+}
+
+input[type="range"]:active::-moz-range-thumb {
+  transform: scale(1.2);
+  background: #5c7c94;
+}
+
+input[type="range"]::-ms-track {
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+  background: transparent;
+  border: solid transparent;
+  color: transparent;
+}
+
+input[type="range"]::-ms-fill-lower {
+  background-color: #73bed3;
+}
+
+input[type="range"]::-ms-thumb {
+  box-sizing: content-box;
+  border: 1px solid #5c7c94;
+  height: 14px;
+  width: 14px;
+  border-radius: 0;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+input[type="range"]:active::-ms-thumb {
+  transform: scale(1.2);
+  background: #5c7c94;
+}
+
+.marquee {
+  --gap: 1rem;
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: var(--gap);
+}
+
+.marquee-content {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-around;
+  min-width: 100%;
+  gap: var(--gap);
+  animation: scroll 30s linear infinite;
+  animation-delay: 2s;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
   }
 }

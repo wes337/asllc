@@ -61,9 +61,7 @@ export default class ChatBubble {
 
     const margin = 40 * scale;
 
-    this.text.style.fontSize = isLargeSizedScreen()
-      ? FONT_SIZES.xl
-      : FONT_SIZES.lg;
+    this.text.style.fontSize = FONT_SIZES.lg;
 
     let width = this.text.width + margin;
     this.text.style.wordWrap = true;
