@@ -25,7 +25,7 @@ export const TEXT_STYLES = {
   default: {
     fontFamily: FONT_FAMILY.name,
     fill: COLORS.white,
-    fontSize: FONT_SIZES.md,
+    fontSize: FONT_SIZES.sm,
     dropShadow: true,
     dropShadowColor: COLORS.darkPurple,
     dropShadowDistance: 4,
@@ -44,6 +44,18 @@ export const TEXT_STYLES = {
     dropShadowColor: COLORS.darkYellow,
     dropShadowDistance: 4,
   },
+};
+
+export const DEFAULT_XS_FONT_SIZE = () => {
+  if (isMobileSizedScreen()) {
+    return 11;
+  }
+
+  if (isLargeSizedScreen()) {
+    return 16;
+  }
+
+  return 12;
 };
 
 export const DEFAULT_FONT_SIZE = () => {

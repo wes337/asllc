@@ -40,6 +40,12 @@ export default class Modal {
     if (["artists", "other"].includes(this.id)) {
       this.setupArtistButtons();
     }
+
+    if (this.id === "about") {
+      this.setupAboutButtons();
+    }
+
+    this.setupBackButton();
   }
 
   static hide() {
@@ -49,6 +55,34 @@ export default class Modal {
     this.visible = false;
     this.id = null;
     SoundPlayer.play("close.wav");
+  }
+
+  static setupBackButton() {
+    const backButton = this.modal.querySelector("#back-button");
+
+    if (!backButton) {
+      return;
+    }
+
+    backButton.onclick = (event) => {
+      event.stopPropagation();
+      this.show(MODALS.about);
+    };
+  }
+
+  static setupAboutButtons() {
+    const touringButton = this.modal.querySelector("#touring-button");
+    const merchandiseButton = this.modal.querySelector("#merchandise-button");
+
+    touringButton.onclick = (event) => {
+      event.stopPropagation();
+      this.show(MODALS.touring);
+    };
+
+    merchandiseButton.onclick = (event) => {
+      event.stopPropagation();
+      this.show(MODALS.merchandise);
+    };
   }
 
   static setupArtistButtons() {

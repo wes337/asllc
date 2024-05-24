@@ -9,7 +9,6 @@ export default class Background {
   static sun = null;
   static clouds = [];
   static buildings = [];
-  static mobileBackground = null;
   static ground = new PIXI.Graphics();
   static dirt = null;
   static moreDirt = null;
@@ -151,38 +150,6 @@ export default class Background {
     }
   }
 
-  static renderMobileBackground() {
-    if (this.mobileBackground) {
-      this.mobileBackground.visible = isMobileSizedScreen();
-    }
-
-    if (!isMobileSizedScreen()) {
-      return;
-    }
-
-    const mobileBackground =
-      this.mobileBackground || PIXI.Sprite.from("./img/mobile-bg.png");
-
-    mobileBackground.scale.y = 1;
-    mobileBackground.scale.x = 1;
-    mobileBackground.anchor.set(0.5);
-
-    mobileBackground.width = window.innerWidth;
-
-    const positionX = State.app.screen.width - mobileBackground.width / 2;
-    const positionY =
-      State.app.screen.height -
-      1600 * State.scale() -
-      Interface.navBar.height();
-
-    mobileBackground.initialPosition = { x: positionX, y: positionY };
-    mobileBackground.position.set(positionX, positionY);
-
-    this.mobileBackground = mobileBackground;
-
-    State.app.stage.addChild(mobileBackground);
-  }
-
   static renderBuildings() {
     const scale = State.scale();
 
@@ -220,7 +187,6 @@ export default class Background {
         State.app.screen.height - building.height / 2 - 300 * scale;
 
       building.initialPosition = { x: positionX, y: positionY };
-      building.visible = !isMobileSizedScreen();
 
       building.position.set(positionX, positionY);
 
@@ -445,7 +411,6 @@ export default class Background {
     this.renderPlane();
     this.renderBlimp();
     this.renderBuildings();
-    this.renderMobileBackground();
     this.renderGround();
     this.renderFossil();
     this.renderCar();

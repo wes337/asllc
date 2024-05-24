@@ -1,6 +1,10 @@
-import { GREETINGS } from "../constants/chat.js";
+import { GREETINGS } from "../content/phrases.js";
 import { FLOORS } from "../constants/floors.js";
-import { DEFAULT_FONT_SIZE, TEXT_STYLES } from "../constants/text.js";
+import {
+  DEFAULT_FONT_SIZE,
+  DEFAULT_XS_FONT_SIZE,
+  TEXT_STYLES,
+} from "../constants/text.js";
 import { COLORS } from "../constants/colors.js";
 import { getRandomElementFromArray, isMobileSizedScreen } from "../utils.js";
 import { animateCamera } from "../animate.js";
@@ -58,7 +62,7 @@ export default class Floor {
 
     this.nameText = new PIXI.Text("", {
       ...TEXT_STYLES.default,
-      fill: COLORS.green,
+      fill: COLORS.white,
     });
 
     this.indicator = PIXI.Sprite.from("indicator.png");
@@ -219,7 +223,7 @@ export default class Floor {
     this.container.addChild(this.separator);
 
     this.nameText.text = this.name;
-    this.nameText.style.fontSize = DEFAULT_FONT_SIZE();
+    this.nameText.style.fontSize = DEFAULT_XS_FONT_SIZE();
     this.nameText.position.set(
       positionX - this.room.width / 2 + 150 * scale,
       positionY - this.nameText.height / 2

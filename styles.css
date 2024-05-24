@@ -90,17 +90,18 @@ canvas {
   flex-direction: column;
   background-color: #10141f;
   color: #fff;
-  width: 800px;
+  width: 550px;
   max-width: 90vw;
   max-height: 80vh;
-  padding: 32px;
-  gap: 24px;
+  padding: 16px;
+  gap: 12px;
   border: 4px solid #5c7c94;
   z-index: 1;
 }
 
 #music-player,
 #settings {
+  padding: 32px;
   width: 400px;
 }
 
@@ -108,10 +109,10 @@ canvas {
 #settings-header {
   font-family: "Nokia", monospace;
   text-transform: uppercase;
-  font-size: 40px;
+  font-size: 24px;
   text-align: center;
   color: #e8c170;
-  text-shadow: 4px 4px 0px #be772b;
+  text-shadow: 2px 2px 0px #be772b;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -119,7 +120,7 @@ canvas {
 
 #modal-body,
 #settings-body {
-  font-size: 24px;
+  font-size: 16px;
   font-family: "Tiny Tower", monospace;
   text-shadow: 2px 2px 0px #495588;
   text-align: center;
@@ -127,14 +128,17 @@ canvas {
   flex-direction: column;
   gap: 8px;
   align-items: center;
-  padding-bottom: 12px;
   overflow: auto;
+}
+
+#settings-body {
+  padding-bottom: 12px;
 }
 
 #modal-footer {
   display: none;
   text-align: center;
-  font-size: 28px;
+  font-size: 18px;
   font-family: "Tiny Tower", monospace;
   text-shadow: 2px 2px 0px #2e4c5e;
 }
@@ -156,6 +160,8 @@ canvas {
   font-size: 24px;
   font-family: "Tiny Tower", monospace;
   background-color: #5c7c94;
+  line-height: 16px;
+  width: 16px;
 }
 
 #music-player-close {
@@ -183,9 +189,34 @@ canvas {
 #modal-footer button {
   all: unset;
   cursor: pointer;
-  font-size: 28px;
+  font-size: 18px;
   font-family: "Tiny Tower", monospace;
   color: #a4dddb;
+}
+
+.modal-links {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.modal-button {
+  all: unset;
+  cursor: pointer;
+  font-size: 20px;
+  font-family: "Tiny Tower", monospace;
+  text-shadow: 2px 2px 0px #696163;
+  color: #e6d7cc;
+  background-color: #5c7c94;
+  box-shadow: 4px 4px 0px #2e4c5e;
+  padding: 4px;
+  width: 100%;
+}
+
+.modal-button:hover {
+  color: #fff;
 }
 
 #music-player img {
@@ -212,21 +243,28 @@ canvas {
 #music-player-next-track img,
 #music-player-play img,
 #music-player-prev-track img {
-  height: 64px;
+  height: 32px;
   width: auto;
 }
 
 #music-player-track-info {
+  color: #e8c170;
   text-align: center;
   white-space: nowrap;
   font-size: 24px;
   letter-spacing: -1px;
+  overflow: hidden;
+  width: 100%;
+  padding: 4px;
+  background-color: #000;
 }
 
 #music-player-controls {
   display: flex;
   justify-content: space-between;
   white-space: nowrap;
+  margin-top: 8px;
+  margin-bottom: -16px;
 }
 
 .artists {
@@ -240,7 +278,7 @@ canvas {
 .artist {
   all: unset;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 16px;
   margin-left: -24px;
 }
 
@@ -258,8 +296,40 @@ canvas {
   opacity: 1;
 }
 
-.info {
+.lead {
   color: #fff;
+}
+
+.tours {
+  padding: 0;
+}
+
+.tours li {
+  list-style-type: none;
+  margin: 8px 0;
+}
+
+.tours li a {
+  margin-left: -8px;
+}
+
+.tours li:hover::before {
+  opacity: 1;
+}
+
+.tours li::before {
+  content: ">>";
+  margin-right: 8px;
+  opacity: 0;
+}
+
+.modal-art {
+  width: 100%;
+}
+
+.modal-art img {
+  width: 100%;
+  height: auto;
 }
 
 hr {
@@ -273,13 +343,14 @@ hr {
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 16px;
   font-family: "Nokia", monospace;
-  font-size: 64px;
+  font-size: 32px;
   text-shadow: 8px 8px 0px #696163;
   color: #e6d7cc;
   background-color: #5c7c94;
   box-shadow: 0px 16px 0px #2e4c5e;
+  width: 300px;
 }
 
 #bg {
@@ -347,20 +418,146 @@ hr {
   text-shadow: 2px 2px 0px #be772b;
 }
 
+#music-player-duration {
+  display: flex;
+  align-items: center;
+}
+
+#current,
+#total {
+  width: 40px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+#seek {
+  width: 100%;
+}
+
+#back-button {
+  width: 100px;
+}
+
 @media only screen and (max-width: 700px) {
   #modal,
-  #settings,
-  #music-player {
+  #settings {
     padding: 16px 8px;
     margin-top: -32px;
   }
 
-  #modal-header {
-    font-size: 28px;
+  #modal-header,
+  #settings-header {
+    font-size: 18px;
   }
 
   #modal-close {
     top: -16px;
     right: -16px;
+  }
+}
+
+/* Music Player Slider */
+input[type="range"] {
+  position: relative;
+  appearance: none;
+  height: 2px;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  background-color: #ebede9;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  position: relative;
+  -webkit-appearance: none;
+  box-sizing: content-box;
+  border: 1px solid #5c7c94;
+  height: 14px;
+  width: 14px;
+  border-radius: 0;
+  background-color: #5c7c94;
+  cursor: pointer;
+  margin: 0;
+}
+
+input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+  background: #5c7c94;
+}
+
+input[type="range"]::-moz-focus-outer {
+  border: 0;
+}
+
+input[type="range"]::-moz-range-thumb {
+  box-sizing: content-box;
+  border: 1px solid #5c7c94;
+  height: 14px;
+  width: 14px;
+  border-radius: 0;
+  background-color: #5c7c94;
+  cursor: pointer;
+}
+
+input[type="range"]:active::-moz-range-thumb {
+  transform: scale(1.2);
+  background: #5c7c94;
+}
+
+input[type="range"]::-ms-track {
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+  background: transparent;
+  border: solid transparent;
+  color: transparent;
+}
+
+input[type="range"]::-ms-fill-lower {
+  background-color: #73bed3;
+}
+
+input[type="range"]::-ms-thumb {
+  box-sizing: content-box;
+  border: 1px solid #5c7c94;
+  height: 14px;
+  width: 14px;
+  border-radius: 0;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+input[type="range"]:active::-ms-thumb {
+  transform: scale(1.2);
+  background: #5c7c94;
+}
+
+.marquee {
+  --gap: 1rem;
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: var(--gap);
+}
+
+.marquee-content {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-around;
+  min-width: 100%;
+  gap: var(--gap);
+  animation: scroll 30s linear infinite;
+  animation-delay: 2s;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
   }
 }

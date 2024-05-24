@@ -25,11 +25,6 @@ export const GREETINGS = {
   wud: [],
   "plague-blvd": [],
   wendigo: [],
-  afourteen: [
-    "They want my eyeballs",
-    "Maybe one day I'll finish the album",
-    "NOBODIES",
-  ],
   biv: [],
   blckk: [],
   bruhmanegod: [],

@@ -32,7 +32,14 @@
     </div>
     <div id="music-player-container">
       <div id="music-player">
-        <div id="music-player-track-info"></div>
+        <div id="music-player-track-info">
+          <div class="marquee"></div>
+        </div>
+        <div id="music-player-duration">
+          <span id="current">0:00</span>
+          <input type="range" id="seek" max="100" value="0" />
+          <span id="total">0:00</span>
+        </div>
         <div id="music-player-controls">
           <button id="music-player-prev-track">
             <img src="./img/gui/track.png" />
