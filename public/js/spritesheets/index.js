@@ -13,25 +13,39 @@ import plane from "./plane.js";
 import dirt from "./dirt.js";
 import blimp from "./blimp.js";
 
+const SPRITESHEETS = [
+  { key: "people", value: people },
+  { key: "misc", value: misc },
+  { key: "underground", value: underground },
+  { key: "elevator", value: elevator },
+  { key: "ui", value: ui },
+  { key: "ui-2", value: ui2 },
+  { key: "green-building", value: greenBuilding },
+  { key: "red-building", value: redBuilding },
+  { key: "plane", value: plane },
+  { key: "floors-1", value: floors1 },
+  { key: "floors-2", value: floors2 },
+  { key: "dirt", value: dirt },
+  { key: "blimp", value: blimp },
+];
+
+export var progress = 0;
+export var totalProgress = SPRITESHEETS.length + 1;
+
+export function updateLoadingPercentage() {
+  progress++;
+
+  const loadingPercentage = document.getElementById("loading-percentage");
+  loadingPercentage.innerHTML = `${Math.floor(
+    (progress / totalProgress) * 100
+  )}%`;
+}
+
 export default async function loadSpritesheets() {
-  const spritesheets = [
-    { key: "people", value: people },
-    { key: "misc", value: misc },
-    { key: "underground", value: underground },
-    { key: "elevator", value: elevator },
-    { key: "ui", value: ui },
-    { key: "ui-2", value: ui2 },
-    { key: "green-building", value: greenBuilding },
-    { key: "red-building", value: redBuilding },
-    { key: "plane", value: plane },
-    { key: "floors-1", value: floors1 },
-    { key: "floors-2", value: floors2 },
-    { key: "dirt", value: dirt },
-    { key: "blimp", value: blimp },
-  ];
+  progress = 0;
 
   await Promise.all(
-    spritesheets.map(async ({ key, value }) => {
+    SPRITESHEETS.map(async ({ key, value }) => {
       const spritesheet = new PIXI.Spritesheet(
         PIXI.BaseTexture.from(value.meta.image),
         value
@@ -43,9 +57,12 @@ export default async function loadSpritesheets() {
         ...State.spritesheets,
         [key]: spritesheet,
       };
+
+      updateLoadingPercentage();
     })
   );
 
   const crane = await PIXI.Assets.load("./img/spritesheets/crane.gif");
   State.spritesheets.crane = crane;
+  updateLoadingPercentage();
 }

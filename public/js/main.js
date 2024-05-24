@@ -24,7 +24,7 @@ async function loadAssets() {
 
     await PIXI.Assets.loadBundle("fonts");
 
-    message.innerHTML = "Loading sprites...";
+    message.innerHTML = `Loading sprites <span id="loading-percentage">0%</span>`;
 
     await loadSpritesheets();
 
