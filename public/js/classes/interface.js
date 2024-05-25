@@ -3,11 +3,7 @@ import { FLOORS } from "../constants/floors.js";
 import { COLORS } from "../constants/colors.js";
 import { MODALS } from "../constants/modal.js";
 import { TEXT_STYLES, FONT_SIZES } from "../constants/text.js";
-import {
-  isLargeSizedScreen,
-  isMobileSizedScreen,
-  isSmallMobileSizedScreen,
-} from "../utils.js";
+import { isLargeSizedScreen, isMobileSizedScreen } from "../utils.js";
 import Building from "./building.js";
 import Elevator from "./elevator.js";
 import Modal from "./modal.js";
@@ -384,6 +380,8 @@ export default class Interface {
       this.navBar.height() / 2 +
       State.app.stage.pivot.y;
 
+    const offsetX = 25 * scale;
+
     // About
     this.navBar.buttons.about =
       this.navBar.buttons.about || PIXI.Sprite.from("about.png");
@@ -391,11 +389,8 @@ export default class Interface {
     this.navBar.buttons.about.scale.y = scale;
     this.navBar.buttons.about.position.y =
       positionY - this.navBar.buttons.about.height / 2 - 50 * scale;
-    this.navBar.buttons.about.position.x = isSmallMobileSizedScreen()
-      ? State.app.screen.width / 2 -
-        this.navBar.buttons.about.width +
-        20 * scale
-      : State.app.screen.width / 2 - this.navBar.buttons.about.width;
+    this.navBar.buttons.about.position.x =
+      State.app.screen.width / 2 - this.navBar.buttons.about.width + offsetX;
     this.navBar.buttons.about.filters = [];
     this.navBar.container.addChild(this.navBar.buttons.about);
 
@@ -406,49 +401,43 @@ export default class Interface {
     this.navBar.buttons.artists.scale.y = scale;
     this.navBar.buttons.artists.position.y =
       positionY - this.navBar.buttons.artists.height / 2 - 50 * scale;
-    this.navBar.buttons.artists.position.x = isSmallMobileSizedScreen()
-      ? State.app.screen.width / 2 - 20 * scale
-      : State.app.screen.width / 2;
+    this.navBar.buttons.artists.position.x =
+      State.app.screen.width / 2 - 70 * scale + offsetX;
     this.navBar.buttons.artists.filters = [];
     this.navBar.container.addChild(this.navBar.buttons.artists);
 
     // Music
     this.navBar.buttons.music =
-      this.navBar.buttons.music ||
-      PIXI.Sprite.from("./img/gui/music_final.png");
-    this.navBar.buttons.music.scale.x = scale / 1.8;
-    this.navBar.buttons.music.scale.y = scale / 1.8;
+      this.navBar.buttons.music || PIXI.Sprite.from("music.png");
+    this.navBar.buttons.music.scale.x = scale;
+    this.navBar.buttons.music.scale.y = scale;
     this.navBar.buttons.music.position.y =
-      positionY - this.navBar.buttons.music.height / 2;
-    this.navBar.buttons.music.position.x = isSmallMobileSizedScreen()
-      ? State.app.screen.width / 2 -
-        this.navBar.buttons.music.width -
-        this.navBar.buttons.about.width +
-        80 * scale
-      : State.app.screen.width / 2 -
-        this.navBar.buttons.music.width -
-        this.navBar.buttons.about.width;
+      positionY - this.navBar.buttons.music.height / 2 - 5 * scale;
+    this.navBar.buttons.music.position.x =
+      State.app.screen.width / 2 -
+      this.navBar.buttons.music.width -
+      this.navBar.buttons.about.width +
+      90 * scale +
+      offsetX;
     this.navBar.container.addChild(this.navBar.buttons.music);
 
     // Settings
     this.navBar.buttons.settings =
-      this.navBar.buttons.settings ||
-      PIXI.Sprite.from("./img/gui/settings_final.png");
-    this.navBar.buttons.settings.scale.x = scale / 1.8;
-    this.navBar.buttons.settings.scale.y = scale / 1.8;
+      this.navBar.buttons.settings || PIXI.Sprite.from("settings.png");
+    this.navBar.buttons.settings.scale.x = scale;
+    this.navBar.buttons.settings.scale.y = scale;
     this.navBar.buttons.settings.position.y =
-      positionY - this.navBar.buttons.settings.height / 2;
-    this.navBar.buttons.settings.position.x = isSmallMobileSizedScreen()
-      ? State.app.screen.width / 2 +
-        this.navBar.buttons.artists.width -
-        80 * scale
-      : State.app.screen.width / 2 + this.navBar.buttons.artists.width;
+      positionY - this.navBar.buttons.settings.height / 2 - 5 * scale;
+    this.navBar.buttons.settings.position.x =
+      State.app.screen.width / 2 +
+      this.navBar.buttons.artists.width -
+      165 * scale +
+      offsetX;
     this.navBar.container.addChild(this.navBar.buttons.settings);
 
     const hover = this.navBar.buttons.hover;
     if (hover) {
-      this.navBar.buttons[hover].position.y -=
-        this.navBar.buttons[hover].height / 8;
+      this.navBar.buttons[hover].position.y -= 25 * scale;
     }
 
     State.app.stage.addChild(this.navBar.container);
