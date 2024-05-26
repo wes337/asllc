@@ -58,6 +58,11 @@ export default class Interface {
     button: PIXI.Sprite.from(INTERFACE_SPRITES.notification.src),
   };
 
+  static spotlight = {
+    background: new PIXI.Graphics(),
+    target: null,
+  };
+
   static setupNavbarEventListeners() {
     if (this.navBar.buttons.initialized) {
       return;
@@ -225,16 +230,7 @@ export default class Interface {
       this.artistInfo.background.clear();
       this.artistInfo.container.pivot.y = this.artistInfo.height() * -2;
 
-      Building.allFloors.forEach((floor) => {
-        if (floor?.room?.filters) {
-          floor.room.filters = [];
-          floor.nameText.style.fill = COLORS.white;
-        }
-      });
-
-      State.people.forEach((person) => {
-        person.filters = [];
-      });
+      this.spotlight.target = null;
 
       return;
     }
@@ -571,7 +567,79 @@ export default class Interface {
     }
   }
 
+  static renderSpotlight() {
+    this.spotlight.background.clear();
+
+    if (!this.spotlight.target) {
+      return;
+    }
+
+    const scale = State.scale();
+    const width = State.app.screen.width;
+    const height = State.app.screen.height * 2;
+
+    let offsetY = 25 * scale;
+
+    if (this.spotlight.target.basement) {
+      offsetY = offsetY + 150 * scale;
+    }
+
+    // Bottom
+    this.spotlight.background.beginFill(COLORS.black);
+    this.spotlight.background.drawRect(
+      0,
+      this.spotlight.target.position.y() +
+        this.spotlight.target.room.height / 2 +
+        offsetY,
+      width,
+      height
+    );
+    this.spotlight.background.endFill();
+
+    // Top
+    this.spotlight.background.beginFill(COLORS.black);
+    this.spotlight.background.drawRect(
+      0,
+      this.spotlight.target.position.y() +
+        this.spotlight.target.room.height / 2 -
+        height -
+        this.spotlight.target.room.height +
+        offsetY,
+      width,
+      height
+    );
+    this.spotlight.background.endFill();
+
+    // Left
+    this.spotlight.background.beginFill(COLORS.black);
+    this.spotlight.background.drawRect(
+      0,
+      this.spotlight.target.position.y() - this.spotlight.target.height() / 2,
+      width / 2 - 485 * scale,
+      this.spotlight.target.height() * 2
+    );
+    this.spotlight.background.endFill();
+
+    // Right
+    this.spotlight.background.beginFill(COLORS.black);
+    this.spotlight.background.drawRect(
+      width / 2 + 760 * scale,
+      this.spotlight.target.position.y() - this.spotlight.target.height() / 2,
+      width / 2,
+      this.spotlight.target.height() * 2
+    );
+    this.spotlight.background.endFill();
+
+    this.spotlight.background.filters = this.spotlight.background.filters || [
+      State.filters.opacity(0.5),
+    ];
+
+    State.app.stage.addChild(this.spotlight.background);
+  }
+
   static render() {
+    this.renderSpotlight();
+
     // Need to reverse so the chat bubble draws
     // on top of the floors above the person
     [...State.people].reverse().forEach((person) => {
