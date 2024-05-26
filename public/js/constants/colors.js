@@ -17,4 +17,9 @@ export const COLORS = {
   darkYellow: "#be772b",
   red: "#a53030",
   green: "#26ff36",
+
+  // Night
+  nightLightBlue: "#546bab",
+  nightBlue: "#2e4482",
+  nightDarkBlue: "#131862",
 };
