@@ -9,7 +9,6 @@ import { COLORS } from "../constants/colors.js";
 import { getRandomElementFromArray, isMobileSizedScreen } from "../utils.js";
 import { animateCamera } from "../animate.js";
 import Elevator from "./elevator.js";
-import Building from "./building.js";
 import Interface from "./interface.js";
 import Modal from "./modal.js";
 import State from "./state.js";
@@ -170,6 +169,7 @@ export default class Floor {
     if (State.activeFloorNumber === this.number) {
       State.activeFloorNumber = null;
       Interface.setArtistInfo(null);
+      Interface.spotlight.target = null;
     } else {
       State.activeFloorNumber = this.number;
 
@@ -183,24 +183,7 @@ export default class Floor {
       }
 
       Interface.setArtistInfo(this.id);
-
-      Building.allFloors.forEach((floor) => {
-        if (floor.room && floor.id !== this.id) {
-          floor.room.filters = [State.filters.adjustment({ brightness: 0.3 })];
-          floor.nameText.style.fill = COLORS.darkGray;
-        } else if (floor.id === this.id) {
-          floor.room.filters = [];
-          floor.nameText.style.fill = COLORS.darkGray;
-        }
-      });
-
-      State.people.forEach((person) => {
-        if (person.inElevator || person.name === this.id) {
-          person.filters = [];
-        } else if (person.name !== this.id) {
-          person.filters = [State.filters.adjustment({ brightness: 0.3 })];
-        }
-      });
+      Interface.spotlight.target = this;
     }
   }
 
