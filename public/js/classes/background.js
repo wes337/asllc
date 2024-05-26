@@ -31,7 +31,10 @@ export default class Background {
 
   static renderNightSky() {
     this.nightSky.clear();
-    this.nightSky.initialPosition = { x: 0, y: 0 };
+    this.nightSky.initialPosition = this.nightSky.initialPosition || {
+      x: 0,
+      y: 0,
+    };
 
     if (!this.nightMode) {
       return;

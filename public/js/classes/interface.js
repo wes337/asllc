@@ -576,7 +576,7 @@ export default class Interface {
 
     const scale = State.scale();
     const width = State.app.screen.width;
-    const height = State.app.screen.height * 2;
+    const height = State.app.screen.height;
 
     let offsetY = 25 * scale;
 
@@ -635,6 +635,10 @@ export default class Interface {
     ];
 
     State.app.stage.addChild(this.spotlight.background);
+  }
+
+  static setSpotlight(target) {
+    this.spotlight.target = target;
   }
 
   static render() {

@@ -169,7 +169,6 @@ export default class Floor {
     if (State.activeFloorNumber === this.number) {
       State.activeFloorNumber = null;
       Interface.setArtistInfo(null);
-      Interface.spotlight.target = null;
     } else {
       State.activeFloorNumber = this.number;
 
@@ -183,7 +182,7 @@ export default class Floor {
       }
 
       Interface.setArtistInfo(this.id);
-      Interface.spotlight.target = this;
+      Interface.setSpotlight(this);
     }
   }
 
