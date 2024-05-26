@@ -34,6 +34,9 @@ async function loadAssets() {
     enterButton.addEventListener("click", () => {
       loading.remove();
       MusicPlayer.toggle();
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute("content", "#4f8fba");
       resolve();
     });
   });

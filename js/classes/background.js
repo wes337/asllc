@@ -61,6 +61,13 @@ export default class Background {
       ? COLORS.nightLightBlue
       : COLORS.lightBlue;
 
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute(
+        "content",
+        nightMode ? COLORS.nightDarkBlue : COLORS.darkBlue
+      );
+
     render();
   }
 
