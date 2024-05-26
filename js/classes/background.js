@@ -1,5 +1,6 @@
 import { COLORS } from "../constants/colors.js";
 import { randomNumberBetween, isMobileSizedScreen } from "../utils.js";
+import render from "../render.js";
 import Interface from "./interface.js";
 import State from "./state.js";
 
@@ -17,6 +18,8 @@ export default class Background {
   static car = null;
   static dinosaur = null;
   static blimp = null;
+  static nightMode = false;
+  static nightSky = new PIXI.Graphics();
 
   static {
     window.addEventListener("resize", () => {
@@ -26,9 +29,43 @@ export default class Background {
     });
   }
 
+  static renderNightSky() {
+    this.nightSky.clear();
+    this.nightSky.initialPosition = { x: 0, y: 0 };
+
+    if (!this.nightMode) {
+      return;
+    }
+
+    const width = State.app.screen.width;
+    const height = State.app.screen.height * 2;
+
+    this.nightSky.beginFill(COLORS.black);
+    this.nightSky.drawRect(0, 0, width, height);
+    this.nightSky.endFill();
+
+    this.nightSky.filters = this.nightSky.filters || [
+      State.filters.opacity(0.5),
+    ];
+
+    State.app.stage.addChild(this.nightSky);
+  }
+
+  static toggleNightMode(nightMode) {
+    this.nightMode = nightMode;
+
+    State.app.renderer.backgroundColor = nightMode
+      ? COLORS.nightLightBlue
+      : COLORS.lightBlue;
+
+    render();
+  }
+
   static pivot() {
     this.sky.position.y = this.sky.initialPosition.y + State.app.stage.pivot.y;
     this.sun.position.y = this.sun.initialPosition.y + State.app.stage.pivot.y;
+    this.nightSky.position.y =
+      this.nightSky.initialPosition.y + State.app.stage.pivot.y;
     this.plane.position.y =
       this.plane.initialPosition.y + State.app.stage.pivot.y;
 
@@ -47,15 +84,17 @@ export default class Background {
     const skyMidSize = skySize / 2;
     const stroke = 4;
 
-    this.sky.beginFill(COLORS.darkBlue);
+    this.sky.beginFill(this.nightMode ? COLORS.nightDarkBlue : COLORS.darkBlue);
     this.sky.drawRect(0, 0, width, skySize);
 
-    this.sky.beginFill(COLORS.blue);
+    this.sky.beginFill(this.nightMode ? COLORS.nightBlue : COLORS.blue);
     this.sky.drawRect(0, skySize - stroke * 2, width, stroke);
     this.sky.drawRect(0, skySize - stroke * 5, width, stroke);
     this.sky.drawRect(0, skySize, width, skyMidSize);
 
-    this.sky.beginFill(COLORS.lightBlue);
+    this.sky.beginFill(
+      this.nightMode ? COLORS.nightLightBlue : COLORS.lightBlue
+    );
     this.sky.drawRect(0, skySize + skyMidSize - stroke * 2, width, stroke);
     this.sky.drawRect(0, skySize + skyMidSize - stroke * 5, width, stroke);
 
@@ -82,6 +121,12 @@ export default class Background {
 
     this.sun.position.set(positionX, positionY);
     this.sun.initialPosition = { x: positionX, y: positionY };
+
+    if (!this.nightMode) {
+      this.sun.filters = undefined;
+    } else {
+      this.sun.filters = this.sun.filters || [State.filters.grayscale()];
+    }
 
     State.app.stage.addChild(this.sun);
   }
@@ -415,6 +460,7 @@ export default class Background {
     this.renderFossil();
     this.renderCar();
     this.renderDinosaur();
+    this.renderNightSky();
 
     this.pivot();
   }

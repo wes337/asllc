@@ -1,9 +1,11 @@
+import Background from "./background.js";
 import MusicPlayer from "./music.js";
 
 export default class Settings {
   static settings = {
     sfx: true,
     music: true,
+    night: false,
   };
 
   static elements = {
@@ -82,6 +84,11 @@ export default class Settings {
           MusicPlayer.stop();
         }
 
+        break;
+      }
+
+      case "night": {
+        Background.toggleNightMode(enabled);
         break;
       }
 

@@ -4,6 +4,7 @@ import {
   isSmallMobileSizedScreen,
 } from "../utils.js";
 import Floor from "./floor.js";
+import Settings from "./settings.js";
 import State from "./state.js";
 
 export default class Building {
@@ -69,6 +70,14 @@ export default class Building {
     );
 
     this.basement[0] = this.foundation;
+
+    if (Settings.settings.night) {
+      this.foundation.filters = this.foundation.filters || [
+        State.filters.adjustment({ brightness: 0.5 }),
+      ];
+    } else {
+      this.foundation.filters = undefined;
+    }
 
     State.app.stage.addChild(this.foundation);
   }
