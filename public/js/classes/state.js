@@ -30,7 +30,8 @@ export default class State {
   static filters = {
     highlight: (size, color) =>
       new PIXI.filters.OutlineFilter(size || 2, color || COLORS.red),
-    opacity: (alpha) => new PIXI.filters.AlphaFilter(alpha || 0.5),
+    opacity: (alpha) =>
+      new PIXI.filters.AdjustmentFilter({ alpha: alpha || 0.5 }),
     adjustment: (options) => new PIXI.filters.AdjustmentFilter(options),
     grayscale: () => new PIXI.filters.GrayscaleFilter(),
   };

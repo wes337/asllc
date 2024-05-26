@@ -154,7 +154,9 @@ export default class Floor {
     await animateCamera(cameraPosition, instant);
   }
 
-  async onClick() {
+  async onClick(event) {
+    event?.stopPropagation?.();
+
     if (
       State.busy ||
       !State.introFinished ||
