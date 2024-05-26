@@ -43,6 +43,7 @@ function handleScroll() {
     if (Building.activeFloor) {
       State.activeFloorNumber = null;
       Interface.setArtistInfo(null);
+      Interface.setSpotlight(null);
     }
   };
 
@@ -68,6 +69,7 @@ function handleScroll() {
     if (Building.activeFloor) {
       State.activeFloorNumber = null;
       Interface.setArtistInfo(null);
+      Interface.setSpotlight(null);
     }
   };
 
