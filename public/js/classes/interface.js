@@ -20,6 +20,11 @@ export default class Interface {
     spotify: PIXI.Sprite.from(INTERFACE_SPRITES.spotify.src),
     ig: PIXI.Sprite.from(INTERFACE_SPRITES.ig.src),
     web: PIXI.Sprite.from(INTERFACE_SPRITES.web.src),
+    twitter: PIXI.Sprite.from(INTERFACE_SPRITES.twitter.src),
+    newgrounds: PIXI.Sprite.from(INTERFACE_SPRITES.newgrounds.src),
+    youtube: PIXI.Sprite.from(INTERFACE_SPRITES.youtube.src),
+    soundcloud: PIXI.Sprite.from(INTERFACE_SPRITES.soundcloud.src),
+    twitch: PIXI.Sprite.from(INTERFACE_SPRITES.twitch.src),
   };
 
   static navBar = {
@@ -334,7 +339,11 @@ export default class Interface {
 
     const linkWidth = INTERFACE_SPRITES.spotify.width * scale;
 
-    const numberOfLinks = Object.keys(links).length;
+    const icons = Object.keys(links)
+      .map((icon) => this.socialMediaLinks[icon])
+      .filter(Boolean);
+
+    const numberOfLinks = icons.length;
     const positionX = State.app.screen.width / 2 + numberOfLinks * 310 * scale;
 
     const positionY =
@@ -342,29 +351,39 @@ export default class Interface {
       this.artistInfo.text.height * 1 +
       (isMobileSizedScreen() ? 40 : 80) * scale;
 
-    Object.keys(links).forEach((icon, i) => {
-      this.socialMediaLinks[icon].position.x =
+    icons.forEach((icon, i) => {
+      const margin = this.artistInfo.margin() / numberOfLinks;
+
+      icon.position.x =
         numberOfLinks === 1
           ? this.artistInfo.text.position.x +
             this.artistInfo.background.width -
             240 * scale
-          : positionX -
-            linkWidth * i -
-            (this.artistInfo.margin() / 3) * (i + 1);
+          : positionX - linkWidth * i - margin * (i + 1);
 
-      this.socialMediaLinks[icon].position.y = isMobileSizedScreen()
-        ? positionY + 50 * scale
-        : positionY - 100 * scale;
+      if (numberOfLinks > 5) {
+        icon.position.x = icon.position.x - 1000 * scale;
+      } else if (numberOfLinks > 4) {
+        icon.position.x = icon.position.x - 800 * scale;
+      } else if (numberOfLinks > 3) {
+        icon.position.x = icon.position.x - 350 * scale;
+      } else if (numberOfLinks === 2) {
+        icon.position.x = icon.position.x + 150 * scale;
+      }
 
-      this.socialMediaLinks[icon].scale.x = scale / 1.2;
-      this.socialMediaLinks[icon].scale.y = scale / 1.2;
-      this.socialMediaLinks[icon].anchor.set(0.5);
+      icon.position.y = isMobileSizedScreen()
+        ? positionY + 60 * scale
+        : positionY + 25 * scale;
 
-      this.socialMediaLinks[icon].filters = [
+      icon.scale.x = scale / 1.2;
+      icon.scale.y = scale / 1.2;
+      icon.anchor.set(0.5);
+
+      icon.filters = [
         State.filters.highlight(isLargeSizedScreen() ? 6 : 4, COLORS.black),
       ];
 
-      this.artistInfo.container.addChild(this.socialMediaLinks[icon]);
+      this.artistInfo.container.addChild(icon);
     });
   }
 

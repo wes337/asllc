@@ -49,6 +49,31 @@ export const INTERFACE_SPRITES = {
     width: 240,
     height: 240,
   },
+  youtube: {
+    src: "./img/icons/youtube.png",
+    width: 240,
+    height: 240,
+  },
+  twitter: {
+    src: "./img/icons/twitter.png",
+    width: 240,
+    height: 240,
+  },
+  twitch: {
+    src: "./img/icons/twitch.png",
+    width: 240,
+    height: 240,
+  },
+  newgrounds: {
+    src: "./img/icons/newgrounds.png",
+    width: 240,
+    height: 240,
+  },
+  soundcloud: {
+    src: "./img/icons/soundcloud.png",
+    width: 240,
+    height: 240,
+  },
 };
 
 export const SPRITE_METADATA = {
