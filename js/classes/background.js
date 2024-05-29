@@ -286,7 +286,7 @@ export default class Background {
   }
 
   static renderFossil() {
-    this.fossil = this.fossil ? this.fossil : PIXI.Sprite.from("distrokid.png");
+    this.fossil = this.fossil ? this.fossil : PIXI.Sprite.from("fossil.png");
 
     const scale = State.scale();
 
@@ -297,11 +297,12 @@ export default class Background {
     const marginX = 16;
     const marginY = 16;
     const positionX = isMobileSizedScreen()
-      ? this.fossil.width / 2 + marginX
+      ? this.fossil.width / 2
       : this.fossil.width * 2;
 
-    const positionY =
-      State.app.screen.height * 2 - this.fossil.height * 4 + marginY;
+    const positionY = isMobileSizedScreen()
+      ? State.app.screen.height * 2 - this.fossil.height * 8
+      : State.app.screen.height * 2 - this.fossil.height * 4 + marginY;
 
     this.fossil.initialPosition = { x: positionX, y: positionY };
 
@@ -320,12 +321,13 @@ export default class Background {
     this.car.anchor.set(0.5);
 
     const marginY = -32;
-    const positionX = isMobileSizedScreen()
+    let positionX = isMobileSizedScreen()
       ? State.app.screen.width - this.car.width / 2
       : State.app.screen.width - this.car.width * 2;
 
-    const positionY =
-      State.app.screen.height * 2 - this.car.height * 8 + marginY;
+    let positionY = isMobileSizedScreen()
+      ? State.app.screen.height * 2 - this.car.height * 10
+      : State.app.screen.height * 2 - this.car.height * 8 + marginY;
 
     this.car.initialPosition = { x: positionX, y: positionY };
 
@@ -346,7 +348,13 @@ export default class Background {
     this.dinosaur.anchor.set(0.5);
 
     const positionX = State.app.screen.width / 2;
-    const positionY = State.app.screen.height * 2 - this.dinosaur.height;
+    let positionY = isMobileSizedScreen()
+      ? State.app.screen.height * 2 - this.dinosaur.height * 3
+      : State.app.screen.height * 2 - this.dinosaur.height;
+
+    if (State.app.screen.width < 390) {
+      positionY = State.app.screen.height * 2 - this.dinosaur.height * 0.75;
+    }
 
     this.dinosaur.initialPosition = { x: positionX, y: positionY };
 

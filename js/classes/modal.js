@@ -73,6 +73,7 @@ export default class Modal {
   static setupAboutButtons() {
     const touringButton = this.modal.querySelector("#touring-button");
     const merchandiseButton = this.modal.querySelector("#merchandise-button");
+    const distributionButton = this.modal.querySelector("#distribution-button");
 
     touringButton.onclick = (event) => {
       event.stopPropagation();
@@ -82,6 +83,11 @@ export default class Modal {
     merchandiseButton.onclick = (event) => {
       event.stopPropagation();
       this.show(MODALS.merchandise);
+    };
+
+    distributionButton.onclick = (event) => {
+      event.stopPropagation();
+      this.show(MODALS.distribution);
     };
   }
 
