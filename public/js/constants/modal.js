@@ -6,6 +6,7 @@ import {
 } from "../content/about.js";
 import { LEAD_TEXT as TOURING_LEAD_TEXT, TOURS } from "../content/touring.js";
 import { LEAD_TEXT as MERCHANDISE_LEAD_TEXT } from "../content/merchandise.js";
+import { LEAD_TEXT as DISTRIBUTION_LEAD_TEXT } from "../content/distribution.js";
 
 export const MODALS = {
   about: {
@@ -15,6 +16,7 @@ export const MODALS = {
       <div class="modal-links">
         <button id="touring-button" class="modal-button">Touring</button>
         <button id="merchandise-button" class="modal-button">Merchandise</button>
+        <button id="distribution-button" class="modal-button">Distribution</button>
       </div>
       <hr />
       <div class="lead">${ABOUT_LEAD_TEXT}</div>
@@ -63,6 +65,20 @@ export const MODALS = {
       </div>
     `,
   },
+  distribution: {
+    id: "distribution",
+    header: "Distribution",
+    body: `
+      <div class="modal-links">
+        <button id="back-button" class="modal-button">Back</button>
+      </div>
+    </div>
+      <hr />
+      <div class="merchandise">
+        <div class="lead">${DISTRIBUTION_LEAD_TEXT}</div>
+      </div>
+    `,
+  },
   artists: {
     id: "artists",
     header: "Artists",
@@ -71,10 +87,9 @@ export const MODALS = {
         ${[...ALL_ARTIST_IDS]
           .sort((a, b) => a.localeCompare(b))
           .map((artistId) => {
-            return `<button id="${artistId}-button" class="artist">${artistId.replace(
-              "-",
-              " "
-            )}</button>`;
+            return `<button id="${artistId}-button" class="artist">${
+              FLOORS[artistId].name || artistId
+            }</button>`;
           })
           .join("\n")}
       </div>
@@ -89,7 +104,9 @@ export const MODALS = {
         ${[...OTHER_IDS]
           .sort((a, b) => a.localeCompare(b))
           .map((artistId) => {
-            return `<button id="${artistId}-button" class="artist">${FLOORS[artistId].name}</button>`;
+            return `<button id="${artistId}-button" class="artist">${
+              FLOORS[artistId].name || artistId
+            }</button>`;
           })
           .join("\n")}
       </div>

@@ -48,14 +48,14 @@ export const TEXT_STYLES = {
 
 export const DEFAULT_XS_FONT_SIZE = () => {
   if (isMobileSizedScreen()) {
-    return 11;
+    return 12;
   }
 
   if (isLargeSizedScreen()) {
-    return 16;
+    return 20;
   }
 
-  return 12;
+  return 14;
 };
 
 export const DEFAULT_FONT_SIZE = () => {
