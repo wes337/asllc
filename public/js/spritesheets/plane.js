@@ -48,7 +48,7 @@ export default {
   meta: {
     app: "https://www.codeandweb.com/texturepacker",
     version: "1.1",
-    image: "./img/spritesheets/plane.png",
+    image: "https://w-img.b-cdn.net/asllc/spritesheets/plane.png",
     format: "RGBA8888",
     size: { w: 1000, h: 1250 },
     scale: "1",

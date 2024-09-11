@@ -20,6 +20,24 @@ export const FLOORS = {
       soundcloud: "https://soundcloud.com/biv",
     },
   },
+  issbrokie: {
+    name: "ISSBROKIE",
+    animationFrames: 2,
+    links: {
+      apple: "https://music.apple.com/gb/artist/issbrokie/1590304987",
+      ig: "http://instagram.com/issbrokie/",
+      spotify: "https://open.spotify.com/artist/23GnlSzW49oADOGGjvyfEI",
+      newgrounds: "https://shteppi.newgrounds.com/",
+    },
+  },
+  calder: {
+    name: "CALDER",
+    animationFrames: 4,
+    links: {
+      apple: "https://music.apple.com/artist/calder/1652163917",
+      spotify: "https://open.spotify.com/artist/3rfH5SRk6ekMfiBZ5KVYw9",
+    },
+  },
   changeline: {
     name: "Changeline",
     extras: [

@@ -191,7 +191,7 @@ export default {
   meta: {
     app: "https://www.codeandweb.com/texturepacker",
     version: "1.1",
-    image: "./img/spritesheets/elevator.png",
+    image: "https://w-img.b-cdn.net/asllc/spritesheets/elevator.png",
     format: "RGBA8888",
     size: { w: 2004, h: 1226 },
     scale: "1",

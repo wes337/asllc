@@ -28,7 +28,7 @@ export default {
   meta: {
     app: "https://www.codeandweb.com/texturepacker",
     version: "1.1",
-    image: "./img/spritesheets/blimp.png",
+    image: "https://w-img.b-cdn.net/asllc/spritesheets/blimp.png",
     format: "RGBA8888",
     size: { w: 960, h: 1800 },
     scale: "1",

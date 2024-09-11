@@ -344,6 +344,7 @@ export default class Interface {
       .filter(Boolean);
 
     const numberOfLinks = icons.length;
+
     const positionX = State.app.screen.width / 2 + numberOfLinks * 310 * scale;
 
     const positionY =

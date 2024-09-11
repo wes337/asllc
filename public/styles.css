@@ -229,8 +229,26 @@ canvas {
   transform: scaleX(-1);
 }
 
-#music-player-play.paused img {
-  opacity: 0.5;
+#music-player-play .play {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 1;
+}
+
+#music-player-play .pause {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+#music-player-play.paused .pause {
+  opacity: 1;
+}
+
+#music-player-play.paused .play {
+  opacity: 0;
 }
 
 #music-player-next-track,
@@ -238,6 +256,12 @@ canvas {
 #music-player-prev-track {
   all: unset;
   cursor: pointer;
+}
+
+#music-player-play {
+  position: relative;
+  width: 32px;
+  height: 32px;
 }
 
 #music-player-next-track img,
