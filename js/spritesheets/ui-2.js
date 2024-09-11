@@ -60,7 +60,7 @@ export default {
   meta: {
     app: "https://www.codeandweb.com/texturepacker",
     version: "1.1",
-    image: "./img/spritesheets/ui-2.png",
+    image: "https://w-img.b-cdn.net/asllc/spritesheets/ui-2.png",
     format: "RGBA8888",
     size: { w: 979, h: 1328 },
     scale: "1",

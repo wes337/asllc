@@ -1,6 +1,9 @@
 import { COLORS } from "./constants/colors.js";
 import { FONT_FAMILY, HEADER_FONT_FAMILY } from "./constants/text.js";
-import loadSpritesheets from "./spritesheets/index.js";
+import {
+  loadSecondarySpritesheets,
+  loadSpritesheets,
+} from "./spritesheets/index.js";
 import State from "./classes/state.js";
 import MusicPlayer from "./classes/music.js";
 import render from "./render.js";
@@ -24,7 +27,7 @@ async function loadAssets() {
 
     await PIXI.Assets.loadBundle("fonts");
 
-    message.innerHTML = `Loading sprites <span id="loading-percentage">0%</span>`;
+    message.innerHTML = "Loading sprites...";
 
     await loadSpritesheets();
 
@@ -39,6 +42,8 @@ async function loadAssets() {
         ?.setAttribute("content", "#4f8fba");
       resolve();
     });
+
+    loadSecondarySpritesheets();
   });
 }
 

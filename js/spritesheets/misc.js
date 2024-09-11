@@ -132,7 +132,7 @@ export default {
   meta: {
     app: "https://www.codeandweb.com/texturepacker",
     version: "1.1",
-    image: "./img/spritesheets/misc.png",
+    image: "https://w-img.b-cdn.net/asllc/spritesheets/misc.png",
     format: "RGBA8888",
     size: { w: 1892, h: 1994 },
     scale: "1",

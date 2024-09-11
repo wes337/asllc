@@ -151,7 +151,7 @@ export default {
   meta: {
     app: "https://www.codeandweb.com/texturepacker",
     version: "1.1",
-    image: "./img/spritesheets/floors-1.png",
+    image: "https://w-img.b-cdn.net/asllc/spritesheets/floors-1.png",
     format: "RGBA8888",
     size: { w: 1920, h: 1925 },
     scale: "1",

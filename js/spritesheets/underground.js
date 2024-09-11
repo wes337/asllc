@@ -25,7 +25,7 @@ export default {
   meta: {
     app: "https://www.codeandweb.com/texturepacker",
     version: "1.1",
-    image: "./img/spritesheets/underground.png",
+    image: "https://w-img.b-cdn.net/asllc/spritesheets/underground.png",
     format: "RGBA8888",
     size: { w: 860, h: 1420 },
     scale: "1",

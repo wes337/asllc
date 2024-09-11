@@ -1,91 +1,133 @@
 export default {
   frames: {
-    "skotskr-floor.png": {
+    "calder-floor-1.png": {
       frame: { x: 0, y: 0, w: 640, h: 275 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
       sourceSize: { w: 640, h: 275 },
     },
-    "sorbet-floor.png": {
+    "calder-floor-2.png": {
       frame: { x: 640, y: 0, w: 640, h: 275 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
       sourceSize: { w: 640, h: 275 },
     },
-    "steel-floor-1.png": {
+    "calder-floor-3.png": {
       frame: { x: 1280, y: 0, w: 640, h: 275 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
       sourceSize: { w: 640, h: 275 },
     },
-    "steel-floor-2.png": {
+    "calder-floor-4.png": {
       frame: { x: 0, y: 275, w: 640, h: 275 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
       sourceSize: { w: 640, h: 275 },
     },
-    "steel-floor-3.png": {
+    "issbrokie-floor-1.png": {
       frame: { x: 640, y: 275, w: 640, h: 275 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
       sourceSize: { w: 640, h: 275 },
     },
-    "steel-floor-4.png": {
+    "issbrokie-floor-2.png": {
       frame: { x: 1280, y: 275, w: 640, h: 275 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
       sourceSize: { w: 640, h: 275 },
     },
-    "steel-floor-5.png": {
+    "skotskr-floor.png": {
       frame: { x: 0, y: 550, w: 640, h: 275 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
       sourceSize: { w: 640, h: 275 },
     },
-    "steel-floor-6.png": {
+    "sorbet-floor.png": {
       frame: { x: 640, y: 550, w: 640, h: 275 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
       sourceSize: { w: 640, h: 275 },
     },
-    "wendigo-floor.png": {
+    "steel-floor-1.png": {
       frame: { x: 1280, y: 550, w: 640, h: 275 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
       sourceSize: { w: 640, h: 275 },
     },
-    "wes-floor-1.png": {
+    "steel-floor-2.png": {
       frame: { x: 0, y: 825, w: 640, h: 275 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
       sourceSize: { w: 640, h: 275 },
     },
-    "wes-floor-2.png": {
+    "steel-floor-3.png": {
       frame: { x: 640, y: 825, w: 640, h: 275 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
       sourceSize: { w: 640, h: 275 },
     },
-    "wes-floor-3.png": {
+    "steel-floor-4.png": {
       frame: { x: 1280, y: 825, w: 640, h: 275 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
       sourceSize: { w: 640, h: 275 },
     },
-    "wud-floor.png": {
+    "steel-floor-5.png": {
       frame: { x: 0, y: 1100, w: 640, h: 275 },
+      rotated: false,
+      trimmed: false,
+      spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
+      sourceSize: { w: 640, h: 275 },
+    },
+    "steel-floor-6.png": {
+      frame: { x: 640, y: 1100, w: 640, h: 275 },
+      rotated: false,
+      trimmed: false,
+      spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
+      sourceSize: { w: 640, h: 275 },
+    },
+    "wendigo-floor.png": {
+      frame: { x: 1280, y: 1100, w: 640, h: 275 },
+      rotated: false,
+      trimmed: false,
+      spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
+      sourceSize: { w: 640, h: 275 },
+    },
+    "wes-floor-1.png": {
+      frame: { x: 0, y: 1375, w: 640, h: 275 },
+      rotated: false,
+      trimmed: false,
+      spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
+      sourceSize: { w: 640, h: 275 },
+    },
+    "wes-floor-2.png": {
+      frame: { x: 640, y: 1375, w: 640, h: 275 },
+      rotated: false,
+      trimmed: false,
+      spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
+      sourceSize: { w: 640, h: 275 },
+    },
+    "wes-floor-3.png": {
+      frame: { x: 1280, y: 1375, w: 640, h: 275 },
+      rotated: false,
+      trimmed: false,
+      spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
+      sourceSize: { w: 640, h: 275 },
+    },
+    "wud-floor.png": {
+      frame: { x: 0, y: 1650, w: 640, h: 275 },
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: 640, h: 275 },
@@ -93,6 +135,13 @@ export default {
     },
   },
   animations: {
+    ["calder-floor"]: [
+      "calder-floor-1.png",
+      "calder-floor-2.png",
+      "calder-floor-3.png",
+      "calder-floor-4.png",
+    ],
+    "issbrokie-floor": ["issbrokie-floor-1.png", "issbrokie-floor-2.png"],
     "steel-floor": [
       "steel-floor-1.png",
       "steel-floor-2.png",
@@ -106,11 +155,11 @@ export default {
   meta: {
     app: "https://www.codeandweb.com/texturepacker",
     version: "1.1",
-    image: "./img/spritesheets/floors-2.png",
+    image: "https://w-img.b-cdn.net/asllc/spritesheets/floors-2.png",
     format: "RGBA8888",
-    size: { w: 1920, h: 1375 },
+    size: { w: 1920, h: 1925 },
     scale: "1",
     smartupdate:
-      "$TexturePacker:SmartUpdate:03940584756ce804fe47d3e10f41c258:12b73ffa76e6fa4755d54eb0ec7cebd9:9605a5e1080add1a6b7d212a32337035$",
+      "$TexturePacker:SmartUpdate:b8e4df9a6fd7cb62f21f1cf45e065d6c:c14c95d79872b93e7ef335034be24570:e890086887ccc148fb5284a54ac8295d$",
   },
 };

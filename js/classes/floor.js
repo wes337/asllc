@@ -36,6 +36,7 @@ export default class Floor {
     this.index = index;
     this.basement = basement;
     this.container = new PIXI.Container();
+    this.creeper = null;
 
     const animationFrames = getAnimationFrames(id);
 
@@ -231,6 +232,43 @@ export default class Floor {
     this.container.addChild(this.indicator);
   }
 
+  async renderCreeper() {
+    if (!this.creeper) {
+      const creeper = await PIXI.Assets.load("./img/sprites/misc/creeper.gif");
+      this.creeper = creeper;
+    }
+
+    if (this.id !== "wud" || (this.creeper && this.creeper.isPlaying)) {
+      return;
+    }
+
+    const scale = State.scale();
+
+    this.creeper = this.creeper ? this.creeper : State.spritesheets.creeper;
+
+    this.creeper.position.set(
+      this.room.position.x - this.room.width / 2 + 180 * scale,
+      this.room.position.y + 120 * scale
+    );
+
+    this.creeper.scale.y = scale;
+    this.creeper.scale.x = scale;
+    this.creeper.anchor.set(0.5);
+
+    this.creeper.visible = true;
+    this.creeper.loop = false;
+    this.creeper.play();
+    this.creeper.isPlaying = true;
+
+    this.creeper.onComplete = () => {
+      this.creeper.visible = false;
+      this.creeper.isPlaying = false;
+      setTimeout(() => this.renderCreeper(), 12000);
+    };
+
+    this.container.addChild(this.creeper);
+  }
+
   render() {
     const scale = State.scale();
 
@@ -298,5 +336,7 @@ export default class Floor {
       this.room.animationSpeed = 0.05;
       this.room.play();
     }
+
+    this.renderCreeper();
   }
 }

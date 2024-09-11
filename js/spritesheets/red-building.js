@@ -11,7 +11,7 @@ export default {
   meta: {
     app: "https://www.codeandweb.com/texturepacker",
     version: "1.1",
-    image: "./img/spritesheets/red-building.png",
+    image: "https://w-img.b-cdn.net/asllc/spritesheets/red-building.png",
     format: "RGBA8888",
     size: { w: 1850, h: 1990 },
     scale: "1",

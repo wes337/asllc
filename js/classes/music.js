@@ -9,6 +9,22 @@ const TRACKS = [
     fileName: "very-lush-and-swag-loop-74140.mp3",
     title: "very-lush-and-swag-loop-74140.mp3",
   },
+  {
+    fileName: "calder - pastel 10 mastered.mp3",
+    title: "calder - pastel 10 mastered.mp3",
+  },
+  {
+    fileName: "calder - pastel 12 mastered.mp3",
+    title: "calder - pastel 12 mastered.mp3",
+  },
+  {
+    fileName: "calder - pastel 15 mastered.mp3",
+    title: "calder - pastel 15 mastered.mp3",
+  },
+  {
+    fileName: "calder - pastel 25 mastered.mp3",
+    title: "calder - pastel 25 mastered.mp3",
+  },
 ];
 
 const calculateTime = (secs) => {

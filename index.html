@@ -17,6 +17,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preload" as="image" href="./img/logo.gif" />
     <link rel="stylesheet" href="./styles.css" />
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-16BP8L8QQT"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-16BP8L8QQT");
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/pixi.js@7.4.0/dist/pixi.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pixi-filters@latest/dist/browser/pixi-filters.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@pixi/gif@2.0.0/dist/pixi-gif.min.js"></script>
@@ -46,7 +58,8 @@
             <img src="./img/gui/track.png" />
           </button>
           <button id="music-player-play">
-            <img src="./img/gui/play.png" />
+            <img class="pause" src="./img/gui/play.png" />
+            <img class="play" src="./img/gui/pause.png" />
           </button>
           <button id="music-player-next-track">
             <img src="./img/gui/track.png" />
